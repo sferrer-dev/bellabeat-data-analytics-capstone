@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36623.8 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data-samples", "data-samples", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		data-samples\dailyActivity_merged.csv = data-samples\dailyActivity_merged.csv
+		data-samples\heartrate_seconds_merged.csv = data-samples\heartrate_seconds_merged.csv
+		data-samples\hourlyCalories_merged.csv = data-samples\hourlyCalories_merged.csv
+		data-samples\hourlyIntensities_merged.csv = data-samples\hourlyIntensities_merged.csv
+		data-samples\hourlySteps_merged.csv = data-samples\hourlySteps_merged.csv
+		data-samples\minuteCaloriesNarrow_merged.csv = data-samples\minuteCaloriesNarrow_merged.csv
+		data-samples\minuteIntensitiesNarrow_merged.csv = data-samples\minuteIntensitiesNarrow_merged.csv
+		data-samples\minuteMETsNarrow_merged.csv = data-samples\minuteMETsNarrow_merged.csv
+		data-samples\minuteSleep_merged.csv = data-samples\minuteSleep_merged.csv
+		data-samples\minuteStepsNarrow_merged.csv = data-samples\minuteStepsNarrow_merged.csv
+		data-samples\weightLogInfo_merged.csv = data-samples\weightLogInfo_merged.csv
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{01589259-6671-4931-92E6-0DA709168197}"
+EndProject
+Project("{C9674DCB-5085-4A16-B785-4C70DD1589BD}") = "ETL.Bellabeat.SSIS", "src\ETL.Bellabeat.SSIS\ETL.Bellabeat.SSIS.dtproj", "{BA89E172-8EE2-07F1-245F-07EAC60F5819}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Development|Default = Development|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BA89E172-8EE2-07F1-245F-07EAC60F5819}.Development|Default.ActiveCfg = Development
+		{BA89E172-8EE2-07F1-245F-07EAC60F5819}.Development|Default.Build.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BA89E172-8EE2-07F1-245F-07EAC60F5819} = {01589259-6671-4931-92E6-0DA709168197}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A954ECB0-008C-4E61-8EA3-5E72CF05C151}
+	EndGlobalSection
+EndGlobal
