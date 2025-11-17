@@ -1,4 +1,5 @@
-source("config/config.R")
+#source("config/config.R")
+source(here("config", "config.R"))
 
 # ---- Load packages ----
 

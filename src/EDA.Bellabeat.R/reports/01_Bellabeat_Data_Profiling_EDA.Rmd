@@ -1,0 +1,23 @@
+---
+title: "Bellabeat – Data Profiling and Exploratory Data Analysis"
+author: "Stéphane Ferrer"
+date: "`r format(Sys.Date(), '%Y-%m-%d')`"
+output:
+  html_document:
+    theme: cosmo
+    highlight: tango
+    toc: true
+    toc_depth: 3
+    toc_float: true
+---
+
+```{r setup-profiling, message=FALSE, warning=FALSE}
+library(readr)
+library(dplyr)
+library(purrr)
+library(tidyr)
+library(skimr)
+library(here)
+library(knitr)
+source(here("scripts", "profile_csv.R"))
+```
