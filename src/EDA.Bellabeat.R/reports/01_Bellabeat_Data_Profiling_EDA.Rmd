@@ -1,6 +1,6 @@
 ---
 title: "Bellabeat – Data Profiling and Exploratory Data Analysis"
-author: "Stéphane Ferrer"
+author: "Stef"
 date: "`r format(Sys.Date(), '%Y-%m-%d')`"
 output:
   html_document:
@@ -9,9 +9,20 @@ output:
     toc: true
     toc_depth: 3
     toc_float: true
+    number_sections: true
+    df_print: paged
+    code_folding: hide
 ---
 
-```{r setup-profiling, message=FALSE, warning=FALSE}
+```{r setup, include=FALSE}
+# Global chunk options
+knitr::opts_chunk$set(
+  echo    = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+
+# Packages
 library(readr)
 library(dplyr)
 library(purrr)
@@ -19,5 +30,40 @@ library(tidyr)
 library(skimr)
 library(here)
 library(knitr)
+
+# Custom profiling function
 source(here("scripts", "profile_csv.R"))
+
+# Avoid scientific notation by default
+options(scipen = 999)
+```
+
+
+# dailyActivity_merged.csv
+
+```{r profile-daily-activity, message=TRUE}
+res_daily <- profile_csv(
+  here("../../data-samples", "dailyActivity_merged.csv")
+)
+```
+
+## Kable
+
+``` {r show-column-level-profile, echo=TRUE}
+kable(res_daily$col_profile, caption = "Column-Level Profile")
+```
+
+```{r show-numeric-variables-stats, echo=TRUE, message=TRUE}
+kable(res_daily$num_stats,caption = "Summary of Numeric Variables")
+```
+
+## Skim profile
+
+```{r show-skim-profile}
+res_daily$skim
+```
+## Glimpse
+
+```{r show-structural-variable, echo=TRUE}
+dplyr::glimpse(res_daily$data)
 ```
