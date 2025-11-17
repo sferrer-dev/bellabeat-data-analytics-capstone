@@ -362,3 +362,17 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 .Rproj.user
+
+# Ignore output folders
+**/output/
+**/logs/
+**/tmp/
+**.cache/
+
+# R project files
+.Rhistory
+.RData
+.Rproj.user/
+.Ruserdata
+__pycache__
+.DS_Store
