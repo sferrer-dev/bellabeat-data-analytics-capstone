@@ -377,3 +377,5 @@ FodyWeavers.xsd
 __pycache__
 .DS_Store
 **/reports/*.html
+**/reports/*.pdf
+**/reports/*.docx
