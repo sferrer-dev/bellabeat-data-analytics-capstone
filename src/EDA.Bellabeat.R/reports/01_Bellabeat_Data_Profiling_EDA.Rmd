@@ -32,11 +32,26 @@ library(skimr)
 library(here)
 library(knitr)
 
+# Custom project configuration
+source(here("config", "config.R"))
 # Custom profiling function
 source(here("scripts", "profile_csv.R"))
 
 # Avoid scientific notation by default
 options(scipen = 999)
+```
+
+```{r}
+# ---- Batch profiling of all CSV files ----
+
+# Retrieve the list of all CSV files located in the data directory.
+# - pattern = "\\.csv$"   → Only files ending with ".csv"
+# - full.names = TRUE     → Return full file paths (needed for reading)
+csv_files  <- list.files(here(data_dir), pattern = "\\.csv$", full.names = TRUE)
+# Apply the profiling function to each CSV file.
+# purrr::map() iterates over the list of file paths and returns
+# a list of profiling results (one element per CSV).
+profiles <- purrr::map(csv_files, profile_csv)
 ```
 
 
