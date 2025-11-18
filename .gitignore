@@ -376,3 +376,4 @@ FodyWeavers.xsd
 .Ruserdata
 __pycache__
 .DS_Store
+reports/*.html
