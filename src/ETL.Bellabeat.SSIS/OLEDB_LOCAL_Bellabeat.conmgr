@@ -1,0 +1,16 @@
+﻿<?xml version="1.0"?>
+<DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:ObjectName="OLEDB_LOCAL_Bellabeat"
+  DTS:DTSID="{904FEDCA-9B76-47AA-AF43-76A0284950F5}"
+  DTS:CreationName="OLEDB">
+  <DTS:ObjectData>
+    <DTS:ConnectionManager
+      DTS:ConnectRetryCount="1"
+      DTS:ConnectRetryInterval="5"
+      DTS:ConnectionString="Data Source=PEARL\SQLEXPRESS;User ID=coursera_student;Initial Catalog=bellabeat_data;Provider=MSOLEDBSQL.1;Persist Security Info=True;Auto Translate=False;">
+      <DTS:Password
+        DTS:Name="Password"
+        Sensitive="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA6/ODvWxH5UCfYyLo0clyAgAAAAACAAAAAAADZgAAwAAAABAAAACyY6Kq/A3+na6v5mgNWFgFAAAAAASAAACgAAAAEAAAAPZeNoR5nWIbyyn7c9E5VP94AAAAI3uX1w6WHqz3xsDea4GcbN5J2GubF2YYFjn14VDFs2WDmxBgBq1MlUbGZQ3hTuzOEKBC3oq0nb3mztVIC6KS6I4PU1sjcYHXtkL/auvmCuD6uL0eKkzC7xFtK9DnPgO8bpd4vIcblLcfzjh+R3NAO6i2ssO1nhqDFAAAAJWmsQDH/rmccRjlUU+hIl4+fdxT</DTS:Password>
+    </DTS:ConnectionManager>
+  </DTS:ObjectData>
+</DTS:ConnectionManager>
