@@ -3,9 +3,6 @@ title: "Bellabeat – Data Profiling and Exploratory Data Analysis"
 author: "Stef"
 date: "`r format(Sys.Date(), '%Y-%m-%d')`"
 output:
-  pdf_document:
-    latex_engine: xelatex
-    number_sections: true
   html_document:
     theme: cosmo
     highlight: tango
@@ -16,6 +13,9 @@ output:
     number_sections: true
     df_print: paged
     code_folding: hide
+  pdf_document:
+    latex_engine: xelatex
+    number_sections: true
 ---
 
 ```{r setup, include=FALSE}
@@ -58,33 +58,45 @@ csv_files  <- list.files(
 # purrr::map() iterates over the list of file paths and returns
 # a list of profiling results (one element per CSV).
 profiles <- purrr::map(csv_files, profile_csv)
-# Name the list using the filenames (without the path)
+# Name the list using the file_names (without the path)
 names(profiles) <- basename(csv_files)
 ```
 
-```{r render-profiles, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
+```{r render-all-profile-files, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
+# Render the profile of each file and dynamically generate the report sections
 purrr::iwalk(
   .x = profiles,
-  .f = function(p, filename) {
+  .f = function(p, file_name) {
 # Section title for this file
-    cat("\n\n# File profile: `", filename, "`\n\n", sep = "")
+    cat("\n\n# File profile: `", file_name, "`\n\n", sep = "")
+# ---- File summary (dimensions) ----
+    n_rows <- nrow(p$data)
+    n_cols <- ncol(p$data)
+    file_path <- file.path(here(data_dir), file_name)
+    file_size <- file.info(file_path)$size / 1024^2  # Mo
+    file_size_fmt <- sprintf("%.2f Mo", file_size)
+    cat("- **File name :** ", file_name, "\n")
+    cat("- **File size :** ", file_size_fmt, "\n")
+    cat("- **Number of observations :** ", n_rows, "\n")
+    cat("- **Number of columns :** ", n_cols, "\n\n")
+    
 # 1. Column profile
     cat("## Column profile\n\n")
     print(
       kable(p$col_profile, 
-            caption = paste("Variable profile -", filename)
+            caption = paste("Variable profile -", file_name)
             )
       )
 # 2. Numerical statistics
     cat("\n\n## Numerical statistics\n\n")
     print(kable(p$num_stats, 
-                caption = paste("Numerical statistics -", filename)
+                caption = paste("Numerical statistics -", file_name)
                 )
           )
 # 3. Skimr summary
     cat("\n\n## Skimr summary\n\n")
     print(kable(p$skim, 
-                caption = paste("Skimr summary -", filename)
+                caption = paste("Skimr summary -", file_name)
                 )
           )
 # 4. Raw data overview
@@ -93,7 +105,7 @@ purrr::iwalk(
       p$data %>%
         head(10) %>%
         kable(
-          caption = paste("Overview (first 10 lines) -", filename)
+          caption = paste("Overview (first 10 lines) -", file_name)
         )
     )
   }
