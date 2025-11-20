@@ -5,14 +5,14 @@
   DTS:CreationName="Microsoft.Package"
   DTS:CreatorComputerName="PEARL"
   DTS:CreatorName="SFERRER\stephane"
-  DTS:DTSID="{090B3EAE-C0D3-4C0C-BFCD-7794499CDD3D}"
+  DTS:DTSID="{0278DC4F-BB95-4287-8631-500E5BBFDFFA}"
   DTS:ExecutableType="Microsoft.Package"
   DTS:LastModifiedProductVersion="17.0.1008.3"
   DTS:LocaleID="1036"
-  DTS:ObjectName="Load_minuteStepsNarrow"
+  DTS:ObjectName="Load_MinuteStepsNarrow"
   DTS:PackageType="5"
-  DTS:VersionBuild="5"
-  DTS:VersionGUID="{0DEEA2FF-F4A2-4ACC-9C1A-21EFAD813B44}">
+  DTS:VersionBuild="6"
+  DTS:VersionGUID="{E06A727B-ACCE-4B01-93D5-341490198B42}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>

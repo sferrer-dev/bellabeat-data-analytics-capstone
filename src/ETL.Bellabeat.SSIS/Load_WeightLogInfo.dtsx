@@ -1,0 +1,689 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="11/20/2025 8:03:22 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="PEARL"
+  DTS:CreatorName="SFERRER\stephane"
+  DTS:DTSID="{CDF96D6C-AA1F-4D8D-9340-E571D7F59B30}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="17.0.1008.3"
+  DTS:LocaleID="1036"
+  DTS:ObjectName="Package1"
+  DTS:PackageType="5"
+  DTS:VersionBuild="5"
+  DTS:VersionGUID="{CEE91011-9151-4CF3-A8E0-961FBEECAE96}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[FFC_WeightLogInfo_Import]"
+      DTS:CreationName="FLATFILE"
+      DTS:DTSID="{21D20633-1D6C-438A-B5F5-BAE031391943}"
+      DTS:ObjectName="FFC_WeightLogInfo_Import">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:Format="Delimited"
+          DTS:LocaleID="1033"
+          DTS:HeaderRowDelimiter="_x000D__x000A_"
+          DTS:ColumnNamesInFirstDataRow="True"
+          DTS:RowDelimiter=""
+          DTS:TextQualifier="_x003C_none_x003E_"
+          DTS:CodePage="65001"
+          DTS:ConnectionString="D:\Coursera\Data\Capstone\Bellabeat\data-samples\weightLogInfo_merged.csv">
+          <DTS:FlatFileColumns>
+            <DTS:FlatFileColumn
+              DTS:ColumnType="Delimited"
+              DTS:ColumnDelimiter="_x002C_"
+              DTS:DataType="20"
+              DTS:TextQualified="True"
+              DTS:ObjectName="Id"
+              DTS:DTSID="{8A5DDA31-68E9-430B-8ED9-F84EA749CB2D}"
+              DTS:CreationName="" />
+            <DTS:FlatFileColumn
+              DTS:ColumnType="Delimited"
+              DTS:ColumnDelimiter="_x002C_"
+              DTS:DataType="134"
+              DTS:TextQualified="True"
+              DTS:ObjectName="Date"
+              DTS:DTSID="{B1499BAA-4839-4E1A-B60C-106E536CC84A}"
+              DTS:CreationName="" />
+            <DTS:FlatFileColumn
+              DTS:ColumnType="Delimited"
+              DTS:ColumnDelimiter="_x002C_"
+              DTS:DataType="131"
+              DTS:DataPrecision="19"
+              DTS:DataScale="16"
+              DTS:TextQualified="True"
+              DTS:ObjectName="WeightKg"
+              DTS:DTSID="{1D93BCA5-706E-4A56-9612-82DA31FFC04D}"
+              DTS:CreationName="" />
+            <DTS:FlatFileColumn
+              DTS:ColumnType="Delimited"
+              DTS:ColumnDelimiter="_x002C_"
+              DTS:DataType="131"
+              DTS:DataPrecision="19"
+              DTS:DataScale="16"
+              DTS:TextQualified="True"
+              DTS:ObjectName="WeightPounds"
+              DTS:DTSID="{CB5DC8DC-2F6F-4AE4-BD8F-44F831AA99BC}"
+              DTS:CreationName="" />
+            <DTS:FlatFileColumn
+              DTS:ColumnType="Delimited"
+              DTS:ColumnDelimiter="_x002C_"
+              DTS:DataType="3"
+              DTS:TextQualified="True"
+              DTS:ObjectName="Fat"
+              DTS:DTSID="{559CC294-574D-486C-BA5C-88249A95EC59}"
+              DTS:CreationName="" />
+            <DTS:FlatFileColumn
+              DTS:ColumnType="Delimited"
+              DTS:ColumnDelimiter="_x002C_"
+              DTS:DataType="131"
+              DTS:DataPrecision="18"
+              DTS:DataScale="16"
+              DTS:TextQualified="True"
+              DTS:ObjectName="BMI"
+              DTS:DTSID="{5EA97B19-40B6-449D-B8F6-A6FF3D917AB8}"
+              DTS:CreationName="" />
+            <DTS:FlatFileColumn
+              DTS:ColumnType="Delimited"
+              DTS:ColumnDelimiter="_x002C_"
+              DTS:DataType="11"
+              DTS:TextQualified="True"
+              DTS:ObjectName="IsManualReport"
+              DTS:DTSID="{7137014E-C6D0-4863-ACD0-90075AB00731}"
+              DTS:CreationName="" />
+            <DTS:FlatFileColumn
+              DTS:ColumnType="Delimited"
+              DTS:ColumnDelimiter="_x000D__x000A_"
+              DTS:DataType="20"
+              DTS:TextQualified="True"
+              DTS:ObjectName="LogId"
+              DTS:DTSID="{869DF874-78B0-4D5C-8056-730CB2A1C3DA}"
+              DTS:CreationName="" />
+          </DTS:FlatFileColumns>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\SRC_WeightLogInfo_CSV"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Tâche de flux de données"
+      DTS:DTSID="{38408804-B70F-4D0C-9744-1AB9C815A6B2}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="SRC_WeightLogInfo_CSV"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV"
+              componentClassID="Microsoft.FlatFileSource"
+              contactInfo="Source du fichier plat;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Tous droits réservés; http://www.microsoft.com/sql/support;1"
+              description="Source du fichier plat"
+              localeId="1033"
+              name="SRC_WeightLogInfo_CSV"
+              usesDispositions="true"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Boolean"
+                  description="Spécifie si les colonnes dont la longueur est zéro sont traitées comme des valeurs NULL."
+                  name="RetainNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Spécifie le nom d'une colonne de sortie contenant le nom du fichier. Si aucun nom n'est spécifié, aucune colonne de sortie contenant le nom du fichier ne sera générée."
+                  name="FileNameColumnName"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Connections[FlatFileConnection]"
+                  connectionManagerID="Package.ConnectionManagers[FFC_WeightLogInfo_Import]"
+                  connectionManagerRefId="Package.ConnectionManagers[FFC_WeightLogInfo_Import]"
+                  name="FlatFileConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat]"
+                  name="Sortie de source de fichier plat">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Id]"
+                      lineageId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]"
+                      name="Id"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si la colonne utilise les routines d'analyse les plus rapides, avec des paramètres régionaux neutres."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si les données sont au format binaire."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[Date]"
+                      dataType="dbTime"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Date]"
+                      lineageId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[Date]"
+                      name="Date"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si la colonne utilise les routines d'analyse les plus rapides, avec des paramètres régionaux neutres."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si les données sont au format binaire."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[WeightKg]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[WeightKg]"
+                      lineageId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[WeightKg]"
+                      name="WeightKg"
+                      precision="19"
+                      scale="16"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si la colonne utilise les routines d'analyse les plus rapides, avec des paramètres régionaux neutres."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si les données sont au format binaire."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[WeightPounds]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[WeightPounds]"
+                      lineageId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[WeightPounds]"
+                      name="WeightPounds"
+                      precision="19"
+                      scale="16"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si la colonne utilise les routines d'analyse les plus rapides, avec des paramètres régionaux neutres."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si les données sont au format binaire."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[Fat]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Fat]"
+                      lineageId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[Fat]"
+                      name="Fat"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si la colonne utilise les routines d'analyse les plus rapides, avec des paramètres régionaux neutres."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si les données sont au format binaire."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[BMI]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[BMI]"
+                      lineageId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[BMI]"
+                      name="BMI"
+                      precision="18"
+                      scale="16"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si la colonne utilise les routines d'analyse les plus rapides, avec des paramètres régionaux neutres."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si les données sont au format binaire."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[IsManualReport]"
+                      dataType="bool"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[IsManualReport]"
+                      lineageId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[IsManualReport]"
+                      name="IsManualReport"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si la colonne utilise les routines d'analyse les plus rapides, avec des paramètres régionaux neutres."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si les données sont au format binaire."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[LogId]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[LogId]"
+                      lineageId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[LogId]"
+                      name="LogId"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si la colonne utilise les routines d'analyse les plus rapides, avec des paramètres régionaux neutres."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si les données sont au format binaire."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Id]"
+                      dataType="i8"
+                      name="Id" />
+                    <externalMetadataColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Date]"
+                      dataType="dbTime"
+                      name="Date" />
+                    <externalMetadataColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[WeightKg]"
+                      dataType="numeric"
+                      name="WeightKg"
+                      precision="19"
+                      scale="16" />
+                    <externalMetadataColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[WeightPounds]"
+                      dataType="numeric"
+                      name="WeightPounds"
+                      precision="19"
+                      scale="16" />
+                    <externalMetadataColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Fat]"
+                      dataType="i4"
+                      name="Fat" />
+                    <externalMetadataColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[BMI]"
+                      dataType="numeric"
+                      name="BMI"
+                      precision="18"
+                      scale="16" />
+                    <externalMetadataColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[IsManualReport]"
+                      dataType="bool"
+                      name="IsManualReport" />
+                    <externalMetadataColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[LogId]"
+                      dataType="i8"
+                      name="LogId" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie d'erreur de source de fichier plat]"
+                  isErrorOut="true"
+                  name="Sortie d'erreur de source de fichier plat">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[Colonne de sortie d'erreur de source de fichier plat]"
+                      codePage="65001"
+                      dataType="text"
+                      description="Colonne de sortie d'erreur de source de fichier plat"
+                      lineageId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[Colonne de sortie d'erreur de source de fichier plat]"
+                      name="Colonne de sortie d'erreur de source de fichier plat" />
+                    <outputColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="Destination OLE DB;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Tous droits réservés; http://www.microsoft.com/sql/support;4"
+              description="Destination OLE DB"
+              name="WeightLogInfo"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="Nombre de secondes avant l'expiration d'une commande.  Une valeur égale à 0 indique un délai d'expiration infini."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Spécifie le nom de l'objet de base de données utilisé pour ouvrir un ensemble de lignes."
+                  name="OpenRowset">[dbo].[WeightLogInfo]</property>
+                <property
+                  dataType="System.String"
+                  description="Spécifie la variable contenant le nom de l'objet de base de données utilisé pour ouvrir un ensemble de lignes."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="Commande SQL à exécuter."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=17.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Spécifie la page de codes de la colonne à utiliser lorsque les informations de page de codes ne sont pas disponibles à partir de la source de données."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Force l'utilisation de la valeur de propriété DefaultCodePage lors de la description des données caractères."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Spécifie le mode utilisé pour accéder à la base de données."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indique si les valeurs fournies pour les colonnes d'identité seront copiées à la destination. Si la valeur est définie à False, les valeurs des colonnes d'identité seront générées automatiquement à la destination. Ne s'applique que si le chargement rapide est activé."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indique si les colonnes contenant la valeur NULL auront cette valeur NULL copiée à la destination. Si la valeur est définie à False, les colonnes contenant la valeur NULL auront leurs valeurs par défaut insérées à la destination. Ne s'applique que si le chargement rapide est activé."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Spécifie les options à utiliser avec le chargement rapide.  Ne s'applique que si le chargement rapide est activé."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Spécifie quand les validations sont émises pendant l'insertion des données.  Une valeur égale à 0 spécifie qu'une validation sera émise à la fin de l'insertion des données.  Ne s'applique que si le chargement rapide est activé."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Connections[OleDbConnection]"
+                  connectionManagerID="{904FEDCA-9B76-47AA-AF43-76A0284950F5}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[OLEDB_LOCAL_Bellabeat]"
+                  description="Connexion OLE DB en cours d'exécution utilisée pour accéder à la base de données."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB]"
+                  errorOrTruncationOperation="Insérer"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="Entrée de destination OLE DB">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].Columns[Id]"
+                      cachedDataType="i8"
+                      cachedName="Id"
+                      externalMetadataColumnId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].ExternalColumns[Id]"
+                      lineageId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]" />
+                    <inputColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].Columns[Date]"
+                      cachedDataType="dbTime"
+                      cachedName="Date"
+                      externalMetadataColumnId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].ExternalColumns[Date]"
+                      lineageId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[Date]" />
+                    <inputColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].Columns[WeightKg]"
+                      cachedDataType="numeric"
+                      cachedName="WeightKg"
+                      cachedPrecision="19"
+                      cachedScale="16"
+                      externalMetadataColumnId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].ExternalColumns[WeightKg]"
+                      lineageId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[WeightKg]" />
+                    <inputColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].Columns[WeightPounds]"
+                      cachedDataType="numeric"
+                      cachedName="WeightPounds"
+                      cachedPrecision="19"
+                      cachedScale="16"
+                      externalMetadataColumnId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].ExternalColumns[WeightPounds]"
+                      lineageId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[WeightPounds]" />
+                    <inputColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].Columns[Fat]"
+                      cachedDataType="i4"
+                      cachedName="Fat"
+                      externalMetadataColumnId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].ExternalColumns[Fat]"
+                      lineageId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[Fat]" />
+                    <inputColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].Columns[BMI]"
+                      cachedDataType="numeric"
+                      cachedName="BMI"
+                      cachedPrecision="18"
+                      cachedScale="16"
+                      externalMetadataColumnId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].ExternalColumns[BMI]"
+                      lineageId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[BMI]" />
+                    <inputColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].Columns[IsManualReport]"
+                      cachedDataType="bool"
+                      cachedName="IsManualReport"
+                      externalMetadataColumnId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].ExternalColumns[IsManualReport]"
+                      lineageId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[IsManualReport]" />
+                    <inputColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].Columns[LogId]"
+                      cachedDataType="i8"
+                      cachedName="LogId"
+                      externalMetadataColumnId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].ExternalColumns[LogId]"
+                      lineageId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat].Columns[LogId]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].ExternalColumns[WeightLogInfoId]"
+                      dataType="i8"
+                      name="WeightLogInfoId" />
+                    <externalMetadataColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].ExternalColumns[Id]"
+                      dataType="i8"
+                      name="Id" />
+                    <externalMetadataColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].ExternalColumns[Date]"
+                      dataType="dbTimeStamp"
+                      name="Date" />
+                    <externalMetadataColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].ExternalColumns[WeightKg]"
+                      dataType="numeric"
+                      name="WeightKg"
+                      precision="19"
+                      scale="16" />
+                    <externalMetadataColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].ExternalColumns[WeightPounds]"
+                      dataType="numeric"
+                      name="WeightPounds"
+                      precision="19"
+                      scale="16" />
+                    <externalMetadataColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].ExternalColumns[Fat]"
+                      dataType="i4"
+                      name="Fat" />
+                    <externalMetadataColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].ExternalColumns[BMI]"
+                      dataType="numeric"
+                      name="BMI"
+                      precision="18"
+                      scale="16" />
+                    <externalMetadataColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].ExternalColumns[IsManualReport]"
+                      dataType="bool"
+                      name="IsManualReport" />
+                    <externalMetadataColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB].ExternalColumns[LogId]"
+                      dataType="i8"
+                      name="LogId" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Outputs[Sortie d'erreur de destination OLE DB]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Sortie d'erreur de destination OLE DB"
+                  synchronousInputId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\SRC_WeightLogInfo_CSV.Paths[Sortie de source de fichier plat]"
+              endId="Package\SRC_WeightLogInfo_CSV\WeightLogInfo.Inputs[Entrée de destination OLE DB]"
+              name="Sortie de source de fichier plat"
+              startId="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV.Outputs[Sortie de source de fichier plat]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="208,42"
+          Id="Package\SRC_WeightLogInfo_CSV"
+          TopLeft="115,86" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\SRC_WeightLogInfo_CSV">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="208,42"
+          Id="Package\SRC_WeightLogInfo_CSV\SRC_WeightLogInfo_CSV"
+          TopLeft="15.5,27" />
+        <NodeLayout
+          Size="150,42"
+          Id="Package\SRC_WeightLogInfo_CSV\WeightLogInfo"
+          TopLeft="129.5,138.5" />
+        <EdgeLayout
+          Id="Package\SRC_WeightLogInfo_CSV.Paths[Sortie de source de fichier plat]"
+          TopLeft="119.5,69">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="85,69.5"
+              Start="0,0"
+              End="85,62">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,30.75" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,30.75"
+                    Point2="0,34.75"
+                    Point3="4,34.75" />
+                  <mssgle:LineSegment
+                    End="81,34.75" />
+                  <mssgle:CubicBezierSegment
+                    Point1="81,34.75"
+                    Point2="85,34.75"
+                    Point3="85,38.75" />
+                  <mssgle:LineSegment
+                    End="85,62" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\SRC_WeightLogInfo_CSV\WeightLogInfo">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
