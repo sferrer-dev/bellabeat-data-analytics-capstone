@@ -11,8 +11,8 @@
   DTS:LocaleID="1036"
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
-  DTS:VersionBuild="8"
-  DTS:VersionGUID="{BB7D714E-2C80-4690-832C-0765033FAE3D}">
+  DTS:VersionBuild="14"
+  DTS:VersionGUID="{4910D191-C741-4CAE-8A21-749F1B5B7D9D}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -81,11 +81,11 @@
           version="1">
           <components>
             <component
-              refId="Package\DFT_HeartrateSeconds\heartrateSeconds"
+              refId="Package\DFT_HeartrateSeconds\HeartrateSeconds"
               componentClassID="Microsoft.OLEDBDestination"
               contactInfo="Destination OLE DB;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Tous droits réservés; http://www.microsoft.com/sql/support;4"
               description="Destination OLE DB"
-              name="heartrateSeconds"
+              name="HeartrateSeconds"
               usesDispositions="true"
               version="4">
               <properties>
@@ -96,7 +96,7 @@
                 <property
                   dataType="System.String"
                   description="Spécifie le nom de l'objet de base de données utilisé pour ouvrir un ensemble de lignes."
-                  name="OpenRowset"></property>
+                  name="OpenRowset">[HeartrateSeconds]</property>
                 <property
                   dataType="System.String"
                   description="Spécifie la variable contenant le nom de l'objet de base de données utilisé pour ouvrir un ensemble de lignes."
@@ -138,7 +138,7 @@
               </properties>
               <connections>
                 <connection
-                  refId="Package\DFT_HeartrateSeconds\heartrateSeconds.Connections[OleDbConnection]"
+                  refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Connections[OleDbConnection]"
                   connectionManagerID="{904FEDCA-9B76-47AA-AF43-76A0284950F5}:external"
                   connectionManagerRefId="Project.ConnectionManagers[OLEDB_LOCAL_Bellabeat]"
                   description="Connexion OLE DB en cours d'exécution utilisée pour accéder à la base de données."
@@ -146,33 +146,72 @@
               </connections>
               <inputs>
                 <input
-                  refId="Package\DFT_HeartrateSeconds\heartrateSeconds.Inputs[Entrée de destination OLE DB]"
+                  refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB]"
                   errorOrTruncationOperation="Insérer"
                   errorRowDisposition="FailComponent"
                   hasSideEffects="true"
                   name="Entrée de destination OLE DB">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB].Columns[Id]"
+                      cachedCodepage="65001"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="Id"
+                      externalMetadataColumnId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB].ExternalColumns[Id]"
+                      lineageId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]" />
+                    <inputColumn
+                      refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB].Columns[Time]"
+                      cachedCodepage="65001"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="Time"
+                      externalMetadataColumnId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB].ExternalColumns[Time]"
+                      lineageId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie de source de fichier plat].Columns[Time]" />
+                    <inputColumn
+                      refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB].Columns[Value]"
+                      cachedCodepage="65001"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="Value"
+                      externalMetadataColumnId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB].ExternalColumns[Value]"
+                      lineageId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie de source de fichier plat].Columns[Value]" />
+                  </inputColumns>
                   <externalMetadataColumns
-                    isUsed="True" />
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB].ExternalColumns[Id]"
+                      dataType="i8"
+                      name="Id" />
+                    <externalMetadataColumn
+                      refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB].ExternalColumns[Time]"
+                      dataType="dbTimeStamp"
+                      name="Time" />
+                    <externalMetadataColumn
+                      refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB].ExternalColumns[Value]"
+                      dataType="i4"
+                      name="Value" />
+                  </externalMetadataColumns>
                 </input>
               </inputs>
               <outputs>
                 <output
-                  refId="Package\DFT_HeartrateSeconds\heartrateSeconds.Outputs[Sortie d'erreur de destination OLE DB]"
+                  refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Outputs[Sortie d'erreur de destination OLE DB]"
                   exclusionGroup="1"
                   isErrorOut="true"
                   name="Sortie d'erreur de destination OLE DB"
-                  synchronousInputId="Package\DFT_HeartrateSeconds\heartrateSeconds.Inputs[Entrée de destination OLE DB]">
+                  synchronousInputId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB]">
                   <outputColumns>
                     <outputColumn
-                      refId="Package\DFT_HeartrateSeconds\heartrateSeconds.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorCode]"
+                      refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorCode]"
                       dataType="i4"
-                      lineageId="Package\DFT_HeartrateSeconds\heartrateSeconds.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorCode]"
+                      lineageId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorCode]"
                       name="ErrorCode"
                       specialFlags="1" />
                     <outputColumn
-                      refId="Package\DFT_HeartrateSeconds\heartrateSeconds.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorColumn]"
+                      refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorColumn]"
                       dataType="i4"
-                      lineageId="Package\DFT_HeartrateSeconds\heartrateSeconds.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorColumn]"
+                      lineageId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorColumn]"
                       name="ErrorColumn"
                       specialFlags="2" />
                   </outputColumns>
@@ -333,7 +372,7 @@
           <paths>
             <path
               refId="Package\DFT_HeartrateSeconds.Paths[Sortie de source de fichier plat]"
-              endId="Package\DFT_HeartrateSeconds\heartrateSeconds.Inputs[Entrée de destination OLE DB]"
+              endId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB]"
               name="Sortie de source de fichier plat"
               startId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie de source de fichier plat]" />
           </paths>
@@ -370,8 +409,8 @@
           Id="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV"
           TopLeft="54,41" />
         <NodeLayout
-          Size="166,42"
-          Id="Package\DFT_HeartrateSeconds\heartrateSeconds"
+          Size="168,42"
+          Id="Package\DFT_HeartrateSeconds\HeartrateSeconds"
           TopLeft="187.333333333333,172.666666666667" />
         <EdgeLayout
           Id="Package\DFT_HeartrateSeconds.Paths[Sortie de source de fichier plat]"
@@ -379,9 +418,9 @@
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="103.333333333333,89.6666666666667"
+              EndConnector="104.333333333333,89.6666666666667"
               Start="0,0"
-              End="103.333333333333,82.1666666666667">
+              End="104.333333333333,82.1666666666667">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
@@ -392,13 +431,13 @@
                     Point2="0,44.8333333333333"
                     Point3="4,44.8333333333333" />
                   <mssgle:LineSegment
-                    End="99.3333333333333,44.8333333333333" />
+                    End="100.333333333333,44.8333333333333" />
                   <mssgle:CubicBezierSegment
-                    Point1="99.3333333333333,44.8333333333333"
-                    Point2="103.333333333333,44.8333333333333"
-                    Point3="103.333333333333,48.8333333333333" />
+                    Point1="100.333333333333,44.8333333333333"
+                    Point2="104.333333333333,44.8333333333333"
+                    Point3="104.333333333333,48.8333333333333" />
                   <mssgle:LineSegment
-                    End="103.333333333333,82.1666666666667" />
+                    End="104.333333333333,82.1666666666667" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -410,5 +449,18 @@
       </GraphLayout>
     </LayoutInfo>
   </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\DFT_HeartrateSeconds\HeartrateSeconds">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
 </Objects>]]></DTS:DesignTimeProperties>
 </DTS:Executable>
