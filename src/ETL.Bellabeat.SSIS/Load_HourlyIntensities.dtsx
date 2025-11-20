@@ -1,0 +1,497 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="11/20/2025 11:06:09 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="PEARL"
+  DTS:CreatorName="SFERRER\stephane"
+  DTS:DTSID="{3F143888-8612-490F-8BFD-F03007B47291}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="17.0.1008.3"
+  DTS:LocaleID="1036"
+  DTS:ObjectName="Package1"
+  DTS:PackageType="5"
+  DTS:VersionBuild="4"
+  DTS:VersionGUID="{C750E7F0-F899-435C-B8F7-FE6E9047927F}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[FFC_HourlyIntensities]"
+      DTS:CreationName="FLATFILE"
+      DTS:DTSID="{AD86344D-46DF-4BC2-B138-F167F3CB2BF6}"
+      DTS:ObjectName="FFC_HourlyIntensities">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:Format="Delimited"
+          DTS:LocaleID="1033"
+          DTS:HeaderRowDelimiter="_x000D__x000A_"
+          DTS:ColumnNamesInFirstDataRow="True"
+          DTS:RowDelimiter=""
+          DTS:TextQualifier="_x003C_none_x003E_"
+          DTS:CodePage="65001"
+          DTS:ConnectionString="D:\Coursera\Data\Capstone\Bellabeat\data-samples\hourlyIntensities_merged.csv">
+          <DTS:FlatFileColumns>
+            <DTS:FlatFileColumn
+              DTS:ColumnType="Delimited"
+              DTS:ColumnDelimiter="_x002C_"
+              DTS:DataType="20"
+              DTS:TextQualified="True"
+              DTS:ObjectName="Id"
+              DTS:DTSID="{FF2708DE-516E-4F5A-AD5B-69E4BF964EE1}"
+              DTS:CreationName="" />
+            <DTS:FlatFileColumn
+              DTS:ColumnType="Delimited"
+              DTS:ColumnDelimiter="_x002C_"
+              DTS:DataType="135"
+              DTS:TextQualified="True"
+              DTS:ObjectName="ActivityHour"
+              DTS:DTSID="{B5BA438B-D056-4509-ACD0-3561AED51644}"
+              DTS:CreationName="" />
+            <DTS:FlatFileColumn
+              DTS:ColumnType="Delimited"
+              DTS:ColumnDelimiter="_x002C_"
+              DTS:DataType="3"
+              DTS:TextQualified="True"
+              DTS:ObjectName="TotalIntensity"
+              DTS:DTSID="{C5833384-26DE-477A-8F1E-2E78ECE96CBA}"
+              DTS:CreationName="" />
+            <DTS:FlatFileColumn
+              DTS:ColumnType="Delimited"
+              DTS:ColumnDelimiter="_x000D__x000A_"
+              DTS:DataType="131"
+              DTS:DataPrecision="10"
+              DTS:DataScale="6"
+              DTS:TextQualified="True"
+              DTS:ObjectName="AverageIntensity"
+              DTS:DTSID="{30667BB0-D107-4D5E-8BFA-C0C4A2F78A98}"
+              DTS:CreationName="" />
+          </DTS:FlatFileColumns>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\DFT_HourlyIntensities"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Tâche de flux de données"
+      DTS:DTSID="{60D705B3-564F-4EF9-A91E-AEEAFF631B3D}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="DFT_HourlyIntensities"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\DFT_HourlyIntensities\HourlyIntensities"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="Destination OLE DB;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Tous droits réservés; http://www.microsoft.com/sql/support;4"
+              description="Destination OLE DB"
+              name="HourlyIntensities"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="Nombre de secondes avant l'expiration d'une commande.  Une valeur égale à 0 indique un délai d'expiration infini."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Spécifie le nom de l'objet de base de données utilisé pour ouvrir un ensemble de lignes."
+                  name="OpenRowset">[HourlyIntensities]</property>
+                <property
+                  dataType="System.String"
+                  description="Spécifie la variable contenant le nom de l'objet de base de données utilisé pour ouvrir un ensemble de lignes."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="Commande SQL à exécuter."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=17.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Spécifie la page de codes de la colonne à utiliser lorsque les informations de page de codes ne sont pas disponibles à partir de la source de données."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Force l'utilisation de la valeur de propriété DefaultCodePage lors de la description des données caractères."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Spécifie le mode utilisé pour accéder à la base de données."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indique si les valeurs fournies pour les colonnes d'identité seront copiées à la destination. Si la valeur est définie à False, les valeurs des colonnes d'identité seront générées automatiquement à la destination. Ne s'applique que si le chargement rapide est activé."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indique si les colonnes contenant la valeur NULL auront cette valeur NULL copiée à la destination. Si la valeur est définie à False, les colonnes contenant la valeur NULL auront leurs valeurs par défaut insérées à la destination. Ne s'applique que si le chargement rapide est activé."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Spécifie les options à utiliser avec le chargement rapide.  Ne s'applique que si le chargement rapide est activé."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Spécifie quand les validations sont émises pendant l'insertion des données.  Une valeur égale à 0 spécifie qu'une validation sera émise à la fin de l'insertion des données.  Ne s'applique que si le chargement rapide est activé."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\DFT_HourlyIntensities\HourlyIntensities.Connections[OleDbConnection]"
+                  connectionManagerID="{904FEDCA-9B76-47AA-AF43-76A0284950F5}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[OLEDB_LOCAL_Bellabeat]"
+                  description="Connexion OLE DB en cours d'exécution utilisée pour accéder à la base de données."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\DFT_HourlyIntensities\HourlyIntensities.Inputs[Entrée de destination OLE DB]"
+                  errorOrTruncationOperation="Insérer"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="Entrée de destination OLE DB">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\DFT_HourlyIntensities\HourlyIntensities.Inputs[Entrée de destination OLE DB].Columns[Id]"
+                      cachedDataType="i8"
+                      cachedName="Id"
+                      externalMetadataColumnId="Package\DFT_HourlyIntensities\HourlyIntensities.Inputs[Entrée de destination OLE DB].ExternalColumns[Id]"
+                      lineageId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]" />
+                    <inputColumn
+                      refId="Package\DFT_HourlyIntensities\HourlyIntensities.Inputs[Entrée de destination OLE DB].Columns[ActivityHour]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="ActivityHour"
+                      externalMetadataColumnId="Package\DFT_HourlyIntensities\HourlyIntensities.Inputs[Entrée de destination OLE DB].ExternalColumns[ActivityHour]"
+                      lineageId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat].Columns[ActivityHour]" />
+                    <inputColumn
+                      refId="Package\DFT_HourlyIntensities\HourlyIntensities.Inputs[Entrée de destination OLE DB].Columns[TotalIntensity]"
+                      cachedDataType="i4"
+                      cachedName="TotalIntensity"
+                      externalMetadataColumnId="Package\DFT_HourlyIntensities\HourlyIntensities.Inputs[Entrée de destination OLE DB].ExternalColumns[TotalIntensity]"
+                      lineageId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat].Columns[TotalIntensity]" />
+                    <inputColumn
+                      refId="Package\DFT_HourlyIntensities\HourlyIntensities.Inputs[Entrée de destination OLE DB].Columns[AverageIntensity]"
+                      cachedDataType="numeric"
+                      cachedName="AverageIntensity"
+                      cachedPrecision="10"
+                      cachedScale="6"
+                      externalMetadataColumnId="Package\DFT_HourlyIntensities\HourlyIntensities.Inputs[Entrée de destination OLE DB].ExternalColumns[AverageIntensity]"
+                      lineageId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat].Columns[AverageIntensity]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\DFT_HourlyIntensities\HourlyIntensities.Inputs[Entrée de destination OLE DB].ExternalColumns[Id]"
+                      dataType="i8"
+                      name="Id" />
+                    <externalMetadataColumn
+                      refId="Package\DFT_HourlyIntensities\HourlyIntensities.Inputs[Entrée de destination OLE DB].ExternalColumns[ActivityHour]"
+                      dataType="dbTimeStamp"
+                      name="ActivityHour" />
+                    <externalMetadataColumn
+                      refId="Package\DFT_HourlyIntensities\HourlyIntensities.Inputs[Entrée de destination OLE DB].ExternalColumns[TotalIntensity]"
+                      dataType="i4"
+                      name="TotalIntensity" />
+                    <externalMetadataColumn
+                      refId="Package\DFT_HourlyIntensities\HourlyIntensities.Inputs[Entrée de destination OLE DB].ExternalColumns[AverageIntensity]"
+                      dataType="numeric"
+                      name="AverageIntensity"
+                      precision="10"
+                      scale="6" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\DFT_HourlyIntensities\HourlyIntensities.Outputs[Sortie d'erreur de destination OLE DB]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Sortie d'erreur de destination OLE DB"
+                  synchronousInputId="Package\DFT_HourlyIntensities\HourlyIntensities.Inputs[Entrée de destination OLE DB]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT_HourlyIntensities\HourlyIntensities.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\DFT_HourlyIntensities\HourlyIntensities.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\DFT_HourlyIntensities\HourlyIntensities.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\DFT_HourlyIntensities\HourlyIntensities.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV"
+              componentClassID="Microsoft.FlatFileSource"
+              contactInfo="Source du fichier plat;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Tous droits réservés; http://www.microsoft.com/sql/support;1"
+              description="Source du fichier plat"
+              localeId="1033"
+              name="SRC_HourlyIntensities_CSV"
+              usesDispositions="true"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Boolean"
+                  description="Spécifie si les colonnes dont la longueur est zéro sont traitées comme des valeurs NULL."
+                  name="RetainNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Spécifie le nom d'une colonne de sortie contenant le nom du fichier. Si aucun nom n'est spécifié, aucune colonne de sortie contenant le nom du fichier ne sera générée."
+                  name="FileNameColumnName"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Connections[FlatFileConnection]"
+                  connectionManagerID="Package.ConnectionManagers[FFC_HourlyIntensities]"
+                  connectionManagerRefId="Package.ConnectionManagers[FFC_HourlyIntensities]"
+                  name="FlatFileConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat]"
+                  name="Sortie de source de fichier plat">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Id]"
+                      lineageId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]"
+                      name="Id"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si la colonne utilise les routines d'analyse les plus rapides, avec des paramètres régionaux neutres."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si les données sont au format binaire."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat].Columns[ActivityHour]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[ActivityHour]"
+                      lineageId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat].Columns[ActivityHour]"
+                      name="ActivityHour"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si la colonne utilise les routines d'analyse les plus rapides, avec des paramètres régionaux neutres."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si les données sont au format binaire."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat].Columns[TotalIntensity]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[TotalIntensity]"
+                      lineageId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat].Columns[TotalIntensity]"
+                      name="TotalIntensity"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si la colonne utilise les routines d'analyse les plus rapides, avec des paramètres régionaux neutres."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si les données sont au format binaire."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat].Columns[AverageIntensity]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[AverageIntensity]"
+                      lineageId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat].Columns[AverageIntensity]"
+                      name="AverageIntensity"
+                      precision="10"
+                      scale="6"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si la colonne utilise les routines d'analyse les plus rapides, avec des paramètres régionaux neutres."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indique si les données sont au format binaire."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Id]"
+                      dataType="i8"
+                      name="Id" />
+                    <externalMetadataColumn
+                      refId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[ActivityHour]"
+                      dataType="dbTimeStamp"
+                      name="ActivityHour" />
+                    <externalMetadataColumn
+                      refId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[TotalIntensity]"
+                      dataType="i4"
+                      name="TotalIntensity" />
+                    <externalMetadataColumn
+                      refId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[AverageIntensity]"
+                      dataType="numeric"
+                      name="AverageIntensity"
+                      precision="10"
+                      scale="6" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie d'erreur de source de fichier plat]"
+                  isErrorOut="true"
+                  name="Sortie d'erreur de source de fichier plat">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[Colonne de sortie d'erreur de source de fichier plat]"
+                      codePage="65001"
+                      dataType="text"
+                      description="Colonne de sortie d'erreur de source de fichier plat"
+                      lineageId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[Colonne de sortie d'erreur de source de fichier plat]"
+                      name="Colonne de sortie d'erreur de source de fichier plat" />
+                    <outputColumn
+                      refId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\DFT_HourlyIntensities.Paths[Sortie de source de fichier plat]"
+              endId="Package\DFT_HourlyIntensities\HourlyIntensities.Inputs[Entrée de destination OLE DB]"
+              name="Sortie de source de fichier plat"
+              startId="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV.Outputs[Sortie de source de fichier plat]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="188,42"
+          Id="Package\DFT_HourlyIntensities"
+          TopLeft="10,19" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\DFT_HourlyIntensities">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="218,42"
+          Id="Package\DFT_HourlyIntensities\SRC_HourlyIntensities_CSV"
+          TopLeft="10.5,7.5" />
+        <NodeLayout
+          Size="160,42"
+          Id="Package\DFT_HourlyIntensities\HourlyIntensities"
+          TopLeft="109,122" />
+        <EdgeLayout
+          Id="Package\DFT_HourlyIntensities.Paths[Sortie de source de fichier plat]"
+          TopLeft="119.5,49.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="69.5,72.5"
+              Start="0,0"
+              End="69.5,65">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,32.25" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,32.25"
+                    Point2="0,36.25"
+                    Point3="4,36.25" />
+                  <mssgle:LineSegment
+                    End="65.5,36.25" />
+                  <mssgle:CubicBezierSegment
+                    Point1="65.5,36.25"
+                    Point2="69.5,36.25"
+                    Point3="69.5,40.25" />
+                  <mssgle:LineSegment
+                    End="69.5,65" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\DFT_HourlyIntensities\HourlyIntensities">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
