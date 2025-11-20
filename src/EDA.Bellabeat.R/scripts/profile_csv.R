@@ -28,6 +28,18 @@ profile_csv <- function(file_path) {
     guess_max = 5000
   )
   
+  # ---- Duplicates analysis ----
+  dup_flags <- duplicated(df)
+  n_duplicates <- sum(dup_flags)
+  has_duplicates <- n_duplicates > 0
+  
+  duplicate_examples <- NULL
+  if (has_duplicates) {
+    # We display the first 10 duplicated lines (beyond the first occurrence)
+    duplicate_examples <- df[dup_flags, ] # |>
+      # head(10)
+  }
+  
   # Build a column-level profile:
   # - column name
   # - detected type
@@ -71,6 +83,9 @@ profile_csv <- function(file_path) {
     file_size    = file.info(file_path)$size / 1024^2,  # Mo
     n_rows       = nrow(df),
     n_cols       = ncol(df),
+    has_duplicates     = has_duplicates,
+    n_duplicates       = n_duplicates,
+    duplicated = duplicate_examples,
     data        = df,
     col_profile = col_profile,
     num_stats   = num_stats,

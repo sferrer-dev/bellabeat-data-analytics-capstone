@@ -75,7 +75,9 @@ purrr::iwalk(
     cat("- **File size :** ", file_size_fmt, "\n")
     cat("- **Number of observations :** ", p$n_rows, "\n")
     cat("- **Number of columns :** ", p$n_cols, "\n\n")
-    
+    cat("- **Duplicates detecteds :**", if (p$has_duplicates) "Oui" else "Non", "\n\n")
+    cat("- **Number of duplicated lines :**", p$n_duplicates, "\n\n")
+
 # 1. Column profile
     cat("## Column profile\n\n")
     print(
@@ -101,9 +103,20 @@ purrr::iwalk(
       p$data %>%
         head(10) %>%
         kable(
-          caption = paste("Overview (first 10 lines) -", file_name)
+          caption = paste("Overview (first 10 lines) -", file_name),
+          align   = "l"
         )
     )
+# 5. Duplicated lines overview    
+    if (p$has_duplicates) {
+      cat("\n\n## Overview duplicated\n\n")
+      print(kable(p$duplicated |>
+                    head(10),
+                  caption = paste("Overview (first 10 duplicated lines) -", file_name),
+                  align   = "l"
+                )
+      )
+    }
   }
 )
 ```
