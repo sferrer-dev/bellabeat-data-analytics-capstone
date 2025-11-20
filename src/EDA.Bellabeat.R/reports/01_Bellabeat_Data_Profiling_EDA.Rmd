@@ -70,15 +70,11 @@ purrr::iwalk(
 # Section title for this file
     cat("\n\n# File profile: `", file_name, "`\n\n", sep = "")
 # ---- File summary (dimensions) ----
-    n_rows <- nrow(p$data)
-    n_cols <- ncol(p$data)
-    file_path <- file.path(here(data_dir), file_name)
-    file_size <- file.info(file_path)$size / 1024^2  # Mo
-    file_size_fmt <- sprintf("%.2f Mo", file_size)
-    cat("- **File name :** ", file_name, "\n")
+    file_size_fmt <- sprintf("%.2f Mo", p$file_size)
+    cat("- **File name :** ", p$file_name, "\n")
     cat("- **File size :** ", file_size_fmt, "\n")
-    cat("- **Number of observations :** ", n_rows, "\n")
-    cat("- **Number of columns :** ", n_cols, "\n\n")
+    cat("- **Number of observations :** ", p$n_rows, "\n")
+    cat("- **Number of columns :** ", p$n_cols, "\n\n")
     
 # 1. Column profile
     cat("## Column profile\n\n")

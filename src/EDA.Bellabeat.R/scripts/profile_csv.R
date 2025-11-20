@@ -1,13 +1,3 @@
-#source("config/config.R")
-source(here("config", "config.R"))
-
-# ---- Load packages ----
-
-#install.packages("tidyverse")
-library(tidyverse)
-#install.packages("skimr")
-library(skimr)
-
 # ---- Profile function ----
 
 #' Profile a CSV file and return profiling objects for reporting.
@@ -37,6 +27,7 @@ profile_csv <- function(file_path) {
     show_col_types = FALSE,
     guess_max = 5000
   )
+  
   # Build a column-level profile:
   # - column name
   # - detected type
@@ -75,30 +66,14 @@ profile_csv <- function(file_path) {
   message("Dimensions : ", nrow(df), " rows x ", ncol(df), " columns")
   # Return a structured list of profiling artifacts
   list(
+    file_path    = file_path,
+    file_name    = basename(file_path),
+    file_size    = file.info(file_path)$size / 1024^2,  # Mo
+    n_rows       = nrow(df),
+    n_cols       = ncol(df),
     data        = df,
     col_profile = col_profile,
     num_stats   = num_stats,
     skim        = skim_profile
   )
 }
-
-
-# ---- Batch profiling of all CSV files ----
-
-# Retrieve the list of all CSV files located in the data directory.
-# - pattern = "\\.csv$"   → Only files ending with ".csv"
-# - full.names = TRUE     → Return full file paths (needed for reading)
-csv_files <- list.files(
-  data_dir,
-  pattern = "\\.csv$",
-  full.names = TRUE
-)
-
-# Apply the profiling function to each CSV file.
-# purrr::map() iterates over the list of file paths and returns
-# a list of profiling results (one element per CSV).
-profiles <- purrr::map(csv_files, profile_csv)
-
-# Display a confirmation message after processing all files.
-# The message reminds the user where the profiling outputs were generated.
-message("✅ Profiling completed. Summaries generated in: ", output_dir)
