@@ -26,7 +26,7 @@
           <SSIS:Property SSIS:Name="CreatorComputerName">PEARL</SSIS:Property>
           <SSIS:Property SSIS:Name="Description">
           </SSIS:Property>
-          <SSIS:Property SSIS:Name="PasswordVerifier" SSIS:Sensitive="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA6/ODvWxH5UCfYyLo0clyAgAAAAACAAAAAAADZgAAwAAAABAAAADvdPm5osOHV4TIQETSIF7RAAAAAASAAACgAAAAEAAAAHCm1Y8vwLJECLb+EFs6r8aIAAAAaoLdBDR+VDDDE1K2f2C+kR+dytZ6RGTsb2c6rHUzuYvJTpPfXqKUB+Y6885T3eRuz6dW+QXSoprOTiM+QcmB9Gyuh1yp3TP469gy7639/8NopSq0WKgx5WsvcNgmsIy1wcDsmjN/NPxKTchp8oEo27HtII3GndPWiAIn6LXyNOeY2dATgqOy2hQAAAAI4wdbG25mmQQPCY5btpPhfsd1aA==</SSIS:Property>
+          <SSIS:Property SSIS:Name="PasswordVerifier" SSIS:Sensitive="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA6/ODvWxH5UCfYyLo0clyAgAAAAACAAAAAAADZgAAwAAAABAAAACHoLJbANO8zsJVU0gAp8JwAAAAAASAAACgAAAAEAAAAM9JoySHAnWcdyyD3MWNICSIAAAAiZOl4hnR2JfW2fNgee8iNSVRfxGMjfPgObxs6wFXmXskSAUsDxt0AM8lw9zQ/10B/Mv6fL41hKcbPc352Rqg/OOK6ucMd1atzGNrtNlKnlLPjwTwPlAkO6AOEff8PrkEYT6PrG8KU5LFYDODOugL7LF3H5A7Y2O1vB5Y37CcMOPVdZuIpu15rxQAAABxVNW/CNcwoLpTDnPcoq9EbibZzw==</SSIS:Property>
           <SSIS:Property SSIS:Name="FormatVersion">1</SSIS:Property>
         </SSIS:Properties>
         <SSIS:Packages>
@@ -41,6 +41,7 @@
           <SSIS:Package SSIS:Name="01_Load_MinuteSleep.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="01_Load_MinuteStepsNarrow.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="01_Load_WeightLogInfo.dtsx" SSIS:EntryPoint="1" />
+          <SSIS:Package SSIS:Name="04_Master_Load_Bellabeat.dtsx" SSIS:EntryPoint="1" />
         </SSIS:Packages>
         <SSIS:ConnectionManagers>
           <SSIS:ConnectionManager SSIS:Name="OLEDB_LOCAL_Bellabeat.conmgr" />
@@ -2562,6 +2563,22 @@
                   </SSIS:Properties>
                 </SSIS:Parameter>
               </SSIS:Parameters>
+            </SSIS:PackageMetaData>
+            <SSIS:PackageMetaData SSIS:Name="04_Master_Load_Bellabeat.dtsx">
+              <SSIS:Properties>
+                <SSIS:Property SSIS:Name="ID">{7729CFCD-0146-493D-8962-BFEF496AB165}</SSIS:Property>
+                <SSIS:Property SSIS:Name="Name">Package1</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionMajor">1</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionBuild">4</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionComments">
+                </SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{2652288C-71C7-4774-8B1A-75494FF87322}</SSIS:Property>
+                <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
+                <SSIS:Property SSIS:Name="Description">Master package orchestrating the loading of Bellabeat files into SQL Server via the Load_* packages.</SSIS:Property>
+                <SSIS:Property SSIS:Name="ProtectionLevel">1</SSIS:Property>
+              </SSIS:Properties>
+              <SSIS:Parameters />
             </SSIS:PackageMetaData>
           </SSIS:PackageInfo>
         </SSIS:DeploymentInfo>
