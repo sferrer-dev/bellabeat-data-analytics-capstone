@@ -28,19 +28,37 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "ETL.Bellabeat.Database", "src\ETL.Bellabeat.Database\ETL.Bellabeat.Database.sqlproj", "{927DE47D-4CA6-4884-BE3B-F9C89C10AFDD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Development|Default = Development|Default
+		Debug|Any CPU = Debug|Any CPU
+		Development|Any CPU = Development|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BA89E172-8EE2-07F1-245F-07EAC60F5819}.Development|Default.ActiveCfg = Development
-		{BA89E172-8EE2-07F1-245F-07EAC60F5819}.Development|Default.Build.0 = Development
+		{BA89E172-8EE2-07F1-245F-07EAC60F5819}.Debug|Any CPU.ActiveCfg = Development
+		{BA89E172-8EE2-07F1-245F-07EAC60F5819}.Debug|Any CPU.Build.0 = Development
+		{BA89E172-8EE2-07F1-245F-07EAC60F5819}.Development|Any CPU.ActiveCfg = Development
+		{BA89E172-8EE2-07F1-245F-07EAC60F5819}.Development|Any CPU.Build.0 = Development
+		{BA89E172-8EE2-07F1-245F-07EAC60F5819}.Release|Any CPU.ActiveCfg = Development
+		{BA89E172-8EE2-07F1-245F-07EAC60F5819}.Release|Any CPU.Build.0 = Development
+		{927DE47D-4CA6-4884-BE3B-F9C89C10AFDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{927DE47D-4CA6-4884-BE3B-F9C89C10AFDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{927DE47D-4CA6-4884-BE3B-F9C89C10AFDD}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{927DE47D-4CA6-4884-BE3B-F9C89C10AFDD}.Development|Any CPU.ActiveCfg = Release|Any CPU
+		{927DE47D-4CA6-4884-BE3B-F9C89C10AFDD}.Development|Any CPU.Build.0 = Release|Any CPU
+		{927DE47D-4CA6-4884-BE3B-F9C89C10AFDD}.Development|Any CPU.Deploy.0 = Release|Any CPU
+		{927DE47D-4CA6-4884-BE3B-F9C89C10AFDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{927DE47D-4CA6-4884-BE3B-F9C89C10AFDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{927DE47D-4CA6-4884-BE3B-F9C89C10AFDD}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BA89E172-8EE2-07F1-245F-07EAC60F5819} = {01589259-6671-4931-92E6-0DA709168197}
+		{927DE47D-4CA6-4884-BE3B-F9C89C10AFDD} = {01589259-6671-4931-92E6-0DA709168197}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A954ECB0-008C-4E61-8EA3-5E72CF05C151}

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:refId="Package"
   DTS:CreationDate="11/20/2025 10:01:34 AM"
@@ -12,7 +12,7 @@
   DTS:ObjectName="01_Load_HourlyCalories"
   DTS:PackageType="5"
   DTS:VersionBuild="5"
-  DTS:VersionGUID="{EB34CE26-D3B2-4152-9BA2-0D4ABD7E47D7}">
+  DTS:VersionGUID="{B831CB52-F8F5-4080-8A44-4ACC457434F1}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -136,8 +136,8 @@
               <connections>
                 <connection
                   refId="Package\DFT_HourlyCalories\HourlyCalories.Connections[OleDbConnection]"
-                  connectionManagerID="{904FEDCA-9B76-47AA-AF43-76A0284950F5}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[OLEDB_LOCAL_Bellabeat]"
+                  connectionManagerID="{904FEDCA-9B76-47AA-AF43-76A0284950F5}:invalid"
+                  connectionManagerRefId="{904FEDCA-9B76-47AA-AF43-76A0284950F5}:invalid"
                   description="Connexion OLE DB en cours d'exécution utilisée pour accéder à la base de données."
                   name="OleDbConnection" />
               </connections>

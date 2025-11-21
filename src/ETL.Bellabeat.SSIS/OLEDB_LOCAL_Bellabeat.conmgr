@@ -1,4 +1,4 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:ObjectName="OLEDB_LOCAL_Bellabeat"
   DTS:DTSID="{904FEDCA-9B76-47AA-AF43-76A0284950F5}"
@@ -7,10 +7,10 @@
     <DTS:ConnectionManager
       DTS:ConnectRetryCount="1"
       DTS:ConnectRetryInterval="5"
-      DTS:ConnectionString="Data Source=PEARL\SQLEXPRESS;User ID=coursera_student;Initial Catalog=bellabeat_data;Provider=MSOLEDBSQL.1;Persist Security Info=True;Auto Translate=False;">
+      DTS:ConnectionString="Data Source=PEARL\SQLEXPRESS;User ID=sa;Initial Catalog=bellabeat_data;Provider=MSOLEDBSQL.1;Persist Security Info=True;Auto Translate=False;Application Name=SSIS-{904FEDCA-9B76-47AA-AF43-76A0284950F5}OLEDB_LOCAL_Bellabeat;">
       <DTS:Password
         DTS:Name="Password"
-        Sensitive="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA6/ODvWxH5UCfYyLo0clyAgAAAAACAAAAAAADZgAAwAAAABAAAACyY6Kq/A3+na6v5mgNWFgFAAAAAASAAACgAAAAEAAAAPZeNoR5nWIbyyn7c9E5VP94AAAAI3uX1w6WHqz3xsDea4GcbN5J2GubF2YYFjn14VDFs2WDmxBgBq1MlUbGZQ3hTuzOEKBC3oq0nb3mztVIC6KS6I4PU1sjcYHXtkL/auvmCuD6uL0eKkzC7xFtK9DnPgO8bpd4vIcblLcfzjh+R3NAO6i2ssO1nhqDFAAAAJWmsQDH/rmccRjlUU+hIl4+fdxT</DTS:Password>
+        Sensitive="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA6/ODvWxH5UCfYyLo0clyAgAAAAACAAAAAAADZgAAwAAAABAAAACLx/ApzNaxBWAwqHdM+HH2AAAAAASAAACgAAAAEAAAAOTBj92G1wpVc/rD/mbb5HV4AAAATeiBqKf+2NyLxYv9mz1hwDSe7zDZWQqGo4lJelHE1iN3UWcsjK2UPODQa9lDAz2AsJnUDKHQAnIm5pkjJzhWvvU5D0Wq2Wn40EOyQA7hNHekweYLYqirW6ptoVGb2j3hKxtijr1UfFTYhCHGXZqTka3KhwSazK/zFAAAANMwvLwXQx7dF94Cv43kw2143ctp</DTS:Password>
     </DTS:ConnectionManager>
   </DTS:ObjectData>
 </DTS:ConnectionManager>

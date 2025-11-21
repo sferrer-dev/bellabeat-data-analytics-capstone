@@ -1,4 +1,4 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:refId="Package"
   DTS:CreationDate="11/15/2025 10:03:44 AM"
@@ -12,7 +12,7 @@
   DTS:ObjectName="01_Load_DailyActivity"
   DTS:PackageType="5"
   DTS:VersionBuild="10"
-  DTS:VersionGUID="{449D1274-AE3E-4269-BD62-8A5741FE33ED}">
+  DTS:VersionGUID="{08D90BB9-7231-4717-BF18-CB93329829AE}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -233,8 +233,8 @@
               <connections>
                 <connection
                   refId="Package\DFT_DailyActivity_CSV_To_SQL\DailyActivity.Connections[OleDbConnection]"
-                  connectionManagerID="{904FEDCA-9B76-47AA-AF43-76A0284950F5}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[OLEDB_LOCAL_Bellabeat]"
+                  connectionManagerID="{904FEDCA-9B76-47AA-AF43-76A0284950F5}:invalid"
+                  connectionManagerRefId="{904FEDCA-9B76-47AA-AF43-76A0284950F5}:invalid"
                   description="Connexion OLE DB en cours d'exécution utilisée pour accéder à la base de données."
                   name="OleDbConnection" />
               </connections>

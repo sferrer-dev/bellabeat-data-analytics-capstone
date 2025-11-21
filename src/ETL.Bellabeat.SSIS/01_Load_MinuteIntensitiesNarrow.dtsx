@@ -1,4 +1,4 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:refId="Package"
   DTS:CreationDate="11/20/2025 1:04:25 PM"
@@ -12,7 +12,7 @@
   DTS:ObjectName="01_Load_MinuteIntensitiesNarrow"
   DTS:PackageType="5"
   DTS:VersionBuild="3"
-  DTS:VersionGUID="{B7943B15-5B43-4571-8C73-EA0540A96ACB}">
+  DTS:VersionGUID="{D230C80E-AC2A-4824-ADF8-2B8B5B8ED91E}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -136,8 +136,8 @@
               <connections>
                 <connection
                   refId="Package\DFT_MinuteIntensitiesNarrow\MinuteIntensitiesNarrow.Connections[OleDbConnection]"
-                  connectionManagerID="{904FEDCA-9B76-47AA-AF43-76A0284950F5}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[OLEDB_LOCAL_Bellabeat]"
+                  connectionManagerID="{904FEDCA-9B76-47AA-AF43-76A0284950F5}:invalid"
+                  connectionManagerRefId="{904FEDCA-9B76-47AA-AF43-76A0284950F5}:invalid"
                   description="Connexion OLE DB en cours d'exécution utilisée pour accéder à la base de données."
                   name="OleDbConnection" />
               </connections>

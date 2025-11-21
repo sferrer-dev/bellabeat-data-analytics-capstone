@@ -6,14 +6,14 @@
   DTS:CreatorComputerName="PEARL"
   DTS:CreatorName="SFERRER\stephane"
   DTS:Description="Master package orchestrating the loading of Bellabeat files into SQL Server via the Load_* packages."
-  DTS:DTSID="{7729CFCD-0146-493D-8962-BFEF496AB165}"
+  DTS:DTSID="{80837FFE-6BFB-4698-A3BF-736CC9C0D633}"
   DTS:ExecutableType="Microsoft.Package"
   DTS:LastModifiedProductVersion="17.0.1008.3"
   DTS:LocaleID="1036"
-  DTS:ObjectName="Package1"
+  DTS:ObjectName="04_Master_Load_Bellabeat"
   DTS:PackageType="5"
-  DTS:VersionBuild="4"
-  DTS:VersionGUID="{2652288C-71C7-4774-8B1A-75494FF87322}">
+  DTS:VersionBuild="6"
+  DTS:VersionGUID="{C59146BA-231D-4B90-89E2-1540FE9E47D3}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables />
@@ -308,6 +308,42 @@
           Size="226,42"
           Id="Package\EPT_Load_HeartrateSeconds"
           TopLeft="17.5,91.5" />
+        <NodeLayout
+          Size="209,42"
+          Id="Package\EPT_Load_HourlyCalories"
+          TopLeft="21.5,166" />
+        <NodeLayout
+          Size="218,42"
+          Id="Package\EPT_Load_HourlyIntensities"
+          TopLeft="25.5,236" />
+        <NodeLayout
+          Size="197,42"
+          Id="Package\EPT_Load_HourlySteps"
+          TopLeft="28,320" />
+        <NodeLayout
+          Size="246,42"
+          Id="Package\EPT_Load_MinuteCaloriesNarrow"
+          TopLeft="25.5,398" />
+        <NodeLayout
+          Size="255,42"
+          Id="Package\EPT_Load_MinuteIntensitiesNarrow"
+          TopLeft="31.5,480.5" />
+        <NodeLayout
+          Size="233,42"
+          Id="Package\ETL_Load_MinuteMETsNarrow"
+          TopLeft="35.5,562" />
+        <NodeLayout
+          Size="197,42"
+          Id="Package\ETL_Load_MinuteSleep"
+          TopLeft="68,644.5" />
+        <NodeLayout
+          Size="207,42"
+          Id="Package\ETL_Load_WeightLogInfo"
+          TopLeft="73,817" />
+        <NodeLayout
+          Size="202,42"
+          Id="Package\ETL_MinuteStepsNarrow"
+          TopLeft="66,733" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint]"
           TopLeft="113.5,60.5">
@@ -342,10 +378,6 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <NodeLayout
-          Size="209,42"
-          Id="Package\EPT_Load_HourlyCalories"
-          TopLeft="21.5,166" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 1]"
           TopLeft="128.25,133.5">
@@ -368,10 +400,6 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <NodeLayout
-          Size="218,42"
-          Id="Package\EPT_Load_HourlyIntensities"
-          TopLeft="25.5,236" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 2]"
           TopLeft="126,208">
@@ -406,10 +434,6 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <NodeLayout
-          Size="197,42"
-          Id="Package\EPT_Load_HourlySteps"
-          TopLeft="28,320" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 3]"
           TopLeft="134.5,278">
@@ -444,10 +468,6 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <NodeLayout
-          Size="246,42"
-          Id="Package\EPT_Load_MinuteCaloriesNarrow"
-          TopLeft="25.5,398" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 4]"
           TopLeft="126.5,362">
@@ -482,10 +502,6 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <NodeLayout
-          Size="255,42"
-          Id="Package\EPT_Load_MinuteIntensitiesNarrow"
-          TopLeft="31.5,480.5" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 5]"
           TopLeft="148.5,440">
@@ -520,10 +536,6 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <NodeLayout
-          Size="233,42"
-          Id="Package\ETL_Load_MinuteMETsNarrow"
-          TopLeft="35.5,562" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 6]"
           TopLeft="155.5,522.5">
@@ -546,10 +558,6 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <NodeLayout
-          Size="197,42"
-          Id="Package\ETL_Load_MinuteSleep"
-          TopLeft="68,644.5" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 7]"
           TopLeft="152,604">
@@ -584,10 +592,6 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <NodeLayout
-          Size="202,42"
-          Id="Package\ETL_MinuteStepsNarrow"
-          TopLeft="66,733" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 8]"
           TopLeft="166.75,686.5">
@@ -610,10 +614,6 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <NodeLayout
-          Size="207,42"
-          Id="Package\ETL_Load_WeightLogInfo"
-          TopLeft="73,817" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 9]"
           TopLeft="167,775">
