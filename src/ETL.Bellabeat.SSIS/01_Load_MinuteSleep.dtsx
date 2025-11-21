@@ -5,14 +5,14 @@
   DTS:CreationName="Microsoft.Package"
   DTS:CreatorComputerName="PEARL"
   DTS:CreatorName="SFERRER\stephane"
-  DTS:DTSID="{D1FEA24B-6810-460E-8AD5-F63DD3312BEF}"
+  DTS:DTSID="{B1240574-3525-403D-A68D-7738AB79833D}"
   DTS:ExecutableType="Microsoft.Package"
   DTS:LastModifiedProductVersion="17.0.1008.3"
   DTS:LocaleID="1036"
-  DTS:ObjectName="Package1"
+  DTS:ObjectName="01_Load_MinuteSleep"
   DTS:PackageType="5"
-  DTS:VersionBuild="6"
-  DTS:VersionGUID="{1308B506-F977-46CD-82FA-0883F70ED022}">
+  DTS:VersionBuild="8"
+  DTS:VersionGUID="{531D3957-4DCE-4BA7-A7B6-5DB832DF9EDC}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -163,28 +163,28 @@
                       cachedName="Id"
                       cachedSortKeyPosition="1"
                       externalMetadataColumnId="Package\DFT_MinuteSleep\MinuteSleep.Inputs[Entrée de destination OLE DB].ExternalColumns[Id]"
-                      lineageId="Package\DFT_MinuteSleep\Trier.Outputs[Sortie de tri].Columns[Id]" />
+                      lineageId="Package\DFT_MinuteSleep\SORT_Duplicated.Outputs[Sortie de tri].Columns[Id]" />
                     <inputColumn
                       refId="Package\DFT_MinuteSleep\MinuteSleep.Inputs[Entrée de destination OLE DB].Columns[date]"
                       cachedDataType="dbTimeStamp"
                       cachedName="date"
                       cachedSortKeyPosition="2"
                       externalMetadataColumnId="Package\DFT_MinuteSleep\MinuteSleep.Inputs[Entrée de destination OLE DB].ExternalColumns[Date]"
-                      lineageId="Package\DFT_MinuteSleep\Trier.Outputs[Sortie de tri].Columns[date]" />
+                      lineageId="Package\DFT_MinuteSleep\SORT_Duplicated.Outputs[Sortie de tri].Columns[date]" />
                     <inputColumn
                       refId="Package\DFT_MinuteSleep\MinuteSleep.Inputs[Entrée de destination OLE DB].Columns[value]"
                       cachedDataType="i4"
                       cachedName="value"
                       cachedSortKeyPosition="4"
                       externalMetadataColumnId="Package\DFT_MinuteSleep\MinuteSleep.Inputs[Entrée de destination OLE DB].ExternalColumns[Value]"
-                      lineageId="Package\DFT_MinuteSleep\Trier.Outputs[Sortie de tri].Columns[value]" />
+                      lineageId="Package\DFT_MinuteSleep\SORT_Duplicated.Outputs[Sortie de tri].Columns[value]" />
                     <inputColumn
                       refId="Package\DFT_MinuteSleep\MinuteSleep.Inputs[Entrée de destination OLE DB].Columns[logId]"
                       cachedDataType="i8"
                       cachedName="logId"
                       cachedSortKeyPosition="3"
                       externalMetadataColumnId="Package\DFT_MinuteSleep\MinuteSleep.Inputs[Entrée de destination OLE DB].ExternalColumns[LogId]"
-                      lineageId="Package\DFT_MinuteSleep\Trier.Outputs[Sortie de tri].Columns[logId]" />
+                      lineageId="Package\DFT_MinuteSleep\SORT_Duplicated.Outputs[Sortie de tri].Columns[logId]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -227,6 +227,164 @@
                       lineageId="Package\DFT_MinuteSleep\MinuteSleep.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorColumn]"
                       name="ErrorColumn"
                       specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\DFT_MinuteSleep\SORT_Duplicated"
+              componentClassID="Microsoft.Sort"
+              contactInfo="Trier;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Tous droits réservés; http://www.microsoft.com/sql/support;1"
+              description="Trie les données d'entrée en ordre croissant ou décroissant lorsque le tri ne peut pas être effectué à la source. Par exemple, triez les données de vente par 'id de client' avant leur enregistrement dans un fichier plat et leur diffusion dans un autre service. Remarque : nous ne recommandons pas cette transformation dans le cas de flux de données volumineux."
+              name="SORT_Duplicated"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Boolean"
+                  description="Indique si la transformation de tri supprime les lignes comportant des valeurs de tri en double."
+                  name="EliminateDuplicates">true</property>
+                <property
+                  dataType="System.Int32"
+                  description="Spécifie le nombre maximal de threads à utiliser pour le tri."
+                  expressionType="Notify"
+                  name="MaximumThreads">-1</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\DFT_MinuteSleep\SORT_Duplicated.Inputs[Entrée de tri]"
+                  name="Entrée de tri">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\DFT_MinuteSleep\SORT_Duplicated.Inputs[Entrée de tri].Columns[Id]"
+                      cachedDataType="i8"
+                      cachedName="Id"
+                      lineageId="Package\DFT_MinuteSleep\SRC_MinuteSleep_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Spécifie les options de comparaison pour les données caractères."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Spécifie l'ordre de tri de la colonne."
+                          name="NewSortKeyPosition">1</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\DFT_MinuteSleep\SORT_Duplicated.Inputs[Entrée de tri].Columns[date]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="date"
+                      lineageId="Package\DFT_MinuteSleep\SRC_MinuteSleep_CSV.Outputs[Sortie de source de fichier plat].Columns[date]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Spécifie les options de comparaison pour les données caractères."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Spécifie l'ordre de tri de la colonne."
+                          name="NewSortKeyPosition">2</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\DFT_MinuteSleep\SORT_Duplicated.Inputs[Entrée de tri].Columns[value]"
+                      cachedDataType="i4"
+                      cachedName="value"
+                      lineageId="Package\DFT_MinuteSleep\SRC_MinuteSleep_CSV.Outputs[Sortie de source de fichier plat].Columns[value]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Spécifie les options de comparaison pour les données caractères."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Spécifie l'ordre de tri de la colonne."
+                          name="NewSortKeyPosition">4</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\DFT_MinuteSleep\SORT_Duplicated.Inputs[Entrée de tri].Columns[logId]"
+                      cachedDataType="i8"
+                      cachedName="logId"
+                      lineageId="Package\DFT_MinuteSleep\SRC_MinuteSleep_CSV.Outputs[Sortie de source de fichier plat].Columns[logId]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Spécifie les options de comparaison pour les données caractères."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Spécifie l'ordre de tri de la colonne."
+                          name="NewSortKeyPosition">3</property>
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\DFT_MinuteSleep\SORT_Duplicated.Outputs[Sortie de tri]"
+                  isSorted="true"
+                  name="Sortie de tri">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT_MinuteSleep\SORT_Duplicated.Outputs[Sortie de tri].Columns[Id]"
+                      dataType="i8"
+                      lineageId="Package\DFT_MinuteSleep\SORT_Duplicated.Outputs[Sortie de tri].Columns[Id]"
+                      name="Id"
+                      sortKeyPosition="1">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Spécifie l'identificateur de traçabilité de la colonne d'entrée associé à cette colonne de sortie."
+                          name="SortColumnId">#{Package\DFT_MinuteSleep\SRC_MinuteSleep_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\DFT_MinuteSleep\SORT_Duplicated.Outputs[Sortie de tri].Columns[date]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\DFT_MinuteSleep\SORT_Duplicated.Outputs[Sortie de tri].Columns[date]"
+                      name="date"
+                      sortKeyPosition="2">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Spécifie l'identificateur de traçabilité de la colonne d'entrée associé à cette colonne de sortie."
+                          name="SortColumnId">#{Package\DFT_MinuteSleep\SRC_MinuteSleep_CSV.Outputs[Sortie de source de fichier plat].Columns[date]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\DFT_MinuteSleep\SORT_Duplicated.Outputs[Sortie de tri].Columns[value]"
+                      dataType="i4"
+                      lineageId="Package\DFT_MinuteSleep\SORT_Duplicated.Outputs[Sortie de tri].Columns[value]"
+                      name="value"
+                      sortKeyPosition="4">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Spécifie l'identificateur de traçabilité de la colonne d'entrée associé à cette colonne de sortie."
+                          name="SortColumnId">#{Package\DFT_MinuteSleep\SRC_MinuteSleep_CSV.Outputs[Sortie de source de fichier plat].Columns[value]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\DFT_MinuteSleep\SORT_Duplicated.Outputs[Sortie de tri].Columns[logId]"
+                      dataType="i8"
+                      lineageId="Package\DFT_MinuteSleep\SORT_Duplicated.Outputs[Sortie de tri].Columns[logId]"
+                      name="logId"
+                      sortKeyPosition="3">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Spécifie l'identificateur de traçabilité de la colonne d'entrée associé à cette colonne de sortie."
+                          name="SortColumnId">#{Package\DFT_MinuteSleep\SRC_MinuteSleep_CSV.Outputs[Sortie de source de fichier plat].Columns[logId]}</property>
+                      </properties>
+                    </outputColumn>
                   </outputColumns>
                   <externalMetadataColumns />
                 </output>
@@ -393,176 +551,18 @@
                 </output>
               </outputs>
             </component>
-            <component
-              refId="Package\DFT_MinuteSleep\Trier"
-              componentClassID="Microsoft.Sort"
-              contactInfo="Trier;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Tous droits réservés; http://www.microsoft.com/sql/support;1"
-              description="Trie les données d'entrée en ordre croissant ou décroissant lorsque le tri ne peut pas être effectué à la source. Par exemple, triez les données de vente par 'id de client' avant leur enregistrement dans un fichier plat et leur diffusion dans un autre service. Remarque : nous ne recommandons pas cette transformation dans le cas de flux de données volumineux."
-              name="Trier"
-              version="1">
-              <properties>
-                <property
-                  dataType="System.Boolean"
-                  description="Indique si la transformation de tri supprime les lignes comportant des valeurs de tri en double."
-                  name="EliminateDuplicates">true</property>
-                <property
-                  dataType="System.Int32"
-                  description="Spécifie le nombre maximal de threads à utiliser pour le tri."
-                  expressionType="Notify"
-                  name="MaximumThreads">-1</property>
-              </properties>
-              <inputs>
-                <input
-                  refId="Package\DFT_MinuteSleep\Trier.Inputs[Entrée de tri]"
-                  name="Entrée de tri">
-                  <inputColumns>
-                    <inputColumn
-                      refId="Package\DFT_MinuteSleep\Trier.Inputs[Entrée de tri].Columns[Id]"
-                      cachedDataType="i8"
-                      cachedName="Id"
-                      lineageId="Package\DFT_MinuteSleep\SRC_MinuteSleep_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Spécifie les options de comparaison pour les données caractères."
-                          name="NewComparisonFlags">0</property>
-                        <property
-                          dataType="System.Int32"
-                          description="Spécifie l'ordre de tri de la colonne."
-                          name="NewSortKeyPosition">1</property>
-                      </properties>
-                    </inputColumn>
-                    <inputColumn
-                      refId="Package\DFT_MinuteSleep\Trier.Inputs[Entrée de tri].Columns[date]"
-                      cachedDataType="dbTimeStamp"
-                      cachedName="date"
-                      lineageId="Package\DFT_MinuteSleep\SRC_MinuteSleep_CSV.Outputs[Sortie de source de fichier plat].Columns[date]">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Spécifie les options de comparaison pour les données caractères."
-                          name="NewComparisonFlags">0</property>
-                        <property
-                          dataType="System.Int32"
-                          description="Spécifie l'ordre de tri de la colonne."
-                          name="NewSortKeyPosition">2</property>
-                      </properties>
-                    </inputColumn>
-                    <inputColumn
-                      refId="Package\DFT_MinuteSleep\Trier.Inputs[Entrée de tri].Columns[value]"
-                      cachedDataType="i4"
-                      cachedName="value"
-                      lineageId="Package\DFT_MinuteSleep\SRC_MinuteSleep_CSV.Outputs[Sortie de source de fichier plat].Columns[value]">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Spécifie les options de comparaison pour les données caractères."
-                          name="NewComparisonFlags">0</property>
-                        <property
-                          dataType="System.Int32"
-                          description="Spécifie l'ordre de tri de la colonne."
-                          name="NewSortKeyPosition">4</property>
-                      </properties>
-                    </inputColumn>
-                    <inputColumn
-                      refId="Package\DFT_MinuteSleep\Trier.Inputs[Entrée de tri].Columns[logId]"
-                      cachedDataType="i8"
-                      cachedName="logId"
-                      lineageId="Package\DFT_MinuteSleep\SRC_MinuteSleep_CSV.Outputs[Sortie de source de fichier plat].Columns[logId]">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Spécifie les options de comparaison pour les données caractères."
-                          name="NewComparisonFlags">0</property>
-                        <property
-                          dataType="System.Int32"
-                          description="Spécifie l'ordre de tri de la colonne."
-                          name="NewSortKeyPosition">3</property>
-                      </properties>
-                    </inputColumn>
-                  </inputColumns>
-                  <externalMetadataColumns />
-                </input>
-              </inputs>
-              <outputs>
-                <output
-                  refId="Package\DFT_MinuteSleep\Trier.Outputs[Sortie de tri]"
-                  isSorted="true"
-                  name="Sortie de tri">
-                  <outputColumns>
-                    <outputColumn
-                      refId="Package\DFT_MinuteSleep\Trier.Outputs[Sortie de tri].Columns[Id]"
-                      dataType="i8"
-                      lineageId="Package\DFT_MinuteSleep\Trier.Outputs[Sortie de tri].Columns[Id]"
-                      name="Id"
-                      sortKeyPosition="1">
-                      <properties>
-                        <property
-                          containsID="true"
-                          dataType="System.Int32"
-                          description="Spécifie l'identificateur de traçabilité de la colonne d'entrée associé à cette colonne de sortie."
-                          name="SortColumnId">#{Package\DFT_MinuteSleep\SRC_MinuteSleep_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]}</property>
-                      </properties>
-                    </outputColumn>
-                    <outputColumn
-                      refId="Package\DFT_MinuteSleep\Trier.Outputs[Sortie de tri].Columns[date]"
-                      dataType="dbTimeStamp"
-                      lineageId="Package\DFT_MinuteSleep\Trier.Outputs[Sortie de tri].Columns[date]"
-                      name="date"
-                      sortKeyPosition="2">
-                      <properties>
-                        <property
-                          containsID="true"
-                          dataType="System.Int32"
-                          description="Spécifie l'identificateur de traçabilité de la colonne d'entrée associé à cette colonne de sortie."
-                          name="SortColumnId">#{Package\DFT_MinuteSleep\SRC_MinuteSleep_CSV.Outputs[Sortie de source de fichier plat].Columns[date]}</property>
-                      </properties>
-                    </outputColumn>
-                    <outputColumn
-                      refId="Package\DFT_MinuteSleep\Trier.Outputs[Sortie de tri].Columns[value]"
-                      dataType="i4"
-                      lineageId="Package\DFT_MinuteSleep\Trier.Outputs[Sortie de tri].Columns[value]"
-                      name="value"
-                      sortKeyPosition="4">
-                      <properties>
-                        <property
-                          containsID="true"
-                          dataType="System.Int32"
-                          description="Spécifie l'identificateur de traçabilité de la colonne d'entrée associé à cette colonne de sortie."
-                          name="SortColumnId">#{Package\DFT_MinuteSleep\SRC_MinuteSleep_CSV.Outputs[Sortie de source de fichier plat].Columns[value]}</property>
-                      </properties>
-                    </outputColumn>
-                    <outputColumn
-                      refId="Package\DFT_MinuteSleep\Trier.Outputs[Sortie de tri].Columns[logId]"
-                      dataType="i8"
-                      lineageId="Package\DFT_MinuteSleep\Trier.Outputs[Sortie de tri].Columns[logId]"
-                      name="logId"
-                      sortKeyPosition="3">
-                      <properties>
-                        <property
-                          containsID="true"
-                          dataType="System.Int32"
-                          description="Spécifie l'identificateur de traçabilité de la colonne d'entrée associé à cette colonne de sortie."
-                          name="SortColumnId">#{Package\DFT_MinuteSleep\SRC_MinuteSleep_CSV.Outputs[Sortie de source de fichier plat].Columns[logId]}</property>
-                      </properties>
-                    </outputColumn>
-                  </outputColumns>
-                  <externalMetadataColumns />
-                </output>
-              </outputs>
-            </component>
           </components>
           <paths>
             <path
               refId="Package\DFT_MinuteSleep.Paths[Sortie de source de fichier plat]"
-              endId="Package\DFT_MinuteSleep\Trier.Inputs[Entrée de tri]"
+              endId="Package\DFT_MinuteSleep\SORT_Duplicated.Inputs[Entrée de tri]"
               name="Sortie de source de fichier plat"
               startId="Package\DFT_MinuteSleep\SRC_MinuteSleep_CSV.Outputs[Sortie de source de fichier plat]" />
             <path
               refId="Package\DFT_MinuteSleep.Paths[Sortie de tri]"
               endId="Package\DFT_MinuteSleep\MinuteSleep.Inputs[Entrée de destination OLE DB]"
               name="Sortie de tri"
-              startId="Package\DFT_MinuteSleep\Trier.Outputs[Sortie de tri]" />
+              startId="Package\DFT_MinuteSleep\SORT_Duplicated.Outputs[Sortie de tri]" />
           </paths>
         </pipeline>
       </DTS:ObjectData>
@@ -597,56 +597,22 @@
           Id="Package\DFT_MinuteSleep\SRC_MinuteSleep_CSV"
           TopLeft="129,82" />
         <NodeLayout
+          Size="168,42"
+          Id="Package\DFT_MinuteSleep\SORT_Duplicated"
+          TopLeft="224,159.333333333333" />
+        <NodeLayout
           Size="140,42"
           Id="Package\DFT_MinuteSleep\MinuteSleep"
           TopLeft="249.333333333333,287.333333333333" />
-        <NodeLayout
-          Size="102,42"
-          Id="Package\DFT_MinuteSleep\Trier"
-          TopLeft="224,159.333333333333" />
-        <EdgeLayout
-          Id="Package\DFT_MinuteSleep.Paths[Sortie de source de fichier plat]"
-          TopLeft="228,124">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="47,35.3333333333333"
-              Start="0,0"
-              End="47,27.8333333333333">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,13.6666666666667" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,13.6666666666667"
-                    Point2="0,17.6666666666667"
-                    Point3="4,17.6666666666667" />
-                  <mssgle:LineSegment
-                    End="43,17.6666666666667" />
-                  <mssgle:CubicBezierSegment
-                    Point1="43,17.6666666666667"
-                    Point2="47,17.6666666666667"
-                    Point3="47,21.6666666666667" />
-                  <mssgle:LineSegment
-                    End="47,27.8333333333333" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
         <EdgeLayout
           Id="Package\DFT_MinuteSleep.Paths[Sortie de tri]"
-          TopLeft="275,201.333333333333">
+          TopLeft="308,201.333333333333">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="44.3333333333333,86"
+              EndConnector="11.333333333333,86"
               Start="0,0"
-              End="44.3333333333333,78.5">
+              End="11.333333333333,78.5">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
@@ -657,13 +623,47 @@
                     Point2="0,43"
                     Point3="4,43" />
                   <mssgle:LineSegment
-                    End="40.3333333333333,43" />
+                    End="7.33333333333303,43" />
                   <mssgle:CubicBezierSegment
-                    Point1="40.3333333333333,43"
-                    Point2="44.3333333333333,43"
-                    Point3="44.3333333333333,47" />
+                    Point1="7.33333333333303,43"
+                    Point2="11.333333333333,43"
+                    Point3="11.333333333333,47" />
                   <mssgle:LineSegment
-                    End="44.3333333333333,78.5" />
+                    End="11.333333333333,78.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\DFT_MinuteSleep.Paths[Sortie de source de fichier plat]"
+          TopLeft="228,124">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="80,35.333333333333"
+              Start="0,0"
+              End="80,27.833333333333">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,13.6666666666665" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,13.6666666666665"
+                    Point2="0,17.6666666666665"
+                    Point3="4,17.6666666666665" />
+                  <mssgle:LineSegment
+                    End="76,17.6666666666665" />
+                  <mssgle:CubicBezierSegment
+                    Point1="76,17.6666666666665"
+                    Point2="80,17.6666666666665"
+                    Point3="80,21.6666666666665" />
+                  <mssgle:LineSegment
+                    End="80,27.833333333333" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>

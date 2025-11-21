@@ -1,26 +1,26 @@
 ﻿<?xml version="1.0"?>
 <DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:refId="Package"
-  DTS:CreationDate="11/20/2025 8:55:02 AM"
+  DTS:CreationDate="11/20/2025 7:26:53 PM"
   DTS:CreationName="Microsoft.Package"
   DTS:CreatorComputerName="PEARL"
   DTS:CreatorName="SFERRER\stephane"
-  DTS:DTSID="{944E9E75-BF4B-4BD9-91A7-16BB81E249E6}"
+  DTS:DTSID="{1B5EF21E-0115-4718-A0BA-2A29503E87C2}"
   DTS:ExecutableType="Microsoft.Package"
   DTS:LastModifiedProductVersion="17.0.1008.3"
   DTS:LocaleID="1036"
-  DTS:ObjectName="Package1"
+  DTS:ObjectName="01_Load_MinuteStepsNarrow"
   DTS:PackageType="5"
-  DTS:VersionBuild="16"
-  DTS:VersionGUID="{CA11189F-1A22-4CEF-A71A-A88249235BFF}">
+  DTS:VersionBuild="7"
+  DTS:VersionGUID="{6DFC3852-24FE-4538-A20A-66F28A5222FF}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
     <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[FFC_HeartrateSeconds_Import]"
+      DTS:refId="Package.ConnectionManagers[FFC_MinuteStepsNarrow_Import]"
       DTS:CreationName="FLATFILE"
-      DTS:DTSID="{79B62043-79A2-4EA0-B0AA-291B1FC01F8A}"
-      DTS:ObjectName="FFC_HeartrateSeconds_Import">
+      DTS:DTSID="{00D94839-061C-45AE-9713-1ADC903B274F}"
+      DTS:ObjectName="FFC_MinuteStepsNarrow_Import">
       <DTS:ObjectData>
         <DTS:ConnectionManager
           DTS:Format="Delimited"
@@ -30,34 +30,31 @@
           DTS:RowDelimiter=""
           DTS:TextQualifier="_x003C_none_x003E_"
           DTS:CodePage="65001"
-          DTS:ConnectionString="D:\Coursera\Data\Capstone\Bellabeat\data-samples\heartrate_seconds_merged.csv">
+          DTS:ConnectionString="D:\Coursera\Data\Capstone\Bellabeat\data-samples\minuteStepsNarrow_merged.csv">
           <DTS:FlatFileColumns>
             <DTS:FlatFileColumn
               DTS:ColumnType="Delimited"
               DTS:ColumnDelimiter="_x002C_"
-              DTS:MaximumWidth="50"
-              DTS:DataType="129"
+              DTS:DataType="20"
               DTS:TextQualified="True"
               DTS:ObjectName="Id"
-              DTS:DTSID="{6F77954E-2B1A-4D7F-BDDF-4652606EB601}"
+              DTS:DTSID="{A9D923C9-DADE-4C84-B414-0A7E55228F88}"
               DTS:CreationName="" />
             <DTS:FlatFileColumn
               DTS:ColumnType="Delimited"
               DTS:ColumnDelimiter="_x002C_"
-              DTS:MaximumWidth="50"
-              DTS:DataType="129"
+              DTS:DataType="135"
               DTS:TextQualified="True"
-              DTS:ObjectName="Time"
-              DTS:DTSID="{DB8D419B-6A6D-459C-A35E-33691D798013}"
+              DTS:ObjectName="ActivityMinute"
+              DTS:DTSID="{4FC3B229-7407-4469-BF1A-332251889490}"
               DTS:CreationName="" />
             <DTS:FlatFileColumn
               DTS:ColumnType="Delimited"
               DTS:ColumnDelimiter="_x000D__x000A_"
-              DTS:MaximumWidth="50"
-              DTS:DataType="129"
+              DTS:DataType="3"
               DTS:TextQualified="True"
-              DTS:ObjectName="Value"
-              DTS:DTSID="{3A4B07F8-3CCE-4023-8225-DA913C2540F5}"
+              DTS:ObjectName="Steps"
+              DTS:DTSID="{A277490D-AABF-4A07-A575-0825FCAA0B25}"
               DTS:CreationName="" />
           </DTS:FlatFileColumns>
         </DTS:ConnectionManager>
@@ -67,13 +64,13 @@
   <DTS:Variables />
   <DTS:Executables>
     <DTS:Executable
-      DTS:refId="Package\DFT_HeartrateSeconds"
+      DTS:refId="Package\DFT_MinuteStepsNarrow"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Tâche de flux de données"
-      DTS:DTSID="{C548F36A-0ADE-4C35-96E8-AF4EB80698A3}"
+      DTS:DTSID="{1E142177-1AB2-4EF8-9F03-8AB1CE7D2E20}"
       DTS:ExecutableType="Microsoft.Pipeline"
       DTS:LocaleID="-1"
-      DTS:ObjectName="DFT_HeartrateSeconds"
+      DTS:ObjectName="DFT_MinuteStepsNarrow"
       DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
       <DTS:Variables />
       <DTS:ObjectData>
@@ -81,11 +78,11 @@
           version="1">
           <components>
             <component
-              refId="Package\DFT_HeartrateSeconds\HeartrateSeconds"
+              refId="Package\DFT_MinuteStepsNarrow\MinuteStepsNarrow"
               componentClassID="Microsoft.OLEDBDestination"
               contactInfo="Destination OLE DB;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Tous droits réservés; http://www.microsoft.com/sql/support;4"
               description="Destination OLE DB"
-              name="HeartrateSeconds"
+              name="MinuteStepsNarrow"
               usesDispositions="true"
               version="4">
               <properties>
@@ -96,7 +93,7 @@
                 <property
                   dataType="System.String"
                   description="Spécifie le nom de l'objet de base de données utilisé pour ouvrir un ensemble de lignes."
-                  name="OpenRowset">[HeartrateSeconds]</property>
+                  name="OpenRowset">[MinuteStepsNarrow]</property>
                 <property
                   dataType="System.String"
                   description="Spécifie la variable contenant le nom de l'objet de base de données utilisé pour ouvrir un ensemble de lignes."
@@ -138,7 +135,7 @@
               </properties>
               <connections>
                 <connection
-                  refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Connections[OleDbConnection]"
+                  refId="Package\DFT_MinuteStepsNarrow\MinuteStepsNarrow.Connections[OleDbConnection]"
                   connectionManagerID="{904FEDCA-9B76-47AA-AF43-76A0284950F5}:external"
                   connectionManagerRefId="Project.ConnectionManagers[OLEDB_LOCAL_Bellabeat]"
                   description="Connexion OLE DB en cours d'exécution utilisée pour accéder à la base de données."
@@ -146,72 +143,66 @@
               </connections>
               <inputs>
                 <input
-                  refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB]"
+                  refId="Package\DFT_MinuteStepsNarrow\MinuteStepsNarrow.Inputs[Entrée de destination OLE DB]"
                   errorOrTruncationOperation="Insérer"
                   errorRowDisposition="FailComponent"
                   hasSideEffects="true"
                   name="Entrée de destination OLE DB">
                   <inputColumns>
                     <inputColumn
-                      refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB].Columns[Id]"
-                      cachedCodepage="65001"
-                      cachedDataType="str"
-                      cachedLength="50"
+                      refId="Package\DFT_MinuteStepsNarrow\MinuteStepsNarrow.Inputs[Entrée de destination OLE DB].Columns[Id]"
+                      cachedDataType="i8"
                       cachedName="Id"
-                      externalMetadataColumnId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB].ExternalColumns[Id]"
-                      lineageId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]" />
+                      externalMetadataColumnId="Package\DFT_MinuteStepsNarrow\MinuteStepsNarrow.Inputs[Entrée de destination OLE DB].ExternalColumns[Id]"
+                      lineageId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]" />
                     <inputColumn
-                      refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB].Columns[Time]"
-                      cachedCodepage="65001"
-                      cachedDataType="str"
-                      cachedLength="50"
-                      cachedName="Time"
-                      externalMetadataColumnId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB].ExternalColumns[Time]"
-                      lineageId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie de source de fichier plat].Columns[Time]" />
+                      refId="Package\DFT_MinuteStepsNarrow\MinuteStepsNarrow.Inputs[Entrée de destination OLE DB].Columns[ActivityMinute]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="ActivityMinute"
+                      externalMetadataColumnId="Package\DFT_MinuteStepsNarrow\MinuteStepsNarrow.Inputs[Entrée de destination OLE DB].ExternalColumns[ActivityMinute]"
+                      lineageId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie de source de fichier plat].Columns[ActivityMinute]" />
                     <inputColumn
-                      refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB].Columns[Value]"
-                      cachedCodepage="65001"
-                      cachedDataType="str"
-                      cachedLength="50"
-                      cachedName="Value"
-                      externalMetadataColumnId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB].ExternalColumns[Value]"
-                      lineageId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie de source de fichier plat].Columns[Value]" />
+                      refId="Package\DFT_MinuteStepsNarrow\MinuteStepsNarrow.Inputs[Entrée de destination OLE DB].Columns[Steps]"
+                      cachedDataType="i4"
+                      cachedName="Steps"
+                      externalMetadataColumnId="Package\DFT_MinuteStepsNarrow\MinuteStepsNarrow.Inputs[Entrée de destination OLE DB].ExternalColumns[Steps]"
+                      lineageId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie de source de fichier plat].Columns[Steps]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
                     <externalMetadataColumn
-                      refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB].ExternalColumns[Id]"
+                      refId="Package\DFT_MinuteStepsNarrow\MinuteStepsNarrow.Inputs[Entrée de destination OLE DB].ExternalColumns[Id]"
                       dataType="i8"
                       name="Id" />
                     <externalMetadataColumn
-                      refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB].ExternalColumns[Time]"
+                      refId="Package\DFT_MinuteStepsNarrow\MinuteStepsNarrow.Inputs[Entrée de destination OLE DB].ExternalColumns[ActivityMinute]"
                       dataType="dbTimeStamp"
-                      name="Time" />
+                      name="ActivityMinute" />
                     <externalMetadataColumn
-                      refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB].ExternalColumns[Value]"
+                      refId="Package\DFT_MinuteStepsNarrow\MinuteStepsNarrow.Inputs[Entrée de destination OLE DB].ExternalColumns[Steps]"
                       dataType="i4"
-                      name="Value" />
+                      name="Steps" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
               <outputs>
                 <output
-                  refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Outputs[Sortie d'erreur de destination OLE DB]"
+                  refId="Package\DFT_MinuteStepsNarrow\MinuteStepsNarrow.Outputs[Sortie d'erreur de destination OLE DB]"
                   exclusionGroup="1"
                   isErrorOut="true"
                   name="Sortie d'erreur de destination OLE DB"
-                  synchronousInputId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB]">
+                  synchronousInputId="Package\DFT_MinuteStepsNarrow\MinuteStepsNarrow.Inputs[Entrée de destination OLE DB]">
                   <outputColumns>
                     <outputColumn
-                      refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorCode]"
+                      refId="Package\DFT_MinuteStepsNarrow\MinuteStepsNarrow.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorCode]"
                       dataType="i4"
-                      lineageId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorCode]"
+                      lineageId="Package\DFT_MinuteStepsNarrow\MinuteStepsNarrow.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorCode]"
                       name="ErrorCode"
                       specialFlags="1" />
                     <outputColumn
-                      refId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorColumn]"
+                      refId="Package\DFT_MinuteStepsNarrow\MinuteStepsNarrow.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorColumn]"
                       dataType="i4"
-                      lineageId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorColumn]"
+                      lineageId="Package\DFT_MinuteStepsNarrow\MinuteStepsNarrow.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorColumn]"
                       name="ErrorColumn"
                       specialFlags="2" />
                   </outputColumns>
@@ -220,12 +211,12 @@
               </outputs>
             </component>
             <component
-              refId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV"
+              refId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV"
               componentClassID="Microsoft.FlatFileSource"
               contactInfo="Source du fichier plat;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Tous droits réservés; http://www.microsoft.com/sql/support;1"
               description="Source du fichier plat"
               localeId="1033"
-              name="SRC_HeartrateSeconds_CSV"
+              name="SRC_minuteStepsNarrow_CSV"
               usesDispositions="true"
               version="1">
               <properties>
@@ -240,25 +231,23 @@
               </properties>
               <connections>
                 <connection
-                  refId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Connections[FlatFileConnection]"
-                  connectionManagerID="Package.ConnectionManagers[FFC_HeartrateSeconds_Import]"
-                  connectionManagerRefId="Package.ConnectionManagers[FFC_HeartrateSeconds_Import]"
+                  refId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Connections[FlatFileConnection]"
+                  connectionManagerID="Package.ConnectionManagers[FFC_MinuteStepsNarrow_Import]"
+                  connectionManagerRefId="Package.ConnectionManagers[FFC_MinuteStepsNarrow_Import]"
                   name="FlatFileConnection" />
               </connections>
               <outputs>
                 <output
-                  refId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie de source de fichier plat]"
+                  refId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie de source de fichier plat]"
                   name="Sortie de source de fichier plat">
                   <outputColumns>
                     <outputColumn
-                      refId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]"
-                      codePage="65001"
-                      dataType="str"
+                      refId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]"
+                      dataType="i8"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Id]"
-                      length="50"
-                      lineageId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]"
+                      externalMetadataColumnId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Id]"
+                      lineageId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]"
                       name="Id"
                       truncationRowDisposition="FailComponent">
                       <properties>
@@ -273,15 +262,13 @@
                       </properties>
                     </outputColumn>
                     <outputColumn
-                      refId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie de source de fichier plat].Columns[Time]"
-                      codePage="65001"
-                      dataType="str"
+                      refId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie de source de fichier plat].Columns[ActivityMinute]"
+                      dataType="dbTimeStamp"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Time]"
-                      length="50"
-                      lineageId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie de source de fichier plat].Columns[Time]"
-                      name="Time"
+                      externalMetadataColumnId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[ActivityMinute]"
+                      lineageId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie de source de fichier plat].Columns[ActivityMinute]"
+                      name="ActivityMinute"
                       truncationRowDisposition="FailComponent">
                       <properties>
                         <property
@@ -295,15 +282,13 @@
                       </properties>
                     </outputColumn>
                     <outputColumn
-                      refId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie de source de fichier plat].Columns[Value]"
-                      codePage="65001"
-                      dataType="str"
+                      refId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie de source de fichier plat].Columns[Steps]"
+                      dataType="i4"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Value]"
-                      length="50"
-                      lineageId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie de source de fichier plat].Columns[Value]"
-                      name="Value"
+                      externalMetadataColumnId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Steps]"
+                      lineageId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie de source de fichier plat].Columns[Steps]"
+                      name="Steps"
                       truncationRowDisposition="FailComponent">
                       <properties>
                         <property
@@ -320,47 +305,41 @@
                   <externalMetadataColumns
                     isUsed="True">
                     <externalMetadataColumn
-                      refId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Id]"
-                      codePage="65001"
-                      dataType="str"
-                      length="50"
+                      refId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Id]"
+                      dataType="i8"
                       name="Id" />
                     <externalMetadataColumn
-                      refId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Time]"
-                      codePage="65001"
-                      dataType="str"
-                      length="50"
-                      name="Time" />
+                      refId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[ActivityMinute]"
+                      dataType="dbTimeStamp"
+                      name="ActivityMinute" />
                     <externalMetadataColumn
-                      refId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Value]"
-                      codePage="65001"
-                      dataType="str"
-                      length="50"
-                      name="Value" />
+                      refId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Steps]"
+                      dataType="i4"
+                      name="Steps" />
                   </externalMetadataColumns>
                 </output>
                 <output
-                  refId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie d'erreur de source de fichier plat]"
+                  refId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie d'erreur de source de fichier plat]"
                   isErrorOut="true"
                   name="Sortie d'erreur de source de fichier plat">
                   <outputColumns>
                     <outputColumn
-                      refId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[Colonne de sortie d'erreur de source de fichier plat]"
+                      refId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[Colonne de sortie d'erreur de source de fichier plat]"
                       codePage="65001"
                       dataType="text"
                       description="Colonne de sortie d'erreur de source de fichier plat"
-                      lineageId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[Colonne de sortie d'erreur de source de fichier plat]"
+                      lineageId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[Colonne de sortie d'erreur de source de fichier plat]"
                       name="Colonne de sortie d'erreur de source de fichier plat" />
                     <outputColumn
-                      refId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorCode]"
+                      refId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorCode]"
                       dataType="i4"
-                      lineageId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorCode]"
+                      lineageId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorCode]"
                       name="ErrorCode"
                       specialFlags="1" />
                     <outputColumn
-                      refId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorColumn]"
+                      refId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorColumn]"
                       dataType="i4"
-                      lineageId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorColumn]"
+                      lineageId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorColumn]"
                       name="ErrorColumn"
                       specialFlags="2" />
                   </outputColumns>
@@ -371,10 +350,10 @@
           </components>
           <paths>
             <path
-              refId="Package\DFT_HeartrateSeconds.Paths[Sortie de source de fichier plat]"
-              endId="Package\DFT_HeartrateSeconds\HeartrateSeconds.Inputs[Entrée de destination OLE DB]"
+              refId="Package\DFT_MinuteStepsNarrow.Paths[Sortie de source de fichier plat]"
+              endId="Package\DFT_MinuteStepsNarrow\MinuteStepsNarrow.Inputs[Entrée de destination OLE DB]"
               name="Sortie de source de fichier plat"
-              startId="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV.Outputs[Sortie de source de fichier plat]" />
+              startId="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV.Outputs[Sortie de source de fichier plat]" />
           </paths>
         </pipeline>
       </DTS:ObjectData>
@@ -393,51 +372,51 @@
       <GraphLayout
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
         <NodeLayout
-          Size="195,42"
-          Id="Package\DFT_HeartrateSeconds"
-          TopLeft="69.5,54.5" />
+          Size="203,42"
+          Id="Package\DFT_MinuteStepsNarrow"
+          TopLeft="11.4,29.4" />
       </GraphLayout>
     </LayoutInfo>
   </Package>
   <TaskHost
-    design-time-name="Package\DFT_HeartrateSeconds">
+    design-time-name="Package\DFT_MinuteStepsNarrow">
     <LayoutInfo>
       <GraphLayout
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
-          Size="226,42"
-          Id="Package\DFT_HeartrateSeconds\SRC_HeartrateSeconds_CSV"
-          TopLeft="54,41" />
+          Size="234,42"
+          Id="Package\DFT_MinuteStepsNarrow\SRC_minuteStepsNarrow_CSV"
+          TopLeft="9.00000000000003,32" />
         <NodeLayout
-          Size="168,42"
-          Id="Package\DFT_HeartrateSeconds\HeartrateSeconds"
-          TopLeft="187.333333333333,172.666666666667" />
+          Size="176,42"
+          Id="Package\DFT_MinuteStepsNarrow\MinuteStepsNarrow"
+          TopLeft="217.333333333333,143.333333333333" />
         <EdgeLayout
-          Id="Package\DFT_HeartrateSeconds.Paths[Sortie de source de fichier plat]"
-          TopLeft="167,83">
+          Id="Package\DFT_MinuteStepsNarrow.Paths[Sortie de source de fichier plat]"
+          TopLeft="126,74">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="104.333333333333,89.6666666666667"
+              EndConnector="179.333333333333,69.3333333333333"
               Start="0,0"
-              End="104.333333333333,82.1666666666667">
+              End="179.333333333333,61.8333333333333">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,40.8333333333333" />
+                    End="0,30.6666666666667" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,40.8333333333333"
-                    Point2="0,44.8333333333333"
-                    Point3="4,44.8333333333333" />
+                    Point1="0,30.6666666666667"
+                    Point2="0,34.6666666666667"
+                    Point3="4,34.6666666666667" />
                   <mssgle:LineSegment
-                    End="100.333333333333,44.8333333333333" />
+                    End="175.333333333333,34.6666666666667" />
                   <mssgle:CubicBezierSegment
-                    Point1="100.333333333333,44.8333333333333"
-                    Point2="104.333333333333,44.8333333333333"
-                    Point3="104.333333333333,48.8333333333333" />
+                    Point1="175.333333333333,34.6666666666667"
+                    Point2="179.333333333333,34.6666666666667"
+                    Point3="179.333333333333,38.6666666666667" />
                   <mssgle:LineSegment
-                    End="104.333333333333,82.1666666666667" />
+                    End="179.333333333333,61.8333333333333" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -450,7 +429,7 @@
     </LayoutInfo>
   </TaskHost>
   <PipelineComponentMetadata
-    design-time-name="Package\DFT_HeartrateSeconds\HeartrateSeconds">
+    design-time-name="Package\DFT_MinuteStepsNarrow\MinuteStepsNarrow">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>

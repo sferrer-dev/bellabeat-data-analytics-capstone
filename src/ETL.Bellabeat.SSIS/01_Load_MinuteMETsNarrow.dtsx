@@ -1,26 +1,26 @@
 ﻿<?xml version="1.0"?>
 <DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:refId="Package"
-  DTS:CreationDate="11/20/2025 10:01:34 AM"
+  DTS:CreationDate="11/20/2025 1:29:14 PM"
   DTS:CreationName="Microsoft.Package"
   DTS:CreatorComputerName="PEARL"
   DTS:CreatorName="SFERRER\stephane"
-  DTS:DTSID="{80AD5234-B880-4F1A-BE24-6EF4A3F7FA26}"
+  DTS:DTSID="{6DAD15EC-3235-4B59-BAED-BFB5911E03C2}"
   DTS:ExecutableType="Microsoft.Package"
   DTS:LastModifiedProductVersion="17.0.1008.3"
   DTS:LocaleID="1036"
-  DTS:ObjectName="Package1"
+  DTS:ObjectName="01_Load_MinuteMETsNarrow"
   DTS:PackageType="5"
-  DTS:VersionBuild="4"
-  DTS:VersionGUID="{955ABCEC-1B2F-4F31-BF03-3ACFB0D233CC}">
+  DTS:VersionBuild="3"
+  DTS:VersionGUID="{D239AC60-446F-49B6-B2A4-472914BDCBEB}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
     <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[FFC_HourlyCalories_CSV]"
+      DTS:refId="Package.ConnectionManagers[FFC_MinuteMETsNarrow_Import]"
       DTS:CreationName="FLATFILE"
-      DTS:DTSID="{A5CB039B-A753-4A27-8F7D-470CBA8AE0B3}"
-      DTS:ObjectName="FFC_HourlyCalories_CSV">
+      DTS:DTSID="{4849F44C-BCDB-4B03-85D7-D1B07ED0875C}"
+      DTS:ObjectName="FFC_MinuteMETsNarrow_Import">
       <DTS:ObjectData>
         <DTS:ConnectionManager
           DTS:Format="Delimited"
@@ -29,8 +29,8 @@
           DTS:ColumnNamesInFirstDataRow="True"
           DTS:RowDelimiter=""
           DTS:TextQualifier="_x003C_none_x003E_"
-          DTS:CodePage="1252"
-          DTS:ConnectionString="D:\Coursera\Data\Capstone\Bellabeat\data-samples\hourlyCalories_merged.csv">
+          DTS:CodePage="65001"
+          DTS:ConnectionString="D:\Coursera\Data\Capstone\Bellabeat\data-samples\minuteMETsNarrow_merged.csv">
           <DTS:FlatFileColumns>
             <DTS:FlatFileColumn
               DTS:ColumnType="Delimited"
@@ -38,23 +38,23 @@
               DTS:DataType="20"
               DTS:TextQualified="True"
               DTS:ObjectName="Id"
-              DTS:DTSID="{42AE55C1-72D7-4756-8EAD-4C61A4AF4CBC}"
+              DTS:DTSID="{AC7702FC-D099-45B1-95E9-48EC51DE8405}"
               DTS:CreationName="" />
             <DTS:FlatFileColumn
               DTS:ColumnType="Delimited"
               DTS:ColumnDelimiter="_x002C_"
               DTS:DataType="135"
               DTS:TextQualified="True"
-              DTS:ObjectName="ActivityHour"
-              DTS:DTSID="{A4B522E7-2E8B-49A1-9CDE-E9D2EF71EA1D}"
+              DTS:ObjectName="ActivityMinute"
+              DTS:DTSID="{EBDA38D2-BD51-425C-81D8-A6C1BF54F313}"
               DTS:CreationName="" />
             <DTS:FlatFileColumn
               DTS:ColumnType="Delimited"
               DTS:ColumnDelimiter="_x000D__x000A_"
               DTS:DataType="3"
               DTS:TextQualified="True"
-              DTS:ObjectName="Calories"
-              DTS:DTSID="{A1A90A4A-E871-4546-BBAC-E8F90B01AFD3}"
+              DTS:ObjectName="METs"
+              DTS:DTSID="{121D437C-F504-4220-92BB-CB2FCCA202C5}"
               DTS:CreationName="" />
           </DTS:FlatFileColumns>
         </DTS:ConnectionManager>
@@ -64,13 +64,13 @@
   <DTS:Variables />
   <DTS:Executables>
     <DTS:Executable
-      DTS:refId="Package\DFT_HourlyCalories"
+      DTS:refId="Package\DFT_MinuteMETsNarrow"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Tâche de flux de données"
-      DTS:DTSID="{DF0A3639-A33E-422E-9AB0-BC9EF29B9AD6}"
+      DTS:DTSID="{ACB7BBD7-E339-49BB-9282-73281CD1E76C}"
       DTS:ExecutableType="Microsoft.Pipeline"
       DTS:LocaleID="-1"
-      DTS:ObjectName="DFT_HourlyCalories"
+      DTS:ObjectName="DFT_MinuteMETsNarrow"
       DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
       <DTS:Variables />
       <DTS:ObjectData>
@@ -78,11 +78,11 @@
           version="1">
           <components>
             <component
-              refId="Package\DFT_HourlyCalories\HourlyCalories"
+              refId="Package\DFT_MinuteMETsNarrow\MinuteMETsNarrow"
               componentClassID="Microsoft.OLEDBDestination"
               contactInfo="Destination OLE DB;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Tous droits réservés; http://www.microsoft.com/sql/support;4"
               description="Destination OLE DB"
-              name="HourlyCalories"
+              name="MinuteMETsNarrow"
               usesDispositions="true"
               version="4">
               <properties>
@@ -93,7 +93,7 @@
                 <property
                   dataType="System.String"
                   description="Spécifie le nom de l'objet de base de données utilisé pour ouvrir un ensemble de lignes."
-                  name="OpenRowset">[HourlyCalories]</property>
+                  name="OpenRowset">[MinuteMETsNarrow]</property>
                 <property
                   dataType="System.String"
                   description="Spécifie la variable contenant le nom de l'objet de base de données utilisé pour ouvrir un ensemble de lignes."
@@ -135,7 +135,7 @@
               </properties>
               <connections>
                 <connection
-                  refId="Package\DFT_HourlyCalories\HourlyCalories.Connections[OleDbConnection]"
+                  refId="Package\DFT_MinuteMETsNarrow\MinuteMETsNarrow.Connections[OleDbConnection]"
                   connectionManagerID="{904FEDCA-9B76-47AA-AF43-76A0284950F5}:external"
                   connectionManagerRefId="Project.ConnectionManagers[OLEDB_LOCAL_Bellabeat]"
                   description="Connexion OLE DB en cours d'exécution utilisée pour accéder à la base de données."
@@ -143,66 +143,66 @@
               </connections>
               <inputs>
                 <input
-                  refId="Package\DFT_HourlyCalories\HourlyCalories.Inputs[Entrée de destination OLE DB]"
+                  refId="Package\DFT_MinuteMETsNarrow\MinuteMETsNarrow.Inputs[Entrée de destination OLE DB]"
                   errorOrTruncationOperation="Insérer"
                   errorRowDisposition="FailComponent"
                   hasSideEffects="true"
                   name="Entrée de destination OLE DB">
                   <inputColumns>
                     <inputColumn
-                      refId="Package\DFT_HourlyCalories\HourlyCalories.Inputs[Entrée de destination OLE DB].Columns[Id]"
+                      refId="Package\DFT_MinuteMETsNarrow\MinuteMETsNarrow.Inputs[Entrée de destination OLE DB].Columns[Id]"
                       cachedDataType="i8"
                       cachedName="Id"
-                      externalMetadataColumnId="Package\DFT_HourlyCalories\HourlyCalories.Inputs[Entrée de destination OLE DB].ExternalColumns[Id]"
-                      lineageId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]" />
+                      externalMetadataColumnId="Package\DFT_MinuteMETsNarrow\MinuteMETsNarrow.Inputs[Entrée de destination OLE DB].ExternalColumns[Id]"
+                      lineageId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]" />
                     <inputColumn
-                      refId="Package\DFT_HourlyCalories\HourlyCalories.Inputs[Entrée de destination OLE DB].Columns[ActivityHour]"
+                      refId="Package\DFT_MinuteMETsNarrow\MinuteMETsNarrow.Inputs[Entrée de destination OLE DB].Columns[ActivityMinute]"
                       cachedDataType="dbTimeStamp"
-                      cachedName="ActivityHour"
-                      externalMetadataColumnId="Package\DFT_HourlyCalories\HourlyCalories.Inputs[Entrée de destination OLE DB].ExternalColumns[ActivityHour]"
-                      lineageId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie de source de fichier plat].Columns[ActivityHour]" />
+                      cachedName="ActivityMinute"
+                      externalMetadataColumnId="Package\DFT_MinuteMETsNarrow\MinuteMETsNarrow.Inputs[Entrée de destination OLE DB].ExternalColumns[ActivityMinute]"
+                      lineageId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie de source de fichier plat].Columns[ActivityMinute]" />
                     <inputColumn
-                      refId="Package\DFT_HourlyCalories\HourlyCalories.Inputs[Entrée de destination OLE DB].Columns[Calories]"
+                      refId="Package\DFT_MinuteMETsNarrow\MinuteMETsNarrow.Inputs[Entrée de destination OLE DB].Columns[METs]"
                       cachedDataType="i4"
-                      cachedName="Calories"
-                      externalMetadataColumnId="Package\DFT_HourlyCalories\HourlyCalories.Inputs[Entrée de destination OLE DB].ExternalColumns[Calories]"
-                      lineageId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie de source de fichier plat].Columns[Calories]" />
+                      cachedName="METs"
+                      externalMetadataColumnId="Package\DFT_MinuteMETsNarrow\MinuteMETsNarrow.Inputs[Entrée de destination OLE DB].ExternalColumns[METs]"
+                      lineageId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie de source de fichier plat].Columns[METs]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
                     <externalMetadataColumn
-                      refId="Package\DFT_HourlyCalories\HourlyCalories.Inputs[Entrée de destination OLE DB].ExternalColumns[Id]"
+                      refId="Package\DFT_MinuteMETsNarrow\MinuteMETsNarrow.Inputs[Entrée de destination OLE DB].ExternalColumns[Id]"
                       dataType="i8"
                       name="Id" />
                     <externalMetadataColumn
-                      refId="Package\DFT_HourlyCalories\HourlyCalories.Inputs[Entrée de destination OLE DB].ExternalColumns[ActivityHour]"
+                      refId="Package\DFT_MinuteMETsNarrow\MinuteMETsNarrow.Inputs[Entrée de destination OLE DB].ExternalColumns[ActivityMinute]"
                       dataType="dbTimeStamp"
-                      name="ActivityHour" />
+                      name="ActivityMinute" />
                     <externalMetadataColumn
-                      refId="Package\DFT_HourlyCalories\HourlyCalories.Inputs[Entrée de destination OLE DB].ExternalColumns[Calories]"
+                      refId="Package\DFT_MinuteMETsNarrow\MinuteMETsNarrow.Inputs[Entrée de destination OLE DB].ExternalColumns[METs]"
                       dataType="i4"
-                      name="Calories" />
+                      name="METs" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
               <outputs>
                 <output
-                  refId="Package\DFT_HourlyCalories\HourlyCalories.Outputs[Sortie d'erreur de destination OLE DB]"
+                  refId="Package\DFT_MinuteMETsNarrow\MinuteMETsNarrow.Outputs[Sortie d'erreur de destination OLE DB]"
                   exclusionGroup="1"
                   isErrorOut="true"
                   name="Sortie d'erreur de destination OLE DB"
-                  synchronousInputId="Package\DFT_HourlyCalories\HourlyCalories.Inputs[Entrée de destination OLE DB]">
+                  synchronousInputId="Package\DFT_MinuteMETsNarrow\MinuteMETsNarrow.Inputs[Entrée de destination OLE DB]">
                   <outputColumns>
                     <outputColumn
-                      refId="Package\DFT_HourlyCalories\HourlyCalories.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorCode]"
+                      refId="Package\DFT_MinuteMETsNarrow\MinuteMETsNarrow.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorCode]"
                       dataType="i4"
-                      lineageId="Package\DFT_HourlyCalories\HourlyCalories.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorCode]"
+                      lineageId="Package\DFT_MinuteMETsNarrow\MinuteMETsNarrow.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorCode]"
                       name="ErrorCode"
                       specialFlags="1" />
                     <outputColumn
-                      refId="Package\DFT_HourlyCalories\HourlyCalories.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorColumn]"
+                      refId="Package\DFT_MinuteMETsNarrow\MinuteMETsNarrow.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorColumn]"
                       dataType="i4"
-                      lineageId="Package\DFT_HourlyCalories\HourlyCalories.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorColumn]"
+                      lineageId="Package\DFT_MinuteMETsNarrow\MinuteMETsNarrow.Outputs[Sortie d'erreur de destination OLE DB].Columns[ErrorColumn]"
                       name="ErrorColumn"
                       specialFlags="2" />
                   </outputColumns>
@@ -211,12 +211,12 @@
               </outputs>
             </component>
             <component
-              refId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV"
+              refId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV"
               componentClassID="Microsoft.FlatFileSource"
               contactInfo="Source du fichier plat;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Tous droits réservés; http://www.microsoft.com/sql/support;1"
               description="Source du fichier plat"
               localeId="1033"
-              name="SRC_HourlyCalories_CSV"
+              name="SRC_MinuteMETsNarrow_CSV"
               usesDispositions="true"
               version="1">
               <properties>
@@ -231,23 +231,23 @@
               </properties>
               <connections>
                 <connection
-                  refId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Connections[FlatFileConnection]"
-                  connectionManagerID="Package.ConnectionManagers[FFC_HourlyCalories_CSV]"
-                  connectionManagerRefId="Package.ConnectionManagers[FFC_HourlyCalories_CSV]"
+                  refId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Connections[FlatFileConnection]"
+                  connectionManagerID="Package.ConnectionManagers[FFC_MinuteMETsNarrow_Import]"
+                  connectionManagerRefId="Package.ConnectionManagers[FFC_MinuteMETsNarrow_Import]"
                   name="FlatFileConnection" />
               </connections>
               <outputs>
                 <output
-                  refId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie de source de fichier plat]"
+                  refId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie de source de fichier plat]"
                   name="Sortie de source de fichier plat">
                   <outputColumns>
                     <outputColumn
-                      refId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]"
+                      refId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]"
                       dataType="i8"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Id]"
-                      lineageId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]"
+                      externalMetadataColumnId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Id]"
+                      lineageId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie de source de fichier plat].Columns[Id]"
                       name="Id"
                       truncationRowDisposition="FailComponent">
                       <properties>
@@ -262,13 +262,13 @@
                       </properties>
                     </outputColumn>
                     <outputColumn
-                      refId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie de source de fichier plat].Columns[ActivityHour]"
+                      refId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie de source de fichier plat].Columns[ActivityMinute]"
                       dataType="dbTimeStamp"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[ActivityHour]"
-                      lineageId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie de source de fichier plat].Columns[ActivityHour]"
-                      name="ActivityHour"
+                      externalMetadataColumnId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[ActivityMinute]"
+                      lineageId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie de source de fichier plat].Columns[ActivityMinute]"
+                      name="ActivityMinute"
                       truncationRowDisposition="FailComponent">
                       <properties>
                         <property
@@ -282,13 +282,13 @@
                       </properties>
                     </outputColumn>
                     <outputColumn
-                      refId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie de source de fichier plat].Columns[Calories]"
+                      refId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie de source de fichier plat].Columns[METs]"
                       dataType="i4"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Calories]"
-                      lineageId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie de source de fichier plat].Columns[Calories]"
-                      name="Calories"
+                      externalMetadataColumnId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[METs]"
+                      lineageId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie de source de fichier plat].Columns[METs]"
+                      name="METs"
                       truncationRowDisposition="FailComponent">
                       <properties>
                         <property
@@ -305,41 +305,41 @@
                   <externalMetadataColumns
                     isUsed="True">
                     <externalMetadataColumn
-                      refId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Id]"
+                      refId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Id]"
                       dataType="i8"
                       name="Id" />
                     <externalMetadataColumn
-                      refId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[ActivityHour]"
+                      refId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[ActivityMinute]"
                       dataType="dbTimeStamp"
-                      name="ActivityHour" />
+                      name="ActivityMinute" />
                     <externalMetadataColumn
-                      refId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[Calories]"
+                      refId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie de source de fichier plat].ExternalColumns[METs]"
                       dataType="i4"
-                      name="Calories" />
+                      name="METs" />
                   </externalMetadataColumns>
                 </output>
                 <output
-                  refId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie d'erreur de source de fichier plat]"
+                  refId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie d'erreur de source de fichier plat]"
                   isErrorOut="true"
                   name="Sortie d'erreur de source de fichier plat">
                   <outputColumns>
                     <outputColumn
-                      refId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[Colonne de sortie d'erreur de source de fichier plat]"
-                      codePage="1252"
+                      refId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[Colonne de sortie d'erreur de source de fichier plat]"
+                      codePage="65001"
                       dataType="text"
                       description="Colonne de sortie d'erreur de source de fichier plat"
-                      lineageId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[Colonne de sortie d'erreur de source de fichier plat]"
+                      lineageId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[Colonne de sortie d'erreur de source de fichier plat]"
                       name="Colonne de sortie d'erreur de source de fichier plat" />
                     <outputColumn
-                      refId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorCode]"
+                      refId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorCode]"
                       dataType="i4"
-                      lineageId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorCode]"
+                      lineageId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorCode]"
                       name="ErrorCode"
                       specialFlags="1" />
                     <outputColumn
-                      refId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorColumn]"
+                      refId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorColumn]"
                       dataType="i4"
-                      lineageId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorColumn]"
+                      lineageId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie d'erreur de source de fichier plat].Columns[ErrorColumn]"
                       name="ErrorColumn"
                       specialFlags="2" />
                   </outputColumns>
@@ -350,10 +350,10 @@
           </components>
           <paths>
             <path
-              refId="Package\DFT_HourlyCalories.Paths[Sortie de source de fichier plat]"
-              endId="Package\DFT_HourlyCalories\HourlyCalories.Inputs[Entrée de destination OLE DB]"
+              refId="Package\DFT_MinuteMETsNarrow.Paths[Sortie de source de fichier plat]"
+              endId="Package\DFT_MinuteMETsNarrow\MinuteMETsNarrow.Inputs[Entrée de destination OLE DB]"
               name="Sortie de source de fichier plat"
-              startId="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV.Outputs[Sortie de source de fichier plat]" />
+              startId="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV.Outputs[Sortie de source de fichier plat]" />
           </paths>
         </pipeline>
       </DTS:ObjectData>
@@ -372,51 +372,51 @@
       <GraphLayout
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
         <NodeLayout
-          Size="179,42"
-          Id="Package\DFT_HourlyCalories"
-          TopLeft="20,24.6666666666667" />
+          Size="204,42"
+          Id="Package\DFT_MinuteMETsNarrow"
+          TopLeft="24,12" />
       </GraphLayout>
     </LayoutInfo>
   </Package>
   <TaskHost
-    design-time-name="Package\DFT_HourlyCalories">
+    design-time-name="Package\DFT_MinuteMETsNarrow">
     <LayoutInfo>
       <GraphLayout
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
-          Size="209,42"
-          Id="Package\DFT_HourlyCalories\SRC_HourlyCalories_CSV"
-          TopLeft="26.4285714285714,42.5714285714286" />
+          Size="234,42"
+          Id="Package\DFT_MinuteMETsNarrow\SRC_MinuteMETsNarrow_CSV"
+          TopLeft="17.4,14" />
         <NodeLayout
-          Size="151,42"
-          Id="Package\DFT_HourlyCalories\HourlyCalories"
-          TopLeft="64.2857142857143,155" />
+          Size="176,42"
+          Id="Package\DFT_MinuteMETsNarrow\MinuteMETsNarrow"
+          TopLeft="141.2,122.8" />
         <EdgeLayout
-          Id="Package\DFT_HourlyCalories.Paths[Sortie de source de fichier plat]"
-          TopLeft="130.928571428571,84.5714285714286">
+          Id="Package\DFT_MinuteMETsNarrow.Paths[Sortie de source de fichier plat]"
+          TopLeft="134.4,56">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="8.85714285714283,70.4285714285714"
+              EndConnector="94.8,66.8"
               Start="0,0"
-              End="8.85714285714283,62.9285714285714">
+              End="94.8,59.3">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,31.2142857142857" />
+                    End="0,29.4" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,31.2142857142857"
-                    Point2="0,35.2142857142857"
-                    Point3="4,35.2142857142857" />
+                    Point1="0,29.4"
+                    Point2="0,33.4"
+                    Point3="4,33.4" />
                   <mssgle:LineSegment
-                    End="4.85714285714283,35.2142857142857" />
+                    End="90.8,33.4" />
                   <mssgle:CubicBezierSegment
-                    Point1="4.85714285714283,35.2142857142857"
-                    Point2="8.85714285714283,35.2142857142857"
-                    Point3="8.85714285714283,39.2142857142857" />
+                    Point1="90.8,33.4"
+                    Point2="94.8,33.4"
+                    Point3="94.8,37.4" />
                   <mssgle:LineSegment
-                    End="8.85714285714283,62.9285714285714" />
+                    End="94.8,59.3" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -429,7 +429,7 @@
     </LayoutInfo>
   </TaskHost>
   <PipelineComponentMetadata
-    design-time-name="Package\DFT_HourlyCalories\HourlyCalories">
+    design-time-name="Package\DFT_MinuteMETsNarrow\MinuteMETsNarrow">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
