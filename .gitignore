@@ -379,3 +379,8 @@ __pycache__
 **/reports/*.html
 **/reports/*.pdf
 **/reports/*.docx
+
+# Large data files
+data-samples/*.csv
+*.csv
+
