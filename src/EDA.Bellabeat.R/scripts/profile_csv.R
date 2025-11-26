@@ -56,16 +56,22 @@ profile_csv <- function(file_path) {
   num_stats <- NULL
   if (any(purrr::map_lgl(df, is.numeric))) {
     num_stats <- df %>%
-      dplyr::summarise(dplyr::across(
-        dplyr::where(is.numeric),
-        list(
-          min    = ~ min(.x, na.rm = TRUE),
-          max    = ~ max(.x, na.rm = TRUE),
-          mean   = ~ mean(.x, na.rm = TRUE),
-          median = ~ median(.x, na.rm = TRUE)
-        ),
-        .names = "{.col}_{.fn}"
-      )) %>%
+      # 1. Explicitly exclude the `Id` column from the set of numeric variables
+      dplyr::select(where(is.numeric), -Id) %>%
+      # 2. Calculate descriptive statistics
+      dplyr::summarise(
+        dplyr::across(
+          dplyr::everything(),
+          list(
+            min    = ~ min(.x, na.rm = TRUE),
+            max    = ~ max(.x, na.rm = TRUE),
+            mean   = ~ mean(.x, na.rm = TRUE),
+            median = ~ median(.x, na.rm = TRUE)
+          ),
+          .names = "{.col}_{.fn}"
+        )
+      ) %>%
+      # 3. Restructure into a long format for clean display using kable()
       tidyr::pivot_longer(
         dplyr::everything(),
         names_to  = c("variable", ".value"),
