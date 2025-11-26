@@ -56,8 +56,8 @@ profile_csv <- function(file_path) {
   num_stats <- NULL
   if (any(purrr::map_lgl(df, is.numeric))) {
     num_stats <- df %>%
-      # 1. Explicitly exclude the `Id` column from the set of numeric variables
-      dplyr::select(where(is.numeric), -Id) %>%
+      # 1. Explicitly exclude columns whose name contains id from the set of numeric variables
+      dplyr::select(where(is.numeric), -matches("(?i)^id$"), -matches("(?i)^logid$")) %>%
       # 2. Calculate descriptive statistics
       dplyr::summarise(
         dplyr::across(
@@ -79,7 +79,11 @@ profile_csv <- function(file_path) {
       )
   }
   # Compute a rich, structured summary for all variables using skimr
-  skim_profile <- skimr::skim(df)
+  skim_profile <- skimr::skim(
+    df %>% 
+    # Explicitly exclude columns whose name contains id from the set of numeric variables
+      dplyr::select(where(is.numeric), -matches("(?i)^id$"), -matches("(?i)^logid$"))
+  )
   # Optionally display dataset dimensions for quick inspection
   message("Dimensions : ", nrow(df), " rows x ", ncol(df), " columns")
   # Return a structured list of profiling artifacts
