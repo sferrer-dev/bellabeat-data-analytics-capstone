@@ -8,11 +8,8 @@ output:
     highlight: tango
     toc: true
     toc_depth: 3
-    toc_float: true
-    css: styles/styles.css
     number_sections: true
     df_print: paged
-    code_folding: hide
   pdf_document:
     latex_engine: xelatex
     number_sections: true
@@ -117,6 +114,8 @@ purrr::iwalk(
                 )
       )
     }
+    
+    cat("[↑ Return to the beginning of the report](#top)")
   }
 )
 ```

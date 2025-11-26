@@ -384,3 +384,4 @@ __pycache__
 data-samples/*.csv
 *.csv
 
+src/EDA.Bellabeat.R/.RDataTmp

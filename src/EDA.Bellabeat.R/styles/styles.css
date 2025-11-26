@@ -1,9 +1,0 @@
-/* Réduire la largeur de la TOC flottante */
-.tocify {
-  width: 220px !important;
-}
-
-/* Décaler le contenu principal pour compenser */
-.toc-content {
-  margin-left: 240px !important;
-}
