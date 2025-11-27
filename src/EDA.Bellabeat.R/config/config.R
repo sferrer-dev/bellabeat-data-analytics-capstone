@@ -6,5 +6,3 @@ output_dir <- file.path("..", "reports", "output")
 
 # Create output folder if needed
 if (!dir.exists(output_dir)) dir.create(output_dir, recursive = TRUE)
-
-

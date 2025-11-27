@@ -47,6 +47,38 @@ All outputs — HTML and PDF — are automatically generated and consolidated in
 
 Together, these elements provide a **technical backbone** for subsequent phases of data cleaning, feature engineering, aggregation, and analytical modelling.
 
+---
+
+**Using the `render_all.R`**
+
+---
+
+To facilitate the automated generation of the HTML of this report, the project includes a dedicated rendering script located at:
+
+```         
+scripts/render_all.R
+```
+
+This script ensures that output is produced in the directory:
+
+```         
+reports/output/
+```
+
+---
+
+**How to execute the rendering script from RStudio**
+
+---
+
+1.  Open the RStudio console.
+2.  Run the following command:
+
+``` r
+source(here::here("scripts", "render_all.R"))
+```
+
+
 [↑ Return to the beginning of the report](#top)
 
 ```{r setup, include=FALSE}
@@ -130,7 +162,9 @@ purrr::iwalk(
           )
 # 4. Skimr summary
     cat("\n\n## Skimr summary\n\n")
-    print(kable(p$skim, 
+    skim_for_report <- p$skim %>%
+      dplyr::select(-numeric.hist)  
+    print(kable(skim_for_report, 
                 caption = paste("Skimr summary -", file_name)
                 )
           )
