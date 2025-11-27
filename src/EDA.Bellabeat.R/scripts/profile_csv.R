@@ -1,3 +1,6 @@
+# Custom Auto parse datetime helper 
+source(here("scripts", "auto_parse_datetime.R"))
+
 # ---- Profile function ----
 
 #' Profile a CSV file and return profiling objects for reporting.
@@ -26,6 +29,15 @@ profile_csv <- function(file_path) {
     file_path,
     show_col_types = FALSE,
     guess_max = 5000
+  )
+  
+  # ---- Automatic column conversion date/datetime ----
+  df <- df %>%
+    dplyr::mutate(
+      dplyr::across(
+         dplyr::matches("date|time|timestamp|datetime|hour|minute", ignore.case = TRUE),
+        ~ auto_parse_datetime(.x, min_success = 0.8)
+      )
   )
   
   # ---- Duplicates analysis ----
@@ -57,7 +69,10 @@ profile_csv <- function(file_path) {
   if (any(purrr::map_lgl(df, is.numeric))) {
     num_stats <- df %>%
       # 1. Explicitly exclude columns whose name contains id from the set of numeric variables
-      dplyr::select(where(is.numeric), -matches("(?i)^id$"), -matches("(?i)^logid$")) %>%
+      dplyr::select(where(is.numeric), 
+                    -matches("(?i)^id$"), 
+                    -matches("(?i)^logid$")
+      ) %>%
       # 2. Calculate descriptive statistics
       dplyr::summarise(
         dplyr::across(
@@ -82,8 +97,45 @@ profile_csv <- function(file_path) {
   skim_profile <- skimr::skim(
     df %>% 
     # Explicitly exclude columns whose name contains id from the set of numeric variables
-      dplyr::select(where(is.numeric), -matches("(?i)^id$"), -matches("(?i)^logid$"))
+      dplyr::select(where(is.numeric), 
+                    -matches("(?i)^id$"), 
+                    -matches("(?i)^logid$")
+      )
   )
+  
+  # ---- Date / datetime stats ----
+  is_date_time <- function(x) {
+    inherits(x, "Date") || inherits(x, "POSIXct") || inherits(x, "POSIXt")
+  }
+  date_stats <- NULL
+  # Check if there is at least one Date / POSIXct / POSIXt column
+  if (any(purrr::map_lgl(df, is_date_time))) {
+    date_stats <- df %>%
+      # 1. Select only the time columns
+      dplyr::select(where(is_date_time)) %>%
+      
+      # 2. Calculate descriptive statistics
+      dplyr::summarise(
+        dplyr::across(
+          dplyr::everything(),
+          list(
+            min    = ~ min(.x, na.rm = TRUE),
+            max    = ~ max(.x, na.rm = TRUE),
+            mean   = ~ mean(.x, na.rm = TRUE),
+            median = ~ stats::median(.x, na.rm = TRUE)
+          ),
+          .names = "{.col}_{.fn}"
+        )
+      ) %>%
+      
+      # 3. Restructuring into a long format (like num_stats)
+      tidyr::pivot_longer(
+        dplyr::everything(),
+        names_to  = c("variable", ".value"),
+        names_sep = "_"
+      )
+  }
+  
   # Optionally display dataset dimensions for quick inspection
   message("Dimensions : ", nrow(df), " rows x ", ncol(df), " columns")
   # Return a structured list of profiling artifacts
@@ -99,6 +151,7 @@ profile_csv <- function(file_path) {
     data        = df,
     col_profile = col_profile,
     num_stats   = num_stats,
+    date_stats  = date_stats,
     skim        = skim_profile
   )
 }

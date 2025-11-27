@@ -82,19 +82,25 @@ purrr::iwalk(
             caption = paste("Variable profile -", file_name)
             )
       )
-# 2. Numerical statistics
+# 2. Date statistics
+    cat("\n\n## Date statistics\n\n")
+    print(kable(p$date_stats, 
+                caption = paste("Date statistics -", file_name)
+                )
+          )
+# 3. Numerical statistics
     cat("\n\n## Numerical statistics\n\n")
     print(kable(p$num_stats, 
                 caption = paste("Numerical statistics -", file_name)
                 )
           )
-# 3. Skimr summary
+# 4. Skimr summary
     cat("\n\n## Skimr summary\n\n")
     print(kable(p$skim, 
                 caption = paste("Skimr summary -", file_name)
                 )
           )
-# 4. Raw data overview
+# 5. Raw data overview
     cat("\n\n## Raw data overview\n\n")
     print(
       p$data %>%
@@ -104,17 +110,17 @@ purrr::iwalk(
           align   = "l"
         )
     )
-# 5. Duplicated lines overview    
+# 6. Duplicated lines overview    
     if (p$has_duplicates) {
-      cat("\n\n## Overview duplicated\n\n")
+      cat("\n\n## Overview duplicated **\n\n")
       print(kable(p$duplicated |>
-                    head(10),
-                  caption = paste("Overview (first 10 duplicated lines) -", file_name),
-                  align   = "l"
+                   head(10),
+                   caption = paste("Overview (first 10 duplicated lines) -", file_name),
+                   align   = "l"
                 )
       )
     }
-    
+# Link to TOC    
     cat("[↑ Return to the beginning of the report](#top)")
   }
 )
