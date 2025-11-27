@@ -2,6 +2,7 @@
 title: "Bellabeat – Data Profiling and Exploratory Data Analysis"
 author: "Stef"
 date: "`r format(Sys.Date(), '%Y-%m-%d')`"
+knit: (function(input_file, encoding) { rmarkdown::render(input = input_file, encoding = encoding, output_dir = "output") })
 output:
   html_document:
     theme: cosmo
