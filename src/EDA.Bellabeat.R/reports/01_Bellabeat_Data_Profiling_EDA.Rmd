@@ -2,7 +2,7 @@
 title: "Bellabeat – Data Profiling and Exploratory Data Analysis"
 author: "Stef"
 date: "`r format(Sys.Date(), '%Y-%m-%d')`"
-knit: (function(input_file, encoding) { rmarkdown::render(input = input_file, encoding = encoding, output_dir = "output") })
+knit: (function(input_file, encoding) { rmarkdown::render(input = input_file, encoding = encoding, output_dir = "output", output_format = "html_document") })
 output:
   html_document:
     theme: cosmo
@@ -11,10 +11,43 @@ output:
     toc_depth: 3
     number_sections: true
     df_print: paged
-  pdf_document:
-    latex_engine: xelatex
-    number_sections: true
 ---
+
+# Introduction
+
+## Overview
+
+This document presents an **automated and fully reproducible R pipeline** designed for data profiling and exploratory data analysis (EDA) on the Bellabeat datasets.\
+It establishes a foundation for all subsequent analytical, modelling, and reporting activities.
+
+The pipeline performs a comprehensive assessment of the raw data to validate their **structure**, **quality**, and **temporal coherence** prior to any advanced analysis. It covers **eleven datasets** of `Fitabase Data 3.12.16–4.11.16` sourced from activity-tracking sensors and examines:
+
+-   dataset volume and dimensionality,
+-   variable types and inferred classes,
+-   missing-value patterns,
+-   duplicates and structural inconsistencies,
+-   temporal ranges and granularity,
+-   key descriptive statistics.
+
+::: tip
+The analysis confirms overall dataset stability while identifying notable anomalies — including the **525 duplicates** found in `minuteSleep_merged.csv` — and provides a clear view of the distribution of core metrics such as activity, sleep, heart rate, and calories.
+:::
+
+## Technical Keys
+
+A central function, **`profile_csv()`**, standardizes all quality checks across datasets: automated type detection, missing-value assessment, cardinality analysis, descriptive statistics, temporal auditing, duplicate identification, and enhanced summaries via **skimr**.
+
+Batch execution through **`purrr::map()`** ensures **homogeneity, reproducibility, and scalability** across the entire processing workflow.
+
+The function **`auto_parse_datetime()`** automatically handles the detection and conversion of temporal columns, ensuring reliable interpretation of dates and timestamps despite the variety of formats present in the raw data. It provides consistent timestamp handling and delivers the uniformity required for all time-based analyses in the pipeline. By centralizing this logic, the pipeline enforces coherent normalization and eliminates ambiguities associated with textual time formats.
+
+::: important
+All outputs — HTML and PDF — are automatically generated and consolidated in the project’s **`output/`** directory, ensuring clean separation between computation, reporting, and delivery.
+:::
+
+Together, these elements provide a **technical backbone** for subsequent phases of data cleaning, feature engineering, aggregation, and analytical modelling.
+
+[↑ Return to the beginning of the report](#top)
 
 ```{r setup, include=FALSE}
 # Global chunk options
