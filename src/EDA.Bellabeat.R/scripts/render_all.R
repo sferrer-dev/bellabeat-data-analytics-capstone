@@ -1,28 +1,49 @@
 # scripts/render_all.R
 
 # -------------------------------------------------------------------
-# Génération des rapports HTML et PDF pour 01_Bellabeat_Data_Profiling_EDA.Rmd
-# Les fichiers de sortie sont placés dans reports/output/
+# Génération des rapports HTML pour :
+#  - 01_Bellabeat_Data_Profiling_EDA.Rmd
+#  - 02_Bellabeat_Files_Overview.Rmd
+#
+# Les fichiers de sortie sont placés dans le sous-dossier "output"
+# du dossier "reports" où se trouvent les .Rmd.
 # -------------------------------------------------------------------
 library(rmarkdown)
 library(here)
 
-# 1. Chemins absolus propres -----------------------------------------
-rmd_path   <- here("reports", "01_Bellabeat_Data_Profiling_EDA.Rmd")
-output_dir <- here("reports", "output")
-
-# 2. S'assurer que le dossier de sortie existe -----------------------
-if (!dir.exists(output_dir)) {
-  dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
-}
-
-# 3. Rendu HTML ------------------------------------------------------
-render(
-  input         = rmd_path,
-  output_format = "html_document",
-  output_file   = "01_Bellabeat_Data_Profiling_EDA.html",
-  output_dir    = output_dir,
-  encoding      = "UTF-8"
+# 1. Récupérer les chemins complets des Rmd --------------------------
+rmd_files <- c(
+  here("reports", "01_Bellabeat_Data_Profiling_EDA.Rmd"),
+  here("reports", "02_Bellabeat_Files_Overview.Rmd")
 )
 
-message("✅ Rendering finished. Outputs available in: ", normalizePath(output_dir))
+for (rmd in rmd_files) {
+  
+  # Dossier du Rmd (devrait être .../src/EDA.Bellabeat.R/reports)
+  rmd_dir <- dirname(rmd)
+  
+  # Dossier de sortie : sous-dossier "output" à côté des Rmd
+  output_dir <- file.path(rmd_dir, "output")
+  
+  if (!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+  }
+  
+  # Nom du fichier HTML de sortie = même préfixe que le Rmd
+  output_file <- sub("\\.Rmd$", ".html", basename(rmd))
+  
+  message("▶ Rendering: ", basename(rmd))
+  message("   - rmd_dir    : ", rmd_dir)
+  message("   - output_dir : ", output_dir)
+  message("   - output_file: ", output_file)
+  
+  render(
+    input         = rmd,
+    output_format = "html_document",
+    output_file   = output_file,
+    output_dir    = output_dir,
+    encoding      = "UTF-8"
+  )
+}
+
+message("✅ Rendering finished.")
