@@ -1,0 +1,702 @@
+---
+title: "Bellabeat – Overview of the 11 Fitabase Datasets (03/12/2016–04/11/2016)"
+author: "Stef"
+date: "`r format(Sys.Date(), '%Y-%m-%d')`"
+knit: (function(input_file, encoding) { rmarkdown::render(input = input_file, encoding = encoding, output_dir = "output", output_format = "html_document") })
+output:
+  html_document:
+    theme: cosmo
+    highlight: tango
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    df_print: paged
+---
+
+# dailyActivity_merged.csv
+
+Le fichier présente des mesures quotidiennes d'activité au format large, avec une ligne par utilisateur et par date. L'ensemble est complet structurellement, sans valeurs manquantes.
+
+Les limites majeures concernent la fiabilité des mesures, la taille réduite de l'échantillon (≈30--33 utilisatrices) et l'ancienneté de la collecte (2016). Plusieurs incohérences potentielles apparaissent : minutes sédentaires bloquées à 1440, minutes actives très élevées, distances actives atypiques, forte concentration de valeurs nulles.
+
+Le fichier reste exploitable pour une EDA et l'analyse de tendances générales, mais il n'est pas adapté à des conclusions généralisables.
+
+## Structure des données
+
+Le fichier est **au format large**. La présence d'une seule ligne par jour et par personne, avec de nombreux attributs simultanés, est caractéristique du **wide format**.
+
+Chaque ligne représente **un utilisateur donné** (Id) **pour une journée** (ActivityDate), et toutes les mesures quotidiennes sont placées **en colonnes** :
+
+-   TotalSteps, TotalDistance, TrackerDistance
+
+-   Distances par niveau d'activité
+
+-   Minutes actives / sédentaires
+
+-   Calories
+
+## Apport analytique du fichier
+
+Ce fichier est **central** pour répondre aux questions clés d'un analyste de données :
+
+**Comprendre l'activité physique globale**
+
+Nombre de pas, distances quotidiennes, intensité.
+
+**Étudier les niveaux d'activité**
+
+Minutes dans chaque zone active → utile pour segmenter les comportements.
+
+**Analyser les calories dépensées**
+
+Permet de relier dépense énergétique ↔ activité.
+
+**Détecter des tendances temporelles**
+
+Avec ActivityDate, on peut analyser :
+
+-   Évolution sur la semaine,
+
+-   Saisonnalité,
+
+-   Comportements du week-end.
+
+# heartrate_seconds_merged.csv 
+
+Le fichier est structuré en format long, chaque ligne correspondant à une mesure par seconde avec un identifiant, un horodatage et une valeur de fréquence cardiaque. L'échantillon est restreint à quatorze utilisatrices, générant plus d'un demi-million d'enregistrements. Les données sont brutes, sans zones d'effort, et présentent une couverture temporelle inégale selon les profiles.
+
+Les valeurs sont complètes et plausibles, mais nécessitent des contrôles d'intégrité.
+
+Ce jeu de données permet d'analyser finement les variations de fréquence cardiaque, de réaliser des agrégations temporelles et de croiser les mesures avec l'activité quotidienne. Les principaux freins résident dans le volume, la qualité hétérogène entre utilisatrices et le manque de contexte.
+
+## Structure des données
+
+Le fichier est au **format long**.
+
+Chaque ligne représente **une mesure de fréquence cardiaque par seconde** pour un utilisateur :
+
+-   Id : identifiant de l'utilisatrice (14 différentes)
+
+-   Time : timestamp (date + heure + seconde)
+
+-   Value : fréquence cardiaque (36 à 185 bpm)
+
+Cela génère un volume très important : **510 597 timestamps distincts**.
+
+**Un format long** est adapté pour le suivi temporel fin, pour calculer des agrégations (par minute / heure / jour), ou pour détecter des schémas d'activité ou de repos.
+
+## Apport analytique du fichier
+
+**Comprendre la physiologie quotidienne**
+
+Les variations de fréquence cardiaque permettent d'observer :
+
+-   Cycles veille / sommeil,
+
+-   Pics d'activité,
+
+-   Récupération post-effort,
+
+-   Périodes de repos.
+
+**Complément indispensable des données d'activité**
+
+En croisant avec dailyActivity_merged.csv, on peut analyser :
+
+-   Relation *intensité d'activité ↔ fréquence cardiaque*,
+
+**Travail temporel**
+
+Le dataset permet :
+
+-   Des agrégations par minute / heure,
+
+-   Des séries temporelles,
+
+-   Des analyses circadiennes **(rythme biologique journalier)**.
+
+# hourlyCalories_merged.csv
+
+Le fichier est structuré en format long, chaque ligne représentant une dépense calorique horaire associée à un identifiant et à un horodatage. L'échantillon comprend trente-quatre utilisatrices pour plus de sept cents timestamps distincts.
+
+La fiabilité reste moyenne, les valeurs dépendant du modèle de capteur et de la couverture horaire propre à chaque profil. Les contrôles d'intégrité portent sur l'unicité Id-ActivityHour, la cohérence des valeurs, la continuité temporelle et le parsing correct des horodatages.
+
+Ce jeu de données permet d'étudier les rythmes journaliers, les pics de dépense énergétique et les comportements horaires, notamment en croisant avec les pas ou la fréquence cardiaque. Les principales limites concernent les valeurs élevées ponctuelles, les lacunes horaires et l'absence de contexte physique réel.
+
+## Structure des données
+
+Le fichier est en **format long**.
+
+Chaque ligne correspond à :
+
+-   **Une utilisatrice** (Id)
+
+-   **Une heure précise** (ActivityHour, chaîne de caractères à convertir en datetime)
+
+-   **Les calories brûlées durant cette heure** (Calories)
+
+Caractéristiques :
+
+-   34 utilisatrices distinctes
+
+-   755 timestamps horaires distincts
+
+-   444 valeurs distinctes de calories
+
+Ce format long est optimal pour des analyses temporelles par heure : tendances journalières, pics d'activité, comportements horaires, etc.
+
+## Apport analytique du fichier
+
+Ces données sont très utiles pour :
+
+**Analyser les rythmes journaliers**
+
+-   Pics de dépense calorique,
+
+-   Habitudes d'activité par heure,
+
+-   Comparaison semaine / week-end.
+
+**Croiser avec d'autres fichiers**
+
+Avec hourlySteps_merged.csv :
+
+-   Steps → effort physique
+
+-   Calories → dépense énergétique
+
+Avec heartrate_seconds_merged.csv :
+
+-   Croiser HR → calories heure par heure
+
+-   Détecter des corrélations entre fréquence cardiaque et calories brûlées
+
+**Identifier les comportements**
+
+-   Utilisateurs sédentaires vs actifs
+
+-   Analyse de la charge d'activité dans la journée
+
+-   Création de clusters par profil de dépense énergétique (Regroupement des utilisateurs selon leur niveau d'activité quotidienne)
+
+# hourlyIntensities_merged.csv
+
+Le fichier est structuré en format long, chaque enregistrement associant un identifiant, un horodatage horaire et deux mesures d'intensité agrégées.
+
+ L'ensemble est complet, sans valeurs manquantes, et repose sur un score minute-par-minute compilé sur une heure.
+
+Les valeurs, concentrées autour de niveaux faibles, reflètent une activité majoritairement sédentaire ponctuée de quelques épisodes plus soutenus.
+
+Les vérifications recommandées portent sur l'unicité des couples Id-ActivityHour, la cohérence entre TotalIntensity et AverageIntensity, la continuité temporelle et l'identification de valeurs extrêmes.
+
+Le fichier permet d'analyser les rythmes journaliers, de détecter les comportements sédentaires ou actifs et d'établir des corrélations avec les pas, les calories ou la fréquence cardiaque.  
+
+## Structure des données
+
+Le fichier est en **format long**. 
+
+Chaque ligne représente :
+
+-   Une **utilisatrice** (Id, 34 personnes)
+
+-   Une **heure précise** (ActivityHour, texte à convertir en datetime)
+
+-   Une **intensité totale de l'activité** durant cette heure (TotalIntensity)
+
+-   L'intensité **moyenne par minute** (AverageIntensity)
+
+Ce format "évènement → une mesure par heure" est adapté aux analyses chronologiques.
+
+Le profil de colonnes montre :
+
+-   **TotalIntensity** varie de **0 à 180**
+
+-   **AverageIntensity** varie de **0 à 3**
+
+-   180 / 3 = 60 → **Fitbit encode l'intensité minute par minute**, probablement sur une échelle 0--3, et agrège sur 60 minutes.
+
+ 👉 Le fichier donne donc une *mesure agrégée de l'effort physique horaire*.
+
+## Apport analytique du fichier
+
+Ce fichier est central dans l'analyse comportementale horaire :
+
+**Comprendre les patterns journaliers d'activité**
+
+-   Heures les plus actives,
+
+-   Creux d'activité,
+
+-   Routine du matin ou du soir.
+
+**Identifier les comportements sédentaires**
+
+Beaucoup d'heures avec AverageIntensity = 0 → forte sédentarité.
+
+**Croiser les données avec :**
+
+-   **hourlySteps\
+    **→ intensité vs nombre de pas
+
+-   **hourlyCalories\
+    **→ intensité vs dépense énergétique
+
+-   **heartrate_seconds\
+    **→ intensité vs fréquence cardiaque (corrélation physiologique)
+
+**Segmentation des utilisatrices**
+
+Possible de construire des profils :
+
+-   **Ultra-actives** : heures intenses régulières,
+
+-   **Modérées** : activité intermittente,
+
+-   **Sédentaires** : intensité quasi nulle.
+
+**Support aux analyses de rythmes circadiens**
+
+Identifier :
+
+-   Pics d'énergie,
+
+-   Périodes de repos,
+
+-   Rythme veille/sommeil indirect (faible intensité la nuit).
+
+# hourlySteps_merged.csv
+
+Le fichier est structuré en format long, chaque enregistrement correspondant à un identifiant, un horodatage horaire et un nombre de pas. L'ensemble est complet, sans valeurs manquantes, et présente une couverture similaire aux autres jeux horaires, avec une distribution très concentrée sur de faibles volumes de pas et quelques pics d'activité.
+
+Les vérifications d'intégrité recommandées portent sur l'unicité des couples Id-ActivityHour, la continuité des séries, l'identification des valeurs extrêmes et la cohérence avec les calories et l'intensité. Ce fichier est utile pour l'analyse des routines horaires, la détection de comportements sédentaires et la segmentation des utilisatrices, surtout lorsqu'il est croisé avec les intensités, les calories ou la fréquence cardiaque.
+
+## Structure des données
+
+Le fichier est en **format long**.
+
+Chaque ligne correspond à :
+
+-   Un **Id** (utilisatrice),
+
+-   Une **heure précise** (ActivityHour, au format texte),
+
+-   Un **nombre de pas réalisés durant cette heure** (StepTotal).
+
+Caractéristiques issues du rapport :
+
+-   **34 utilisatrices**, comme les autres fichiers horaires,
+
+-   **755 timestamps horaires distincts**,
+
+-   Aucune valeur manquante.
+
+Ce format évènementiel « une ligne = une heure » est optimale pour analyser les comportements journaliers.
+
+## Apport analytique du fichier
+
+Ce fichier est central pour comprendre les comportements horaires.
+
+**Analyse des routines quotidiennes**
+
+-   Pics d'activité le matin ou soir,
+
+-   Marche durant la pause de midi,
+
+-   Sédentarité prolongée.
+
+**Segmentation des profils d'utilisatrices**
+
+-   Très actives,
+
+-   Modérément actives,
+
+-   Sédentaires.
+
+**Croisement avec :**
+
+-   **hourlyIntensities_merged.csv\
+    **→ comprendre si les pas correspondent à des activités intenses ou légères.
+
+-   **hourlyCalories_merged.csv\
+    **→ calories brûlées par heure selon les pas.
+
+-   **dailyActivity_merged.csv\
+    **→ reconstituer le total journalier à partir de l'horaire.
+
+**Préparation à des visualisations structurantes**
+
+-   Heatmaps hebdomadaires (jours × heures),
+
+-   Graphiques de tendance horaire,
+
+-   Analyse circadienne complète.
+
+# minuteCaloriesNarrow_merged.csv
+
+Le fichier contient des données minute par minute pour 34 utilisatrices, soit 45 300 enregistrements structurés en format long. Chaque ligne associe un identifiant, un horodatage et une estimation calorique. Les valeurs sont complètes, sans données manquantes.
+
+Les calories varient de 0 à 23 kcal/min, avec une médiane de 1,22. Les valeurs extrêmes peuvent indiquer une activité intense.
+
+ Le format long facilite les analyses temporelles : séries minute par minute, agrégations horaires ou journalières, détection de pics et comparaison entre utilisatrices. L'agrégation améliore la fiabilité, car les mesures minute-level sont instables.
+
+Des vérifications comme l'unicité Id + timestamp, la continuité temporelle et l'examen des valeurs extrêmes sont nécessaires.
+
+Croisé avec minuteIntensities, minuteSteps, minuteMETs ou les fichiers horaires/journaliers, il permet une analyse complète des comportements et de la dépense énergétique.
+
+## Structure des données
+
+Le fichier est en **format long** (narrow) : **1 ligne = 1 minute d'activité pour une utilisatrice**.
+
+Il contient trois colonnes.
+
+Le fichier couvre 34 utilisatrices sur un mois, avec **45 300 minutes horodatées**.
+
+La colonne **Calories** représente la **dépense énergétique estimée chaque minute** par Fitbit.
+
+Selon le rapport :
+
+-   **Min = 0**
+
+-   **Max = 23.01**
+
+-   **Moyenne = 1.57**
+
+-   **Médiane = 1.22**
+
+**Interprétation**
+
+-   Une minute complètement inactive → **0 à 1 kcal**.
+
+-   Une activité modérée → **2 à 5 kcal/min**.
+
+-   Une activité intense → **6 à 10 kcal/min**.
+
+-   La valeur maximale de 23 kcal/min suggère un **effort très intense**
+
+## Apport analytique du fichier
+
+Le fichier permet :
+
+ **Analyse de l'effort minute par minute**
+
+-   Détecter les pics d'activité,
+
+-   Repérer les activités intenses,
+
+-   Analyser les cycles jour/nuit.
+
+**Agrégation à des niveaux supérieurs**
+
+-   Calories par heure (vérification contre hourlyCalories),
+
+-   Calories par jour pour valider dailyActivity.
+
+**Analyse comportementale fine**
+
+-   Routine quotidienne (temps actif vs inactif),
+
+-   Comparaison du style de vie entre utilisatrice
+
+# minuteIntensitiesNarrow_merged.csv
+
+Le fichier fournit des mesures d'intensité minute par minute pour 34 utilisatrices, en format long, sans valeurs manquantes.
+
+Chaque ligne associe un identifiant, un horodatage et un score d'intensité. L'échelle comprend quatre niveaux (0 à 3).  
+
+La distribution est très déséquilibrée, dominée par les intensités nulles, ce qui nécessite de vérifier la continuité temporelle et la cohérence des minutes actives.
+
+Le dataset est propre et structuré. Il permet d'analyser les transitions d'activité, les patterns circadiens et les minutes actives, surtout via l'agrégation quotidienne ou horaire. Croisé avec minuteCalories, minuteMETs ou dailyActivity, il devient utile pour comprendre les comportements et identifier les séquences actives ou sédentaires.
+
+## Structure des données
+
+Le fichier est en **format long** (narrow format), c'est-à-dire : 📌 **Une ligne = 1 minute de mesure pour une utilisatrice.**
+
+Le fichier n'a **aucune valeur manquante**, comme tous les fichiers minute.
+
+La variable Intensity suit une échelle Fitbit minute par minute :
+
+| Intensité | Signification      |
+|:---------:|:-------------------|
+|     0     | Sédentaire / repos |
+|     1     | Activité légère    |
+|     2     | Activité modérée   |
+|     3     | Activité intense   |
+
+👉 C'est un score dérivé, basé sur les mouvements.
+
+## Apport analytique du fichier
+
+Le fichier **minute-intensities** est un des plus informatifs pour les analyses temporelles fines.
+
+**Identifier les comportements minute-à-minute**
+
+-   Transitions repos → activité,
+
+-   Activité sporadique vs activité continue,
+
+-   Agitation nocturne (corrélations avec minuteSleep).
+
+**Détection des patterns d'activité**
+
+-   Analyse circadienne à haute résolution,
+
+-   Heatmaps minute-by-minute,
+
+-   Analyse des *pics* d'intensité.
+
+**Construction d'indicateurs dérivés**
+
+-   Total minutes actives par jour,
+
+-   Ratio minutes actives / minutes sédentaires,
+
+-   Durée des épisodes actifs consécutifs.
+
+**Croisements riches**
+
+-   **Avec minuteCalories** → intensité ↔ dépense énergétique
+
+-   **Avec minuteMETs** → intensité ↔ équivalent métabolique
+
+-   **Avec dailyActivity** → consolidation journalière
+
+-   **Avec hourlyIntensities** → validation de l'agrégation horaire
+
+**\
+**
+
+# minuteMETsNarrow_merged.csv
+
+Le fichier regroupe des mesures minute par minute pour 34 utilisatrices, sans valeurs manquantes, avec trois colonnes (Id, horodatage, METs). Les données couvrent environ 45 300 minutes et présentent 141 valeurs distinctes pour les METs.
+
+Le MET (Metabolic Equivalent Task) est normalement une unité physiologique :
+
+-   **1 MET** = métabolisme de base (repos)
+
+-   **3 METs** = marche modérée
+
+-   **6 METs** = course légère
+
+-   **\>10 METs** = activité intense
+
+Les statistiques montrent une distribution très asymétrique, avec une médiane à 10 et des valeurs extrêmes pouvant atteindre 189.
+
+Les METs élevés traduisent essentiellement des pics d'activité.
+
+Le format long permet des analyses temporelles détaillées : détection des variations minute par minute, construction de profils journaliers, agrégation en MET-minutes et repérage des épisodes d'activité. Les limitations incluent les artefacts dus au capteur, les surévaluations possibles et l'incohérence avec les METs standards.
+
+La structure propre et complète du fichier en fait une base utile pour analyser les patterns d'activité et croiser les mesures avec celles d'intensité ou de calories, à condition d'interpréter les valeurs extrêmes avec prudence et de privilégier les agrégations pour renforcer la cohérence.
+
+## Structure des données
+
+Le fichier est en **format long**, avec une granularité **minute par minute**.
+
+Chaque ligne représente la valeur MET (Metabolic Equivalent of Task) estimée par Fitbit pour une minute d'activité d'une utilisatrice.
+
+Statistiques issues du rapport :
+
+-   **Min = 0**
+
+-   **Max = 189**
+
+-   **Moyenne = 14.23**
+
+-   **Médiane = 10**
+
+Un MET supérieur à **20** est déjà physiologiquement très improbable. Un MET à **189** est **impossible physiologiquement.**
+
+👉 Le fichier est **propre**, complet, et couvre **34 utilisatrices** sur un mois (\~45k minutes).
+
+## Apport analytique du fichier
+
+-   Calcul des **zones d'effort** (repos, léger, modéré, intense) à partir des METs.
+
+-   Comparaison entre utilisateurs ou entre journées sur la base d'un indicateur physiologique standardisé (METs).
+
+-   Validation de la cohérence entre METs, intensité, pas et calories.
+
+# minuteSleep_merged.csv
+
+Ce fichier est particulier dans le dataset Bellabeat/Fitbit car il concerne **le sommeil minute par minute**, avec une granularité fine. Ce fichier contient des données minute par minute sur le sommeil, en format long : une ligne par minute et par utilisatrice. Il comporte 4 colonnes sans valeurs manquantes : Id (23 utilisatrices seulement), date (timestamp minute à convertir), value (état de sommeil codé 1 = asleep, 2 = restless, 3 = awake) et logId (identifiant de session de sommeil/nuit).
+
+Les données sont organisées par sessions de sommeil via logId, ce qui permet de reconstruire chaque nuit et de suivre, minute par minute, les transitions entre sommeil, agitation et éveil. Elles sont adaptées aux analyses temporelles fines (structure interne du sommeil, fragmentation, cycles veille/sommeil).
+
+Le fichier permet de calculer des indicateurs clés (durée totale de sommeil, temps éveillé/restless, nombre de réveils, efficacité du sommeil, heures de coucher/lever) et d'étudier les comportements nocturnes et leur variabilité. Pour garantir l'intégrité, il est recommandé de vérifier la continuité minute par minute par logId, la durée réaliste des sessions, l'absence de valeurs value ≠ 1/2/3 et d'écarter les sessions anormalement courtes. Le croisement avec les fichiers d'activité (steps, intensities, calories) ouvre la voie à des analyses sommeil ↔ activité physique.
+
+## Structure des données
+
+Le fichier est en **format long**, comme tous les fichiers minute-by-minute.
+
+**▸ Une ligne = 1 minute de mesure de sommeil pour une utilisatrice.**
+
+👉 Seulement **23 utilisatrices** ont des données de sommeil (moins que dans les fichiers activity et steps).
+
+**Format long, minute par minute**
+
+Chaque minute comporte un état de sommeil indiqué par value.
+
+**Les variables importantes :**
+
+-   **Id** : identifiant de l'utilisatrice.
+
+-   **date** : timestamp minute (à convertir en POSIXct).
+
+-   **value** :
+
+    -   Valeur = **1** → *Asleep*
+
+    -   Valeur = **2** → *Restless*
+
+    -   Valeur = **3** → *Awake*
+
+-   **logId** : Identifiant de session de sommeil (permet de regrouper les nuits).
+
+👉 Ce fichier permet d'analyser **la structure interne du sommeil**, minute par minute
+
+## Apport analytique du fichier
+
+Ce fichier est riche pour comprendre **la qualité du sommeil** :
+
+**Analyser la structure du sommeil**
+
+-   Périodes "asleep", "restless", "awake" minute par minute
+
+-   Fragmentation du sommeil
+
+-   Cycles veille/sommeil détectés par l'algorithme
+
+**Calculer les indicateurs clés**
+
+-   **Durée totale de sommeil**
+
+-   **Durée éveillé/restless**
+
+-   **Nombre de réveils nocturnes**
+
+-   **Efficacité du sommeil (%)**
+
+-   **Heures d'endormissement / réveil**
+
+**Étudier les comportements**
+
+-   Heures de coucher et lever
+
+-   Variabilité d'une nuit à l'autre
+
+-   Impact d'activité physique sur la qualité du sommeil (corrélation possible avec steps/intensities/calories)
+
+Ce fichier est idéal pour **une étude exploratoire** ou une **corrélation sommeil ↔ activité physique** (pas, intensité, calories).
+
+Le fichier minuteSleep_merged.csv est adapté à une étude exploratoire, car il fournit une vision minute par minute du sommeil. Cette granularité permet d'observer les cycles nocturnes, les réveils, les phases de sommeil agité ou profond, et d'analyser facilement la qualité et la régularité du sommeil. Sa structure simple, cohérente et riche en variations en fait un support idéal pour visualiser, décrire et comprendre les comportements de sommeil des utilisateurs.
+
+# minuteStepsNarrow_merged.csv
+
+Le fichier contient 1,4 M de lignes structurées minute par minute pour 34 utilisatrices, sans doublons ni valeurs manquantes.
+
+Chaque enregistrement associe un horodatage et un nombre de pas, avec une distribution fortement asymétrique : la médiane est nulle et les valeurs élevées restent limitées, confirmant une majorité de minutes inactives. Le suivi temporel est continu et cohérent, ce qui permet de reconstituer les séquences d'activité.
+
+Les minutes avec pas élevés restent plausibles, mais doivent être croisées avec les intensités, les calories ou les METs pour valider la cohérence. L'analyse requiert une conversion de l'horodatage et une vérification de la continuité temporelle. Les données sont sensibles aux limites du capteur au poignet, entraînant sur- ou sous-détections.
+
+Le fichier est particulièrement adapté à l'étude des rythmes circadiens, des épisodes actifs, des routines journalières et de la cadence minute par minute, ainsi qu'à la construction d'agrégations horaires ou journalières. Malgré le bruit inhérent et la variabilité utilisateur, il constitue une source centrale pour comprendre les comportements de marche et les patterns d'activité.
+
+## Structure des données
+
+Chaque ligne représente **une minute** d'activité pour une utilisatrice.
+
+**Nombre d'utilisatrices cohérent : 34**
+
+Cela correspond aux fichiers horaires et journaliers → cohérence multi-fichier.
+
+**Format long / narrow**
+
+Nombre d'observations : 1 445 040
+
+Les **45 300 timestamps distincts** reflètent la granularité minute × utilisateurs au cours d'un mois environ.
+
+Nombre de colonnes : 3
+
+-   0 doublons détectés
+
+-   0 valeurs manquantes dans toutes les colonnes
+
+| **Variable** | **Min** | **Max** | **Mean** | **Median** |
+|:-------------|:--------|:--------|:---------|:-----------|
+| **Steps**    | 0       | 204     | 4.77     | 0          |
+
+**Interprétation :**
+
+-   **Min = 0** → minutes totalement inactives
+
+-   **Max = 204** → \~200 pas/min ≈ marche rapide (\~12 km/h)
+
+-   **Moyenne = 4.77 pas/min** → les utilisatrices étaient majoritairement sédentaires
+
+-   **Médiane = 0** → plus de 50 % du temps = aucune marche minute par minute
+
+👉 Une distribution très **asymétrique**, caractéristique des données minute-level d'activité physique.
+
+## Apport analytique du fichier
+
+Le fichier **minuteStepsNarrow_merged.csv** est un fichier riche et informatif du dataset Fitbit/Bellabeat.
+
+ **Atouts majeurs**
+
+-   Granularité minute
+
+-   Dataset complet (0 NA, 0 doublons)
+
+-   Cohérence temporelle
+
+-   Utile pour des analyses comportementales fines
+
+-   Pertinence forte pour visualisations (heatmaps, séries temporelles)
+
+C'est un fichier clé pour l'exploration du comportement utilisateur minute par minute. Il doit être croisé avec intensité, calories, METs et sommeil pour produire des insights fiables.
+
+# weightLogInfo_merged
+
+Le fichier contient des mesures ponctuelles de poids, structurées ligne par ligne avec des valeurs associées comme le BMI ou le pourcentage de masse grasse. L'ensemble est propre en apparence mais très peu fourni : seules quelques utilisatrices ont enregistré des données et la fréquence des mesures est trop faible pour dégager une tendance fiable. La majorité des colonnes sont vides ou auto-rapportées, ce qui limite fortement la fiabilité analytique. Les valeurs restent cohérentes mais nécessitent une vérification de base, notamment la conversion des horodatages et la cohérence avec le BMI calculé.
+
+L'intérêt analytique reste marginal : l'échantillon est trop réduit, la variabilité temporelle quasi nulle et la mesure dépend d'une saisie manuelle souvent imprécise. Le fichier se prête au mieux à une lecture descriptive ponctuelle, sans pouvoir soutenir une analyse solide ni des corrélations robustes avec l'activité physique.
+
+## Structure des données
+
+Le fichier **weightLogInfo_merged.csv** contient les enregistrements de poids saisis par les utilisatrices.
+
+**Format : wide.** Chaque ligne = *une mesure de poids*.
+
+Toutes les variables descriptives sont en colonnes → format adapté aux analyses descriptives.
+
+C'est le fichier **le moins fourni et le moins exploitable** du dataset
+
+-   Le fichier contient **très peu d'enregistrements** (souvent \< 70 au total).
+
+-   Seules **8 utilisateurs environ** ont saisi leur poids.
+
+-   Beaucoup de colonnes sont **vides** ou **rarement renseignées** (Fat, BMI).
+
+**Données horodatées**
+
+Permet d'analyser les variations de poids dans le temps... *si suffisamment de données existent* (rare).
+
+## Apport analytique du fichier
+
+**Utilité très limitée** dans le cadre Bellabeat Coursera.
+
+Elles permettent au mieux :
+
+-   Une évaluation ponctuelle IMC (BMI),
+
+-   Une segmentation d'utilisatrices (si le fichier est rempli),
+
+-   Une corrélation rudimentaire entre poids et activité.
+
+Mais en pratique :
+
+-   Trop peu de données,
+
+-   Trop peu d'utilisatrices,
+
+-   Valeurs souvent auto-rapportées,
+
+-   Pas de séries temporelles.

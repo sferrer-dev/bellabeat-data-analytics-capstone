@@ -13,9 +13,9 @@ output:
     df_print: paged
 ---
 
-# Introduction
+# Introduction { - }
 
-## Overview
+## Overview { - }
 
 This document presents an **automated and fully reproducible R pipeline** designed for data profiling and exploratory data analysis (EDA) on the Bellabeat datasets.\
 It establishes a foundation for all subsequent analytical, modelling, and reporting activities.
@@ -33,7 +33,7 @@ The pipeline performs a comprehensive assessment of the raw data to validate the
 The analysis confirms overall dataset stability while identifying notable anomalies — including the **525 duplicates** found in `minuteSleep_merged.csv` — and provides a clear view of the distribution of core metrics such as activity, sleep, heart rate, and calories.
 :::
 
-## Technical Keys
+## Technical Keys { - }
 
 A central function, **`profile_csv()`**, standardizes all quality checks across datasets: automated type detection, missing-value assessment, cardinality analysis, descriptive statistics, temporal auditing, duplicate identification, and enhanced summaries via **skimr**.
 
