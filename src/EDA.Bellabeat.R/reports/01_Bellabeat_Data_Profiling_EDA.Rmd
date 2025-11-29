@@ -78,7 +78,7 @@ source(here::here("scripts", "render_all.R"))
 ```
 
 
-[↑ Return to the beginning of the report](#top)
+[↑ Return to the beginning](#top)
 
 ```{r setup, include=FALSE}
 # Global chunk options
@@ -129,8 +129,11 @@ names(profiles) <- basename(csv_files)
 purrr::iwalk(
   .x = profiles,
   .f = function(p, file_name) {
-# Section title for this file
-    cat("\n\n# File profile: `", file_name, "`\n\n", sep = "")
+# Section title and anchor for this file
+    cat(sprintf("\n\n# File: %s {#%s}\n\n", file_name, file_name))
+# Anchor to the other report
+    name_no_ext <- sub("\\.csv$", "", file_name)
+    cat(sprintf("\n\n[→ Link to overview report](02_Bellabeat_Files_Overview.html#%s)\n\n", name_no_ext))
 # ---- File summary (dimensions) ----
     file_size_fmt <- sprintf("%.2f Mo", p$file_size)
     cat("- **File name :** ", p$file_name, "\n")
@@ -188,7 +191,7 @@ purrr::iwalk(
       )
     }
 # Link to TOC    
-    cat("[↑ Return to the beginning of the report](#top)")
+    cat("[↑ Return to the beginning](#top)")
   }
 )
 ```

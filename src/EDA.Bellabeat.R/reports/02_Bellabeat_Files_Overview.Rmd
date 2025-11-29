@@ -37,7 +37,7 @@ Les fichiers couverts sont les suivants :
 
 Ce document sert de **référence technique** pour orienter les travaux d’exploration des données (EDA), de préparation, de visualisation et d’analyse plus avancée sur le dataset Bellabeat.
 
-# dailyActivity_merged.csv
+# File: dailyActivity_merged.csv {#dailyActivity_merged}
 
 ## Résumé général
 
@@ -83,7 +83,7 @@ Avec `ActivityDate`, on peut analyser :
 - Les différences de comportements en semaine vs week-end.
 
 
-# heartrate_seconds_merged.csv
+# File: heartrate_seconds_merged.csv {#heartrate_seconds_merged}
 
 ## Résumé général
 
@@ -134,7 +134,7 @@ Le dataset permet :
 - Des analyses circadiennes (rythme biologique journalier).
 
 
-# hourlyCalories_merged.csv
+# File: hourlyCalories_merged.csv {#hourlyCalories_merged}
 
 ## Résumé général
 
@@ -191,7 +191,7 @@ Avec `heartrate_seconds_merged.csv` :
 - Création de profils de dépense énergétique (regroupement des utilisatrices selon leur niveau d'activité quotidienne).
 
 
-# hourlyIntensities_merged.csv
+# File: hourlyIntensities_merged.csv {#hourlyIntensities_merged}
 
 ## Résumé général
 
@@ -260,7 +260,7 @@ Identifier :
 - Rythme veille/sommeil indirect (faible intensité la nuit).
 
 
-# hourlySteps_merged.csv
+# File: hourlySteps_merged.csv {#hourlySteps_merged}
 
 ## Résumé général
 
@@ -317,7 +317,7 @@ Ce fichier est central pour comprendre les comportements horaires.
 - Analyse circadienne complète.
 
 
-# minuteCaloriesNarrow_merged.csv
+# File: minuteCaloriesNarrow_merged.csv {#minuteCaloriesNarrow_merged}
 
 ## Résumé général
 
@@ -379,7 +379,7 @@ Statistiques issues du rapport :
 - Construction d'indicateurs dérivés (calories actives quotidiennes, charge d'entraînement, etc.).
 
 
-# minuteIntensitiesNarrow_merged.csv
+# File: minuteIntensitiesNarrow_merged.csv {#minuteIntensitiesNarrow_merged}
 
 ## Résumé général
 
@@ -436,7 +436,7 @@ Le fichier `minuteIntensitiesNarrow_merged.csv` est un des plus informatifs pour
 - Avec `hourlyIntensities_merged.csv` → validation de l'agrégation horaire.
 
 
-# minuteMETsNarrow_merged.csv
+# File: minuteMETsNarrow_merged.csv {#minuteMETsNarrow_merged}
 
 ## Résumé général
 
@@ -478,7 +478,7 @@ Le fichier est propre, complet, et couvre 34 utilisatrices sur un mois (~ 45k mi
 - Construction d'indicateurs comme les MET-minutes journaliers (somme des METs sur une journée), utiles pour des recommandations d'activité physique.
 
 
-# minuteSleep_merged.csv
+# File: minuteSleep_merged.csv {#minuteSleep_merged}
 
 ## Résumé général
 
@@ -539,7 +539,7 @@ Ce fichier est riche pour comprendre **la qualité du sommeil**.
 Le fichier `minuteSleep_merged.csv` est bien adapté à une étude exploratoire, car sa granularité minute par minute permet d'observer les cycles nocturnes, les réveils, les phases de sommeil agité ou éveillé, et d’analyser la qualité et la régularité du sommeil des utilisatrices.
 
 
-# minuteStepsNarrow_merged.csv
+# File: minuteStepsNarrow_merged.csv {#minuteStepsNarrow_merged}
 
 ## Résumé général
 
@@ -595,7 +595,7 @@ Le fichier `minuteStepsNarrow_merged.csv` est un fichier riche et informatif du 
 C'est un fichier clé pour l'exploration du comportement utilisateur minute par minute. Il doit être croisé avec intensité, calories, METs et sommeil pour produire des insights fiables.
 
 
-# weightLogInfo_merged.csv
+# File: weightLogInfo_merged.csv {#weightLogInfo_merged}
 
 ## Résumé général
 
