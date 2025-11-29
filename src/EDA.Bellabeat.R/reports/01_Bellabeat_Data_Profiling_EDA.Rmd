@@ -130,9 +130,9 @@ purrr::iwalk(
   .x = profiles,
   .f = function(p, file_name) {
 # Section title and anchor for this file
-    cat(sprintf("\n\n# File: %s {#%s}\n\n", file_name, file_name))
-# Anchor to the other report
     name_no_ext <- sub("\\.csv$", "", file_name)
+    cat(sprintf("\n\n# File: %s {#%s}\n\n", file_name, name_no_ext))
+# Anchor to the other report
     cat(sprintf("\n\n[→ Link to overview report](02_Bellabeat_Files_Overview.html#%s)\n\n", name_no_ext))
 # ---- File summary (dimensions) ----
     file_size_fmt <- sprintf("%.2f Mo", p$file_size)

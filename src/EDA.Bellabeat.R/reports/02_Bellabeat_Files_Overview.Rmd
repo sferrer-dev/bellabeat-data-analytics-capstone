@@ -38,6 +38,7 @@ Les fichiers couverts sont les suivants :
 Ce document sert de **référence technique** pour orienter les travaux d’exploration des données (EDA), de préparation, de visualisation et d’analyse plus avancée sur le dataset Bellabeat.
 
 # File: dailyActivity_merged.csv {#dailyActivity_merged}
+[→ Link to profiling report](01_Bellabeat_Data_Profiling_EDA.html#dailyActivity_merged)
 
 ## Résumé général
 
@@ -82,8 +83,11 @@ Avec `ActivityDate`, on peut analyser :
 - Une éventuelle saisonnalité,
 - Les différences de comportements en semaine vs week-end.
 
+[↑ Return to the beginning](#top)
+
 
 # File: heartrate_seconds_merged.csv {#heartrate_seconds_merged}
+[→ Link to profiling report](01_Bellabeat_Data_Profiling_EDA.html#heartrate_seconds_merged)
 
 ## Résumé général
 
@@ -133,8 +137,11 @@ Le dataset permet :
 - La construction de séries temporelles,
 - Des analyses circadiennes (rythme biologique journalier).
 
+[↑ Return to the beginning](#top)
+
 
 # File: hourlyCalories_merged.csv {#hourlyCalories_merged}
+[→ Link to profiling report](01_Bellabeat_Data_Profiling_EDA.html#hourlyCalories_merged)
 
 ## Résumé général
 
@@ -190,8 +197,11 @@ Avec `heartrate_seconds_merged.csv` :
 - Analyse de la charge d'activité dans la journée,
 - Création de profils de dépense énergétique (regroupement des utilisatrices selon leur niveau d'activité quotidienne).
 
+[↑ Return to the beginning](#top)
+
 
 # File: hourlyIntensities_merged.csv {#hourlyIntensities_merged}
+[→ Link to profiling report](01_Bellabeat_Data_Profiling_EDA.html#hourlyIntensities_merged)
 
 ## Résumé général
 
@@ -259,8 +269,11 @@ Identifier :
 - Périodes de repos,
 - Rythme veille/sommeil indirect (faible intensité la nuit).
 
+[↑ Return to the beginning](#top)
+
 
 # File: hourlySteps_merged.csv {#hourlySteps_merged}
+[→ Link to profiling report](01_Bellabeat_Data_Profiling_EDA.html#hourlySteps_merged)
 
 ## Résumé général
 
@@ -316,8 +329,11 @@ Ce fichier est central pour comprendre les comportements horaires.
 - Graphiques de tendance horaire,
 - Analyse circadienne complète.
 
+[↑ Return to the beginning](#top)
+
 
 # File: minuteCaloriesNarrow_merged.csv {#minuteCaloriesNarrow_merged}
+[→ Link to profiling report](01_Bellabeat_Data_Profiling_EDA.html#minuteCaloriesNarrow_merged)
 
 ## Résumé général
 
@@ -378,8 +394,11 @@ Statistiques issues du rapport :
 - Comparaison du style de vie entre utilisatrices,
 - Construction d'indicateurs dérivés (calories actives quotidiennes, charge d'entraînement, etc.).
 
+[↑ Return to the beginning](#top)
+
 
 # File: minuteIntensitiesNarrow_merged.csv {#minuteIntensitiesNarrow_merged}
+[→ Link to profiling report](01_Bellabeat_Data_Profiling_EDA.html#minuteIntensitiesNarrow_merged)
 
 ## Résumé général
 
@@ -435,8 +454,11 @@ Le fichier `minuteIntensitiesNarrow_merged.csv` est un des plus informatifs pour
 - Avec `dailyActivity_merged.csv` → consolidation journalière,
 - Avec `hourlyIntensities_merged.csv` → validation de l'agrégation horaire.
 
+[↑ Return to the beginning](#top)
+
 
 # File: minuteMETsNarrow_merged.csv {#minuteMETsNarrow_merged}
+[→ Link to profiling report](01_Bellabeat_Data_Profiling_EDA.html#minuteMETsNarrow_merged)
 
 ## Résumé général
 
@@ -477,8 +499,11 @@ Le fichier est propre, complet, et couvre 34 utilisatrices sur un mois (~ 45k mi
 - Validation de la cohérence entre METs, intensité, pas et calories.
 - Construction d'indicateurs comme les MET-minutes journaliers (somme des METs sur une journée), utiles pour des recommandations d'activité physique.
 
+[↑ Return to the beginning](#top)
+
 
 # File: minuteSleep_merged.csv {#minuteSleep_merged}
+[→ Link to profiling report](01_Bellabeat_Data_Profiling_EDA.html#minuteSleep_merged)
 
 ## Résumé général
 
@@ -538,8 +563,11 @@ Ce fichier est riche pour comprendre **la qualité du sommeil**.
 
 Le fichier `minuteSleep_merged.csv` est bien adapté à une étude exploratoire, car sa granularité minute par minute permet d'observer les cycles nocturnes, les réveils, les phases de sommeil agité ou éveillé, et d’analyser la qualité et la régularité du sommeil des utilisatrices.
 
+[↑ Return to the beginning](#top)
+
 
 # File: minuteStepsNarrow_merged.csv {#minuteStepsNarrow_merged}
+[→ Link to profiling report](01_Bellabeat_Data_Profiling_EDA.html#minuteStepsNarrow_merged)
 
 ## Résumé général
 
@@ -594,8 +622,11 @@ Le fichier `minuteStepsNarrow_merged.csv` est un fichier riche et informatif du 
 
 C'est un fichier clé pour l'exploration du comportement utilisateur minute par minute. Il doit être croisé avec intensité, calories, METs et sommeil pour produire des insights fiables.
 
+[↑ Return to the beginning](#top)
+
 
 # File: weightLogInfo_merged.csv {#weightLogInfo_merged}
+[→ Link to profiling report](01_Bellabeat_Data_Profiling_EDA.html#weightLogInfo_merged)
 
 ## Résumé général
 
@@ -637,3 +668,5 @@ En pratique :
 - Pas de séries temporelles exploitables.
 
 Le fichier est donc surtout utile pour illustrer les limites d’un jeu de données incomplet et rappeler la nécessité de données suffisantes pour mener des analyses robustes.
+
+[↑ Return to the beginning](#top)
