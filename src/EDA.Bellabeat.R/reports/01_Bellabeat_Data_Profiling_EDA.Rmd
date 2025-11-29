@@ -5,6 +5,7 @@ date: "`r format(Sys.Date(), '%Y-%m-%d')`"
 output:
   html_document:
     theme: cosmo
+    css: css/styles.css
     highlight: tango
     toc: true
     toc_depth: 3

@@ -1,0 +1,145 @@
+---
+title: "Bellabeat – Analyse globale ROCCC"
+author: "Stef"
+date: "`r format(Sys.Date(), '%Y-%m-%d')`"
+output:
+  html_document:
+    theme: cosmo
+    css: css/styles.css
+    highlight: tango
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    df_print: paged
+---
+
+# **R**eliability (Fiabilité des données)
+
+La fiabilité des données Fitabase/Bellabeat est **globalement modérée**, avec plusieurs limites.
+
+## Forces
+
+-   **Données issues de capteurs réels** (Fitbit), donc mesures objectives : pas d'auto-déclaration.
+-   **Horodatage cohérent** dans l'ensemble des fichiers minute-by-minute, hourly et daily.
+-   **Aucune valeur manquante critique** dans les colonnes temporelles et les identifiants utilisateur.
+-   **Granularité riche** : minute, heure, jour → favorable aux analyses temporelles et à la détection de patterns.
+
+## Faiblesses
+
+-   **Échantillon très réduit : 30 utilisateurs seulement**, fortement limitant pour la généralisation.
+-   **Distribution hétérogène des contributions** : certains utilisateurs fournissent beaucoup de données cardiaques, d'autres presque rien (p. ex. `heartrate_seconds_merged`).
+-   **Déséquilibre dans certaines métriques** :
+    -   `minuteMETsNarrow_merged` : distribution extrêmement asymétrique ;\
+    -   `weightLogInfo_merged` : très faible couverture → biais potentiel.
+-   **Données issues d'une période courte** (31 jours) → pas de saisonnalité annuelle.
+
+> **Conclusion fiabilité** – Suffisante pour un projet exploratoire pédagogique, insuffisante pour produire des recommandations robustes de type *market research*.
+
+------------------------------------------------------------------------
+
+# **O**riginality (Caractère unique / apport analytique)
+
+## Ce que les données permettent d'analyser
+
+-   **Patterns circadiens** grâce aux fichiers à granularité minute et heure.
+-   **Analyse comportementale globale** : activité, sommeil, calories, rythmes cardiaques.
+-   **Combinaison multi-granularité** → rare et précieuse pour modéliser la journée type.
+-   **Possibilité d'assembler un parcours utilisateur complet** :
+    -   sommeil → réveil ;
+    -   activité / intensité → calories → METs → comportement journalier.
+
+## Limites
+
+-   Pas de variables socio-démographiques → pas d'analyse par profil (âge, sexe, IMC généralisable, etc.).
+
+> **Conclusion originalité** – La diversité des niveaux de détail est l'atout du jeu de données.
+
+------------------------------------------------------------------------
+
+# **C**omprehensiveness (Exhaustivité / couverture fonctionnelle)
+
+## Couverture analytique apportée par les 11 fichiers
+
+| Domaine | Niveau de couverture | Commentaire |
+|---------------|---------------|------------------------------------------|
+| Activité journalière | **Élevé** | `dailyActivity`, `dailyIntensities`, `dailySteps` → vision globale complète. |
+| Activité horaire | **Très élevé** | `hourlyCalories`, `hourlyIntensities`, `hourlySteps` → analyses circadiennes robustes. |
+| Activité minute | **Très élevé** | Granularité fine pour modélisation ou détection de pics d'activité. |
+| Calories / dépense énergétique | **Élevé** | `minuteCaloriesNarrow` + `hourlyCalories` → cohérence des mesures. |
+| METs (intensité physiologique) | **Élevé** | Donnée rare mais fortement asymétrique. |
+| Sommeil | **Modéré** | `minuteSleep_merged` → bon niveau de détail mais sans phases de sommeil. |
+| Rythme cardiaque | **Faible** | `heartrate_seconds_merged` incomplet selon les utilisateurs. |
+| Poids / IMC | **Très faible** | `weightLogInfo_merged` quasi inutilisable pour des analyses globales. |
+
+## Exhaustivité temporelle
+
+-   **31 jours** → suffisant pour :
+    -   patterns journaliers ;
+    -   clustering comportemental ;
+    -   quantification d'habitudes.
+-   **Insuffisant** pour :
+    -   saisonnalité ;
+    -   changement de comportement long terme.
+
+> **Conclusion exhaustivité** – Élevée sur l'activité, modérée sur le sommeil, faible sur cardio/poids.
+
+------------------------------------------------------------------------
+
+# **C**itation (Documentation / traçabilité / reproductibilité)
+
+## Points positifs
+
+-   Fichiers nommés clairement.
+-   Colonnes homogènes entre fichiers (`Id`, `dateTime`, `value`).
+-   Documentation Fitabase disponible publiquement.
+
+## Points faibles
+
+-   Pas de métadonnées intégrées aux fichiers.
+-   Pas d'identifiants de device → perte d'information contextuelle.
+-   Pas de README officiel complet.
+
+> **Conclusion citation** – Faible intrinsèquement dans les fichiers bruts.
+
+------------------------------------------------------------------------
+
+# **C**urrency (Actualité des données)
+
+Les données datent de **2016**.
+
+## Conséquences
+
+-   Appareils Fitbit 2016 → **biais technologique** important.
+-   Les normes de santé, recommandations d'activité et classifications d'intensité ont évolué.
+-   Les comportements utilisateurs ont changé (plus d'intégration smartphone, plus de capteurs modernes).
+
+> **Conclusion actualité** – Faible pour un usage opérationnel, mais adéquate pour un projet analytique académique.
+
+------------------------------------------------------------------------
+
+# Synthèse Finale ROCCC {.unnumbered}
+
+## Forces
+
+-   Granularité exceptionnellement riche (minute → heure → jour).
+-   Cohérence temporelle.
+-   Données réelles, non déclaratives.
+-   Potentiel élevé pour analyses comportementales et segmentation.
+-   Dataset adapté pour pratiquer EDA, cleaning, profilage, clustering et analyses circadiennes.
+
+## Faiblesses
+
+-   Échantillon trop petit (30 utilisateurs → faible fiabilité statistique).
+-   Données anciennes (2016).
+-   Distributions très asymétriques sur METs, intensité et calories minute.
+-   Absence de variables démographiques.
+
+## Conclusion
+
+Les 11 fichiers Bellabeat constituent un **excellent terrain d'apprentissage en analytique de données** : profiling, EDA, contrôle qualité, intégration ETL, visualisation, segmentation, et construction d'un narratif analytique.
+
+Cependant, ils sont **trop limités** pour un usage décisionnel réel, principalement en raison :
+
+-   de la petite taille d'échantillon ;
+-   de la faible diversité des utilisateurs ;
+-   de l'ancienneté des données.

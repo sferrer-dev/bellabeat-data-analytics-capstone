@@ -1,0 +1,145 @@
+---
+title: "Bellabeat – Global ROCCC Analysis"
+author: "Stef"
+date: "`r format(Sys.Date(), '%Y-%m-%d')`"
+output:
+  html_document:
+    theme: cosmo
+    css: css/styles.css
+    highlight: tango
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    df_print: paged
+---
+
+# **R**eliability (Data reliability)
+
+The reliability of the Fitabase/Bellabeat data is **overall moderate**, with several limitations.
+
+## Strengths
+
+- **Data collected from real devices** (Fitbit), therefore objective measurements: no self-reporting.
+- **Consistent timestamping** across the minute-by-minute, hourly and daily files.
+- **No critical missing values** in time columns and user identifiers.
+- **Rich granularity**: minute, hour, day → suitable for time-series analysis and pattern detection.
+
+## Weaknesses
+
+- **Very small sample: only 30 users**, which strongly limits generalizability.
+- **Uneven distribution of user contributions**: some users provide a lot of heart-rate data, others almost none (e.g. `heartrate_seconds_merged`).
+- **Imbalance in some metrics**:
+    - `minuteMETsNarrow_merged`: extremely skewed distribution;
+    - `weightLogInfo_merged`: very low coverage → potential bias.
+- **Data collected over a short period** (31 days) → no annual seasonality.
+
+> **Reliability conclusion** – Sufficient for an educational exploratory project, not strong enough to support robust *market research* recommendations.
+
+---
+
+# **O**riginality (Uniqueness / analytical value)
+
+## What the data allows us to analyse
+
+- **Circadian patterns** thanks to the minute- and hour-level files.
+- **Global behavioural analysis**: activity, sleep, calories, heart rate.
+- **Multi-granularity combination** → rare and valuable for modelling a typical day.
+- **Possibility to reconstruct a complete user journey**:
+    - sleep → wake-up;
+    - activity / intensity → calories → METs → daily behaviour.
+
+## Limitations
+
+- No socio-demographic variables → no profile-based analyses (age, gender, generalizable BMI, etc.).
+
+> **Originality conclusion** – The diversity of detail levels is the main strength of this dataset.
+
+---
+
+# **C**omprehensiveness (Coverage / functional scope)
+
+## Analytical coverage provided by the 11 files
+
+| Area                    | Coverage level | Comment                                                                 |
+|-------------------------|----------------|-------------------------------------------------------------------------|
+| Daily activity          | **High**       | `dailyActivity`, `dailyIntensities`, `dailySteps` → complete global view. |
+| Hourly activity         | **Very high**  | `hourlyCalories`, `hourlyIntensities`, `hourlySteps` → robust circadian analyses. |
+| Minute-level activity   | **Very high**  | Fine granularity for modelling or detecting activity peaks.            |
+| Calories / energy expenditure | **High** | `minuteCaloriesNarrow` + `hourlyCalories` → consistent measurement over time. |
+| METs (physiological intensity) | **High** | Rare metric but highly skewed.                                         |
+| Sleep                   | **Moderate**   | `minuteSleep_merged` → good level of detail but no sleep stages.       |
+| Heart rate              | **Low**        | `heartrate_seconds_merged` incomplete depending on the user.           |
+| Weight / BMI            | **Very low**   | `weightLogInfo_merged` almost unusable for global analyses.            |
+
+## Temporal comprehensiveness
+
+- **31 days** → sufficient for:
+    - daily patterns;
+    - behavioural clustering;
+    - habit quantification.
+- **Insufficient** for:
+    - seasonality;
+    - long-term behaviour change.
+
+> **Comprehensiveness conclusion** – High for activity, moderate for sleep, low for heart rate and weight/BMI.
+
+---
+
+# **C**itation (Documentation / traceability / reproducibility)
+
+## Strengths
+
+- Clearly named files.
+- Homogeneous columns across files (`Id`, `dateTime`, `value`).
+- Fitabase documentation is publicly available.
+
+## Weaknesses
+
+- No metadata embedded in the files.
+- No device identifiers → loss of contextual information.
+- No complete official README.
+
+> **Citation conclusion** – Intrinsically weak at the raw file level; improved only through project documentation.
+
+---
+
+# **C**urrency (Data recency)
+
+The data dates back to **2016**.
+
+## Consequences
+
+- 2016 Fitbit devices → significant **technological bias**.
+- Health guidelines, activity recommendations and intensity classifications have evolved since then.
+- User behaviour has changed (more smartphone integration, more modern sensors).
+
+> **Currency conclusion** – Weak for operational decision-making, but adequate for an academic or training-oriented analytics project.
+
+---
+
+# Final ROCCC Summary {.unnumbered}
+
+## Strengths
+
+- Exceptionally rich granularity (minute → hour → day).
+- Temporal consistency.
+- Real, non self-reported data.
+- High potential for behavioural analysis and segmentation.
+- Dataset well-suited for practising EDA, cleaning, profiling, clustering and circadian analysis.
+
+## Weaknesses
+
+- Sample size too small (30 users → low statistical reliability).
+- Old data (2016).
+- Strongly skewed distributions for METs, intensity and minute-level calories.
+- No demographic variables.
+
+## Overall conclusion
+
+The 11 Bellabeat files provide an **excellent learning ground for data analytics**: profiling, EDA, quality checks, ETL integration, visualisation, segmentation, and building an analytical narrative.
+
+However, they are **too limited** for real-world decision-making, mainly because of:
+
+- the small sample size;
+- the lack of user diversity;
+- the age of the data.
