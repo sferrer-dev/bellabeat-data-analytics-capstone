@@ -1,0 +1,43 @@
+name: "Bellabeat Analytics"
+output_dir: "output"
+
+navbar:
+  title: "Bellabeat"
+  left:
+    - text: "Accueil"
+      href: index.html
+
+    - text: "EDA"
+      menu:
+        - text: "01 – Data Profiling (EN)"
+          href: 01_Bellabeat_Data_Profiling_EDA.html
+
+    - text: "Fichiers"
+      menu:
+        - text: "02 – Files Overview (EN)"
+          href: 02_Bellabeat_Files_Overview.html
+        - text: "02 – Vue d’ensemble des fichiers (FR)"
+          href: 02_Bellabeat_Files_Overview_FR.html
+
+    - text: "ETL"
+      menu:
+        - text: "04 – ETL Process (EN)"
+          href: 04_Bellabeat_Processus_ETL.html
+        - text: "04 – Processus ETL (FR)"
+          href: 04_Bellabeat_Processus_ETL_FR.html
+
+    - text: "Qualité / ROCCC"
+      menu:
+        - text: "03 – ROCCC (EN)"
+          href: 03_Bellabeat_ROCCC.html
+        - text: "03 – ROCCC (FR)"
+          href: 03_Bellabeat_ROCCC_FR.html
+
+output:
+  html_document:
+    theme: cosmo
+    css: css/styles.css
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    df_print: paged

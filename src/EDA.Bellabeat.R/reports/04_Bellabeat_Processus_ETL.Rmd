@@ -1,0 +1,270 @@
+---
+title: "Bellabeat – ETL Process Documentation"
+author: "Stef"
+date: "`r format(Sys.Date(), '%Y-%m-%d')`"
+output:
+  html_document:
+    theme: cosmo
+    css: css/styles.css
+    highlight: tango
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    df_print: paged
+---
+
+# Environment Setup
+
+## Creating the SSIS project
+
+An **Integration Services (SSIS) project** was created in **Visual Studio 2022** with the name\
+**ETL.Bellabeat.SSIS (SQL Server 2019)**.
+
+Its purpose is to build **automated data and control flows** that orchestrate the complete **ETL** process (Extract – Transform – Load).
+
+The core of the project contains 11 **load packages**, each dedicated to a single CSV source file. Each package includes:
+
+-   One **Flat File Connection Manager** per CSV file;
+-   SSIS **transformations** (type conversion, cleaning, deduplication);
+-   An **OLE DB Destination** creating and loading a typed RAW table in the SQL Server database.
+
+A **master package** orchestrates the sequential execution of the 11 load packages in order to provide a complete, stable, and reproducible pipeline.
+
+## Creating typed RAW tables from OLE DB Destinations
+
+I implemented a **typed RAW** approach: the tables that receive the loaded data are created with their final data types and constraints (PK, NOT NULL), instead of using an intermediate staging layer in plain NVARCHAR. This strategy allows quality to be enforced as early as the CSV load.
+
+For each package:
+
+1.  Configure the **Flat File Source** to analyze the structure of the CSV file.
+2.  Add an **OLE DB Destination** → click **New...** to automatically generate a `CREATE TABLE` statement.
+3.  **Manually edit the SQL script** to:
+    -   refine the generated SQL Server data types;
+    -   add `PRIMARY KEY`;
+    -   add `NOT NULL` on mandatory columns;
+    -   reject duplicates or inconsistencies directly in the RAW layer.
+
+These tables form the **typed RAW layer**, used directly in the ETL.
+
+## Choosing data types
+
+I followed a structured approach to determine SQL Server data types based on the actual granularity of the CSVs.
+
+**Id columns → BIGINT**
+
+I chose `BIGINT` for `Id` columns because:
+
+-   the actual range of values (Fitbit identifiers) is much larger than `INT`;
+-   `BIGINT` performs well in analytical joins.
+
+**Decimal columns (distance, METs, weight, BMI) → DECIMAL(p, s)**
+
+I chose the **precision (p)** and **scale (s)** by inspecting the real values in the CSVs:
+
+-   decimal places for distances and METs are preserved without loss;
+-   no unnecessary rounding;
+-   good compatibility with SSIS (avoids ambiguous floating-point conversions).
+
+**Integer numeric columns** (steps, minutes, calories, intensities...)\
+→ `DT_I4` in SSIS, then **`INT`** in SQL Server.
+
+**Date/time columns** from the CSVs\
+→ `DT_DBTIMESTAMP` in SSIS, then **`DATETIME`** (or `DATETIME2` if required) in SQL Server.
+
+These choices ensure **fidelity to the source files**, which is essential for the analytical project.
+
+## SSIS → SQL Server mapping table
+
+| Usage (Bellabeat) | SSIS type (Data Flow) | SQL Server type created in RAW tables |
+|---------------------------|-----------------|----------------------------|
+| Identifiers `Id`, `LogId` | `DT_I8` (64-bit integer) | `BIGINT` |
+| Technical keys, counters, minutes | `DT_I4` (32-bit integer) | `INT` |
+| Distance, METs, weight, BMI, decimal values | `DT_NUMERIC` | `DECIMAL(p, s)` (p, s based on actual granularity) |
+| Full date/time columns | `DT_DBTIMESTAMP` | `DATETIME` |
+| Date-only columns | `DT_DBDATE` | `DATE` |
+| Time-only columns (when used) | `DT_DBTIME` | `TIME` |
+| Short text (e.g. categories, labels) | `DT_STR` | `VARCHAR(n)` |
+| Unicode text | `DT_WSTR` | `NVARCHAR(n)` |
+
+## Building the 11 SSIS packages to load CSV files
+
+Each CSV file is handled in a dedicated package: **`01_Load_*.dtsx`**.
+
+**Common structure of the Data Flow Tasks:**
+
+-   `Flat File Source`;
+-   optional transformations (sorting, conversion, derivation);
+-   `OLE DB Destination` (fast load) → corresponding typed RAW table.
+
+## Deduplicating *minuteSleep_merged.csv*
+
+This file contains duplicate rows.
+
+In the package **01_Load_MinuteSleep.dtsx**:
+
+-   a **Sort** component is added with:
+    -   sorting on `(Id, Date, LogId)`;
+    -   **Remove duplicates** option enabled.
+
+This component ensures that **only unique rows** are sent to the RAW table.
+
+This is a critical step: without deduplication, the primary key would fail in SQL Server.
+
+
+# Locale and Encoding Settings for CSV Import in SSIS
+
+Because the Bellabeat CSV files are formatted using **US conventions** (en-US), I had to change the locale of the **Flat File Connection Manager** from my default **French (fr-FR)** environment to **English (United States)**.  
+
+The French locale uses:
+- commas as decimal separators (`3,57`),
+- day-first dates (`dd/MM/yyyy`),
+- semicolons as separators (`;`),
+
+while the Bellabeat files use:
+- dots as decimals (`3.57`),
+- US dates (`MM/dd/yyyy`),
+- commas as separators (`,`).
+
+If I had kept the French locale, SSIS would not parse numbers or dates correctly, leading to **Data Conversion Failed** errors when converting to `INT`, `DECIMAL`, or `DATETIME`.
+
+I also replaced the default **ANSI 1252** code page with **UTF-8**, because the CSV files are encoded in UTF-8. Keeping ANSI could cause character corruption, parsing issues, or column misalignment.
+
+Using **en-US + UTF-8** ensures that SSIS reads the CSV structure correctly and loads clean, valid data into the RAW SQL layer.
+
+
+# Validation and data integrity checks in SSIS
+
+The following mechanisms were implemented to guarantee data quality during the load.
+
+## Structural checks
+
+-   exact column mapping between CSV columns and SQL RAW columns;
+-   immediate rejection of invalid rows thanks to SQL constraints (`NOT NULL`, `PRIMARY KEY`).
+
+## Data type checks
+
+-   correct conversion to `BIGINT` / `INT` / `DECIMAL` / `DATETIME`;
+-   no truncation caused by incorrectly sized columns.
+
+## Consistency checks
+
+-   ensure that time-related values can be converted to `DATETIME`;
+-   ensure that column `Id` is present in every file.
+
+## Duplicate checks
+
+-   **Sort** component + SQL Server primary keys → strict record uniqueness.
+
+
+# Orchestration via the master package
+
+A master package **04_Master_Load_Bellabeat.dtsx** orchestrates the 11 packages:
+
+-   add one **Execute Package Task** per load package;
+-   run them sequentially by granularity:
+    1.  Daily\
+    2.  Hourly\
+    3.  Minute\
+    4.  Weight
+-   automatically stop the chain if any error occurs.
+
+This orchestration guarantees a **reproducible execution** of the whole ETL pipeline.
+
+# Post-load validation and analysis readiness
+
+After loading, several checks were performed:
+
+## Row count checks
+
+Comparison between:
+
+-   number of rows in the CSVs;
+-   number of rows in the RAW tables\
+    (with deduplication for MinuteSleep).
+
+## Data type checks
+
+SQL Server types match the source formats exactly:
+
+-   identifiers: `BIGINT`;
+-   distances, METs: `DECIMAL(p, s)`;
+-   steps / calories / intensity: `INT`;
+-   date and time: `DATETIME` / `DATETIME2`.
+
+## Cross-table consistency checks
+
+-   presence of `Id` in each table;
+-   temporal integrity: Date/Minute/Hour columns correctly converted;
+-   wide comparison to verify `Id` values shared across granularities.
+
+## Consistency of the typed RAW layer
+
+SQL constraints and primary keys guarantee:
+
+-   clean data;
+-   no duplicates;
+-   no invalid values;
+-   no structural inconsistencies.
+
+The data is now **ready for exploratory data analysis (EDA)**, analytical SQL queries, aggregated views, or BI modelling.
+
+# Architecture diagram
+
+The Bellabeat ETL relies on a **typed RAW layer** generated via SSIS OLE DB Destinations, strengthened with optimised data types (`BIGINT`, `DECIMAL`) and strict SQL constraints. The 11 load packages structure the CSV data into a stable, controlled schema, including duplicate removal for MinuteSleep. The master package orchestrates the entire chain, providing a reproducible and reliable pipeline that meets the requirements of a structured analytics project.
+
+::: asciibox
+``` text
+┌──────────────────────────────┐
+│ Project ETL.Bellabeat.SSIS   │
+│ Visual Studio 2022           │
+└───────────────┬──────────────┘
+                │
+                ▼
+┌──────────────────────────────┐
+│ Master Package (04_Master)   │
+│ Orchestration of 11 packages │
+└───────────────┬──────────────┘
+                │
+                ▼
+┌──────────────────────────────┐
+│ Packages 01_Load_*           │
+│ (Daily, Hourly, Minute,      │
+│  WeightLogInfo)              │
+└───────────────┬──────────────┘
+                │
+                ▼
+┌──────────────────────────────┐
+│ Flat File Source             │
+│ Read CSV                     │
+└───────────────┬──────────────┘
+                │
+                ▼
+┌──────────────────────────────┐
+│ SSIS Transformations         │
+│ - Type conversion            │
+│ - Derived Column             │
+│ - Cleaning                   │
+│ MinuteSleep: Sort + Dedup    │
+└───────────────┬──────────────┘
+                │
+                ▼
+┌──────────────────────────────┐
+│ OLE DB Destination           │
+│ Table creation + typing      │
+│ PK / NOT NULL / DECIMAL /    │
+│ BIGINT / DATETIME            │
+└───────────────┬──────────────┘
+                │
+                ▼
+┌──────────────────────────────┐
+│ Typed RAW SQL layer          │
+│ bellabeat_data (11 tables)   │
+└───────────────┬──────────────┘
+                │
+                ▼
+┌──────────────────────────────┐
+│ Data ready for EDA, SQL      │
+│ and BI modelling             │
+└──────────────────────────────┘
+```
+:::

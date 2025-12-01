@@ -1,0 +1,28 @@
+---
+title: "Bellabeat – Reports Hub"
+output:
+  html_document:
+    theme: cosmo
+    toc: false
+---
+
+# Bellabeat – Analytical Reports
+
+This page is the entry point for all reports of the Bellabeat project.
+
+## Exploratory Data Analysis
+
+- [01 – Data Profiling (EDA)](01_Bellabeat_Data_Profiling_EDA.html)
+- [02 – Files Overview (EN)](02_Bellabeat_Files_Overview.html)
+- [02 – Vue d’ensemble des fichiers (FR)](02_Bellabeat_Files_Overview_FR.html)
+
+## Data Quality / ROCCC
+
+- [03 – ROCCC (EN)](03_Bellabeat_ROCCC.html)
+- [03 – ROCCC (FR)](03_Bellabeat_ROCCC_FR.html)
+
+## ETL
+
+- [04 – ETL Process (EN)](04_Bellabeat_Processus_ETL.html)
+- [04 – Processus ETL (FR)](04_Bellabeat_Processus_ETL_FR.html)
+
