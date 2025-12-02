@@ -1,7 +1,5 @@
 ---
 title: "Bellabeat – Data Profiling and Exploratory Data Analysis"
-author: "Stef"
-date: "`r format(Sys.Date(), '%Y-%m-%d')`"
 output:
   html_document:
     theme: cosmo
@@ -13,9 +11,9 @@ output:
     df_print: paged
 ---
 
-# Introduction { - }
+# Introduction {.unnumbered}
 
-## Overview { - }
+## Overview {.unnumbered}
 
 This document presents an **automated and fully reproducible R pipeline** designed for data profiling and exploratory data analysis (EDA) on the Bellabeat datasets.\
 It establishes a foundation for all subsequent analytical, modelling, and reporting activities.
@@ -33,7 +31,7 @@ The pipeline performs a comprehensive assessment of the raw data to validate the
 The analysis confirms overall dataset stability while identifying notable anomalies — including the **525 duplicates** found in `minuteSleep_merged.csv` — and provides a clear view of the distribution of core metrics such as activity, sleep, heart rate, and calories.
 :::
 
-## Technical Keys { - }
+## Technical Keys {.unnumbered}
 
 A central function, **`profile_csv()`**, standardizes all quality checks across datasets: automated type detection, missing-value assessment, cardinality analysis, descriptive statistics, temporal auditing, duplicate identification, and enhanced summaries via **skimr**.
 
@@ -47,11 +45,11 @@ All outputs — HTML and PDF — are automatically generated and consolidated in
 
 Together, these elements provide a **technical backbone** for subsequent phases of data cleaning, feature engineering, aggregation, and analytical modelling.
 
----
+------------------------------------------------------------------------
 
 **Using the `render_all.R`**
 
----
+------------------------------------------------------------------------
 
 To facilitate the automated generation of the HTML of this report, the project includes a dedicated rendering script located at:
 
@@ -65,11 +63,11 @@ This script ensures that output is produced in the directory:
 reports/output/
 ```
 
----
+------------------------------------------------------------------------
 
 **How to execute the rendering script from RStudio**
 
----
+------------------------------------------------------------------------
 
 1.  Open the RStudio console.
 2.  Run the following command:
@@ -77,7 +75,6 @@ reports/output/
 ``` r
 source(here::here("scripts", "render_all.R"))
 ```
-
 
 [↑ Return to the beginning](#top)
 

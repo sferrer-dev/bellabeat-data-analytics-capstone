@@ -1,28 +1,34 @@
 ---
-title: "Bellabeat – Reports Hub"
+title: "Coursera Bellabeat – Reports Hub"
+author: "Stephane F."
+date: "`r format(as.Date('2025-12-01'), '%Y-%m-%d')`"
 output:
   html_document:
     theme: cosmo
+    css: css/styles.css
+    highlight: tango
     toc: false
 ---
 
-# Bellabeat – Analytical Reports
+This **Coursera Capstone Project** focuses on analyzing the **Fitabase dataset (03/12/2016–11/04/2016)**, which contains activity, sleep, and wellness data collected from Fitbit device users from the manufacturer Bellabeat. The goal of this project is to apply the full analytical workflow — data preparation, transformation, exploration, and visualization — to uncover meaningful trends and generate insights that can support Bellabeat, a company specializing in health-focused smart devices. This analysis forms the final practical assessment of the Google Data Analytics Certification.
 
-This page is the entry point for all reports of the Bellabeat project.
+<a href="https://bellabeat.com/" target="_blank">Bellabeat, women’s wellness company</a>  
+<a href="https://www.kaggle.com/datasets/arashnic/fitbit?select=mturkfitbit_export_3.12.16-4.11.16" target="_blank">Fitabase dataset (03/12/2016–11/04/2016)</a>
 
-## Exploratory Data Analysis
+
+# Exploratory Data Analysis {.unnumbered}
 
 - [01 – Data Profiling (EDA)](01_Bellabeat_Data_Profiling_EDA.html)
-- [02 – Files Overview (EN)](02_Bellabeat_Files_Overview.html)
-- [02 – Vue d’ensemble des fichiers (FR)](02_Bellabeat_Files_Overview_FR.html)
+- [02 – Files Overview](02_Bellabeat_Files_Overview.html)
+- [02 – Vue d’ensemble des fichiers](02_Bellabeat_Files_Overview_FR.html)
 
-## Data Quality / ROCCC
+# Data Quality / ROCCC {.unnumbered}
 
 - [03 – ROCCC (EN)](03_Bellabeat_ROCCC.html)
 - [03 – ROCCC (FR)](03_Bellabeat_ROCCC_FR.html)
 
-## ETL
+# ETL {.unnumbered}
 
-- [04 – ETL Process (EN)](04_Bellabeat_Processus_ETL.html)
-- [04 – Processus ETL (FR)](04_Bellabeat_Processus_ETL_FR.html)
+- [04 – ETL Process](04_Bellabeat_Processus_ETL.html)
+- [04 – Processus ETL](04_Bellabeat_Processus_ETL_FR.html)
 

@@ -1,7 +1,5 @@
 ---
 title: "Bellabeat – Overview of the 11 Fitabase Files"
-author: "Stef"
-date: "`r format(Sys.Date(), '%Y-%m-%d')`"
 output:
   html_document:
     theme: cosmo

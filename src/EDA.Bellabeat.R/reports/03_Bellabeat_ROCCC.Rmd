@@ -1,7 +1,5 @@
 ---
 title: "Bellabeat – Global ROCCC Analysis"
-author: "Stef"
-date: "`r format(Sys.Date(), '%Y-%m-%d')`"
 output:
   html_document:
     theme: cosmo

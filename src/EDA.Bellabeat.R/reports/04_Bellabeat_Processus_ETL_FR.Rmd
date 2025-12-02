@@ -1,7 +1,5 @@
 ---
 title: "Bellabeat – Documentation du processus E.T.L."
-author: "Stef"
-date: "`r format(Sys.Date(), '%Y-%m-%d')`"
 output:
   html_document:
     theme: cosmo

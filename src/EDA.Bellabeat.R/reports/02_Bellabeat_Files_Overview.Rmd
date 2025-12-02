@@ -1,7 +1,5 @@
 ---
 title: "Bellabeat – Overview of the 11 Fitabase Files"
-author: "Stef"
-date: "`r format(Sys.Date(), '%Y-%m-%d')`"
 output:
   html_document:
     theme: cosmo
@@ -77,10 +75,10 @@ The file is in **wide format**. The presence of only one row per day and per per
 
 Each row represents **a given user** (`Id`) **for a specific day** (`ActivityDate`), and all daily measurements are stored in **columns**:
 
-* `TotalSteps`, `TotalDistance`, `TrackerDistance`
-* Distances by activity level
-* Active / sedentary minutes
-* `Calories`
+-   `TotalSteps`, `TotalDistance`, `TrackerDistance`
+-   Distances by activity level
+-   Active / sedentary minutes
+-   `Calories`
 
 ## Analytical value of the file
 
@@ -88,23 +86,23 @@ This file is **central** to answering key business and analytics questions:
 
 **Understand overall physical activity**
 
-* Number of steps, daily distances, overall intensity.
+-   Number of steps, daily distances, overall intensity.
 
 **Study activity levels**
 
-* Minutes spent in each activity zone → useful to segment behaviour.
+-   Minutes spent in each activity zone → useful to segment behaviour.
 
 **Analyse calories burned**
 
-* Allows linking energy expenditure ↔ activity.
+-   Allows linking energy expenditure ↔ activity.
 
 **Detect temporal patterns**
 
 With `ActivityDate`, it is possible to analyse:
 
-* Weekly evolution,
-* Possible seasonality,
-* Behaviour differences on weekdays vs weekends.
+-   Weekly evolution,
+-   Possible seasonality,
+-   Behaviour differences on weekdays vs weekends.
 
 [↑ Return to the beginning](#top)
 
@@ -126,9 +124,9 @@ The file is in **long format**.
 
 Each row represents **a per-second heart rate measurement** for a user:
 
-* `Id`: user identifier (14 distinct users),
-* `Time`: timestamp (date + time + second),
-* `Value`: heart rate (36 to 185 bpm).
+-   `Id`: user identifier (14 distinct users),
+-   `Time`: timestamp (date + time + second),
+-   `Value`: heart rate (36 to 185 bpm).
 
 This generates a very large volume: **510,597 distinct timestamps**.
 
@@ -140,25 +138,25 @@ This long format is suitable for detailed temporal tracking, computing aggregati
 
 Heart rate variations make it possible to observe:
 
-* Sleep–wake cycles,
-* Activity peaks,
-* Post-exercise recovery,
-* Rest periods.
+-   Sleep–wake cycles,
+-   Activity peaks,
+-   Post-exercise recovery,
+-   Rest periods.
 
 **Essential complement to activity data**
 
 By combining this file with `dailyActivity_merged.csv`, one can analyse:
 
-* The relationship *activity intensity ↔ heart rate*,
-* Physiological consistency of measured activity levels.
+-   The relationship *activity intensity ↔ heart rate*,
+-   Physiological consistency of measured activity levels.
 
 **Temporal analysis**
 
 The dataset allows:
 
-* Minute, hourly and daily aggregations,
-* Construction of time series,
-* Circadian analysis (daily biological rhythms).
+-   Minute, hourly and daily aggregations,
+-   Construction of time series,
+-   Circadian analysis (daily biological rhythms).
 
 [↑ Return to the beginning](#top)
 
@@ -180,15 +178,15 @@ The file is in **long format**.
 
 Each row corresponds to:
 
-* A **user** (`Id`),
-* A **specific hour** (`ActivityHour`, character to be converted to datetime),
-* The **calories burned during that hour** (`Calories`).
+-   A **user** (`Id`),
+-   A **specific hour** (`ActivityHour`, character to be converted to datetime),
+-   The **calories burned during that hour** (`Calories`).
 
 Key characteristics:
 
-* 34 distinct users,
-* 755 distinct hourly timestamps,
-* 444 distinct calorie values.
+-   34 distinct users,
+-   755 distinct hourly timestamps,
+-   444 distinct calorie values.
 
 This long format is optimal for hourly temporal analysis: daily patterns, activity peaks, hourly behaviours, etc.
 
@@ -198,27 +196,27 @@ This data is particularly useful for:
 
 **Analysing daily rhythms**
 
-* Peaks in calorie expenditure,
-* Activity habits by hour,
-* Comparison between weekdays and weekends.
+-   Peaks in calorie expenditure,
+-   Activity habits by hour,
+-   Comparison between weekdays and weekends.
 
 **Combining with other files**
 
 With `hourlySteps_merged.csv`:
 
-* `Steps` → physical effort,
-* `Calories` → energy expenditure.
+-   `Steps` → physical effort,
+-   `Calories` → energy expenditure.
 
 With `heartrate_seconds_merged.csv`:
 
-* Cross-analyse heart rate and hourly calories,
-* Detect correlations between heart rate and calories burned.
+-   Cross-analyse heart rate and hourly calories,
+-   Detect correlations between heart rate and calories burned.
 
 **Identifying behaviour patterns**
 
-* Sedentary vs active users,
-* Load of activity throughout the day,
-* Creation of energy-expenditure profiles (grouping users by their daily activity level).
+-   Sedentary vs active users,
+-   Load of activity throughout the day,
+-   Creation of energy-expenditure profiles (grouping users by their daily activity level).
 
 [↑ Return to the beginning](#top)
 
@@ -242,15 +240,15 @@ The file is in **long format**.
 
 Each row represents:
 
-* A **user** (`Id`, 34 people),
-* A **specific hour** (`ActivityHour`, character to be converted to datetime),
-* The **total activity intensity** during that hour (`TotalIntensity`),
-* The **average per-minute intensity** (`AverageIntensity`).
+-   A **user** (`Id`, 34 people),
+-   A **specific hour** (`ActivityHour`, character to be converted to datetime),
+-   The **total activity intensity** during that hour (`TotalIntensity`),
+-   The **average per-minute intensity** (`AverageIntensity`).
 
 Column profiles show:
 
-* `TotalIntensity` ranges from **0 to 180**,
-* `AverageIntensity` ranges from **0 to 3**.
+-   `TotalIntensity` ranges from **0 to 180**,
+-   `AverageIntensity` ranges from **0 to 3**.
 
 The ratio 180 / 3 = 60 indicates that **Fitbit encodes intensity minute by minute**, likely on a 0–3 scale, then aggregates over 60 minutes.
 
@@ -262,35 +260,35 @@ This file is central for hourly behavioural analysis:
 
 **Understand daily activity patterns**
 
-* Most active hours,
-* Periods of low activity,
-* Morning and evening routines.
+-   Most active hours,
+-   Periods of low activity,
+-   Morning and evening routines.
 
 **Identify sedentary behaviour**
 
-* Many hours with `AverageIntensity = 0` → strong sedentariness.
+-   Many hours with `AverageIntensity = 0` → strong sedentariness.
 
 **Cross with:**
 
-* **`hourlySteps_merged.csv`** → intensity vs number of steps,
-* **`hourlyCalories_merged.csv`** → intensity vs energy expenditure,
-* **`heartrate_seconds_merged.csv`** → intensity vs heart rate (physiological correlation).
+-   **`hourlySteps_merged.csv`** → intensity vs number of steps,
+-   **`hourlyCalories_merged.csv`** → intensity vs energy expenditure,
+-   **`heartrate_seconds_merged.csv`** → intensity vs heart rate (physiological correlation).
 
 **User segmentation**
 
 Profile construction:
 
-* Highly active users: frequent intense hours,
-* Moderately active users: intermittent activity,
-* Sedentary users: almost zero intensity.
+-   Highly active users: frequent intense hours,
+-   Moderately active users: intermittent activity,
+-   Sedentary users: almost zero intensity.
 
 **Support for circadian-rhythm analysis**
 
 Identify:
 
-* Energy peaks,
-* Rest periods,
-* Indirect sleep–wake patterns (very low intensity at night).
+-   Energy peaks,
+-   Rest periods,
+-   Indirect sleep–wake patterns (very low intensity at night).
 
 [↑ Return to the beginning](#top)
 
@@ -312,15 +310,15 @@ The file is in **long format**.
 
 Each row corresponds to:
 
-* An **Id** (user),
-* A **specific hour** (`ActivityHour`, stored as text),
-* The **number of steps performed during that hour** (`StepTotal`).
+-   An **Id** (user),
+-   A **specific hour** (`ActivityHour`, stored as text),
+-   The **number of steps performed during that hour** (`StepTotal`).
 
 Key characteristics from the report:
 
-* 34 users, as in the other hourly files,
-* 755 distinct hourly timestamps,
-* No missing values.
+-   34 users, as in the other hourly files,
+-   755 distinct hourly timestamps,
+-   No missing values.
 
 This event-based structure (“one row = one hour”) is optimal for analysing daily behaviour.
 
@@ -330,27 +328,27 @@ This file is central to understanding hourly behaviour.
 
 **Analyse daily routines**
 
-* Morning or evening activity peaks,
-* Walking during lunch breaks,
-* Extended periods of sedentariness.
+-   Morning or evening activity peaks,
+-   Walking during lunch breaks,
+-   Extended periods of sedentariness.
 
 **User segmentation**
 
-* Highly active users,
-* Moderately active users,
-* Sedentary users.
+-   Highly active users,
+-   Moderately active users,
+-   Sedentary users.
 
 **Cross with:**
 
-* **`hourlyIntensities_merged.csv`** → determine whether steps correspond to light or vigorous activity,
-* **`hourlyCalories_merged.csv`** → calories burned by hour as a function of steps,
-* **`dailyActivity_merged.csv`** → rebuild the daily total from hourly data.
+-   **`hourlyIntensities_merged.csv`** → determine whether steps correspond to light or vigorous activity,
+-   **`hourlyCalories_merged.csv`** → calories burned by hour as a function of steps,
+-   **`dailyActivity_merged.csv`** → rebuild the daily total from hourly data.
 
 **Preparation for strong visualisations**
 
-* Weekly heatmaps (days × hours),
-* Hourly trend charts,
-* Full circadian analysis.
+-   Weekly heatmaps (days × hours),
+-   Hourly trend charts,
+-   Full circadian analysis.
 
 [↑ Return to the beginning](#top)
 
@@ -376,46 +374,46 @@ The file is in **long (narrow) format**: **one row = one minute of activity for 
 
 It contains three columns:
 
-* `Id`,
-* Minute-level timestamp,
-* `Calories`.
+-   `Id`,
+-   Minute-level timestamp,
+-   `Calories`.
 
-The file covers 34 users over about one month, with **~45,300 timestamped minutes**.
+The file covers 34 users over about one month, with **\~45,300 timestamped minutes**.
 
 The `Calories` column represents the **estimated energy expenditure for each minute** as computed by Fitbit.
 
 Statistics from the report:
 
-* Min = 0,
-* Max = 23.01,
-* Mean = 1.57,
-* Median = 1.22.
+-   Min = 0,
+-   Max = 23.01,
+-   Mean = 1.57,
+-   Median = 1.22.
 
 **Interpretation:**
 
-* Completely inactive minute → around 0–1 kcal,
-* Moderate activity → around 2–5 kcal/min,
-* Intense activity → around 6–10 kcal/min,
-* The maximum of 23 kcal/min suggests very intense effort (to be interpreted with caution).
+-   Completely inactive minute → around 0–1 kcal,
+-   Moderate activity → around 2–5 kcal/min,
+-   Intense activity → around 6–10 kcal/min,
+-   The maximum of 23 kcal/min suggests very intense effort (to be interpreted with caution).
 
 ## Analytical value of the file
 
 **Minute-by-minute effort analysis**
 
-* Detect activity peaks,
-* Identify periods of intense effort,
-* Analyse day–night cycles.
+-   Detect activity peaks,
+-   Identify periods of intense effort,
+-   Analyse day–night cycles.
 
 **Aggregation to higher levels**
 
-* Calories per hour (check against `hourlyCalories_merged.csv`),
-* Calories per day to validate `dailyActivity_merged.csv`.
+-   Calories per hour (check against `hourlyCalories_merged.csv`),
+-   Calories per day to validate `dailyActivity_merged.csv`.
 
 **Fine-grained behavioural analysis**
 
-* Daily routine (active vs inactive time),
-* Lifestyle comparison between users,
-* Construction of derived indicators (daily active calories, training load, etc.).
+-   Daily routine (active vs inactive time),
+-   Lifestyle comparison between users,
+-   Construction of derived indicators (daily active calories, training load, etc.).
 
 [↑ Return to the beginning](#top)
 
@@ -440,7 +438,7 @@ The file contains **no missing values**, like the other minute-level files.
 The `Intensity` variable follows Fitbit’s minute-level scale:
 
 | Intensity | Meaning             |
-| :-------: | :------------------ |
+|:---------:|:--------------------|
 |     0     | Sedentary / resting |
 |     1     | Light activity      |
 |     2     | Moderate activity   |
@@ -454,28 +452,28 @@ The `minuteIntensitiesNarrow_merged.csv` file is one of the most informative for
 
 **Identify minute-level behaviour**
 
-* Transitions from rest to activity,
-* Sporadic vs continuous activity,
-* Night-time agitation (potential correlations with `minuteSleep_merged.csv`).
+-   Transitions from rest to activity,
+-   Sporadic vs continuous activity,
+-   Night-time agitation (potential correlations with `minuteSleep_merged.csv`).
 
 **Detect activity patterns**
 
-* High-resolution circadian analysis,
-* Minute-by-minute heatmaps,
-* Detection of intensity peaks.
+-   High-resolution circadian analysis,
+-   Minute-by-minute heatmaps,
+-   Detection of intensity peaks.
 
 **Build derived indicators**
 
-* Total active minutes per day,
-* Ratio of active vs sedentary minutes,
-* Duration of continuous active episodes.
+-   Total active minutes per day,
+-   Ratio of active vs sedentary minutes,
+-   Duration of continuous active episodes.
 
 **Cross-analysis**
 
-* With `minuteCaloriesNarrow_merged.csv` → intensity ↔ energy expenditure,
-* With `minuteMETsNarrow_merged.csv` → intensity ↔ metabolic equivalent,
-* With `dailyActivity_merged.csv` → daily consolidation,
-* With `hourlyIntensities_merged.csv` → validation of hourly aggregation.
+-   With `minuteCaloriesNarrow_merged.csv` → intensity ↔ energy expenditure,
+-   With `minuteMETsNarrow_merged.csv` → intensity ↔ metabolic equivalent,
+-   With `dailyActivity_merged.csv` → daily consolidation,
+-   With `hourlyIntensities_merged.csv` → validation of hourly aggregation.
 
 [↑ Return to the beginning](#top)
 
@@ -489,10 +487,10 @@ The file groups minute-by-minute measurements for 34 users, with no missing valu
 
 MET (Metabolic Equivalent of Task) is usually a physiological unit:
 
-* **1 MET** = basal metabolic rate (rest),
-* **3 METs** = moderate walking,
-* **6 METs** = light running,
-* **> 10 METs** = vigorous activity.
+-   **1 MET** = basal metabolic rate (rest),
+-   **3 METs** = moderate walking,
+-   **6 METs** = light running,
+-   **\> 10 METs** = vigorous activity.
 
 The statistics show a highly skewed distribution, with a median of 10 and extreme values up to 189. High METs mainly reflect activity peaks, but some levels are physiologically impossible.
 
@@ -506,21 +504,21 @@ Each row represents the `METs` (Metabolic Equivalent of Task) value estimated by
 
 Statistics from the report:
 
-* Min = 0,
-* Max = 189,
-* Mean = 14.23,
-* Median = 10.
+-   Min = 0,
+-   Max = 189,
+-   Mean = 14.23,
+-   Median = 10.
 
 A MET value above 20 is already physiologically unlikely; a MET of 189 is impossible.
 
-The file is clean, complete, and covers 34 users over one month (~45k minutes).
+The file is clean, complete, and covers 34 users over one month (\~45k minutes).
 
 ## Analytical value of the file
 
-* Compute **effort zones** (rest, light, moderate, vigorous) from METs (after filtering or capping extreme values).
-* Compare users or days using a standardised physiological indicator (METs).
-* Validate consistency between METs, intensity, steps, and calories.
-* Build indicators such as daily MET-minutes (sum of METs over a day), useful for physical-activity recommendations.
+-   Compute **effort zones** (rest, light, moderate, vigorous) from METs (after filtering or capping extreme values).
+-   Compare users or days using a standardised physiological indicator (METs).
+-   Validate consistency between METs, intensity, steps, and calories.
+-   Build indicators such as daily MET-minutes (sum of METs over a day), useful for physical-activity recommendations.
 
 [↑ Return to the beginning](#top)
 
@@ -542,23 +540,23 @@ Combining it with activity files (steps, intensities, calories) enables analyses
 
 The file is in **long format**, like all minute-by-minute files.
 
-* One row = one minute of sleep measurement for a user.
+-   One row = one minute of sleep measurement for a user.
 
 Only **23 users** have sleep data (fewer than in the activity and step files).
 
 Important variables:
 
-* `Id`: user identifier,
+-   `Id`: user identifier,
 
-* `date`: minute-level timestamp (to convert to `POSIXct`),
+-   `date`: minute-level timestamp (to convert to `POSIXct`),
 
-* `value`:
+-   `value`:
 
-  * 1 → *Asleep*,
-  * 2 → *Restless*,
-  * 3 → *Awake*,
+    -   1 → *Asleep*,
+    -   2 → *Restless*,
+    -   3 → *Awake*,
 
-* `logId`: sleep session identifier (used to group nights).
+-   `logId`: sleep session identifier (used to group nights).
 
 This file enables analysis of the **internal structure of sleep**, minute by minute.
 
@@ -568,23 +566,23 @@ This file is rich for understanding **sleep quality**.
 
 **Analyse sleep structure**
 
-* Periods of “asleep”, “restless”, and “awake” minute by minute,
-* Sleep fragmentation,
-* Sleep–wake cycles.
+-   Periods of “asleep”, “restless”, and “awake” minute by minute,
+-   Sleep fragmentation,
+-   Sleep–wake cycles.
 
 **Compute key indicators**
 
-* Total sleep duration,
-* Awake / restless duration,
-* Number of nocturnal awakenings,
-* Sleep efficiency (%),
-* Bedtime and wake-up time.
+-   Total sleep duration,
+-   Awake / restless duration,
+-   Number of nocturnal awakenings,
+-   Sleep efficiency (%),
+-   Bedtime and wake-up time.
 
 **Study behaviours**
 
-* Bedtime and wake-up habits,
-* Night-to-night variability,
-* Impact of physical activity on sleep quality (possible correlations with steps/intensities/calories).
+-   Bedtime and wake-up habits,
+-   Night-to-night variability,
+-   Impact of physical activity on sleep quality (possible correlations with steps/intensities/calories).
 
 The `minuteSleep_merged.csv` file is well suited to exploratory analysis, because its minute-level granularity allows observation of nocturnal cycles, awakenings, and phases of restless or awake sleep, and supports analysis of the quality and regularity of users’ sleep.
 
@@ -612,24 +610,24 @@ The number of users is consistent: **34**, matching the hourly and daily files �
 
 **Long / narrow format**
 
-* Number of observations: 1,445,040,
-* Around 45,300 distinct timestamps (minute × users over one month),
-* Number of columns: 3 (`Id`, timestamp, `Steps`),
-* 0 duplicates,
-* 0 missing values in all columns.
+-   Number of observations: 1,445,040,
+-   Around 45,300 distinct timestamps (minute × users over one month),
+-   Number of columns: 3 (`Id`, timestamp, `Steps`),
+-   0 duplicates,
+-   0 missing values in all columns.
 
 Summary statistics for steps:
 
 | Variable | Min | Max | Mean | Median |
-| :------: | :-: | :-: | :--: | :----: |
-|   Steps  |  0  | 204 | 4.77 |    0   |
+|:--------:|:---:|:---:|:----:|:------:|
+|  Steps   |  0  | 204 | 4.77 |   0    |
 
 **Interpretation:**
 
-* Min = 0 → fully inactive minutes,
-* Max = 204 → ~200 steps/min ≈ brisk walking,
-* Mean = 4.77 steps/min → users were globally sedentary,
-* Median = 0 → more than 50% of the time = no steps at all.
+-   Min = 0 → fully inactive minutes,
+-   Max = 204 → \~200 steps/min ≈ brisk walking,
+-   Mean = 4.77 steps/min → users were globally sedentary,
+-   Median = 0 → more than 50% of the time = no steps at all.
 
 The distribution is therefore highly **right-skewed**, a typical pattern for minute-level physical-activity data.
 
@@ -639,11 +637,11 @@ The `minuteStepsNarrow_merged.csv` file is one of the richest and most informati
 
 **Key strengths**
 
-* Minute-level granularity,
-* Complete dataset (0 NAs, 0 duplicates),
-* Temporal coherence,
-* High relevance for fine-grained behavioural analysis,
-* Ideal support for visualisations (heatmaps, time series).
+-   Minute-level granularity,
+-   Complete dataset (0 NAs, 0 duplicates),
+-   Temporal coherence,
+-   High relevance for fine-grained behavioural analysis,
+-   Ideal support for visualisations (heatmaps, time series).
 
 It is a key file for exploring minute-by-minute user behaviour. It should be combined with intensity, calories, METs, and sleep to generate robust insights.
 
@@ -671,9 +669,9 @@ All descriptive variables are stored in columns, which is appropriate for simple
 
 This is the **least populated and least exploitable** file in the dataset:
 
-* Very few records overall (often fewer than 70),
-* Only about 8 users have recorded their weight,
-* Many columns are empty or rarely filled (`Fat`, `BMI`, etc.).
+-   Very few records overall (often fewer than 70),
+-   Only about 8 users have recorded their weight,
+-   Many columns are empty or rarely filled (`Fat`, `BMI`, etc.).
 
 Timestamps are available and, in theory, could be used to analyse weight change over time, but only if enough data were present (which is not the case here).
 
@@ -681,15 +679,15 @@ Timestamps are available and, in theory, could be used to analyse weight change 
 
 Practical usefulness is very limited in the Bellabeat Coursera context:
 
-* Occasional BMI evaluation,
-* Possible segmentation of users by weight category, if the data were more complete,
-* Very rough correlation between weight and physical-activity level.
+-   Occasional BMI evaluation,
+-   Possible segmentation of users by weight category, if the data were more complete,
+-   Very rough correlation between weight and physical-activity level.
 
 In practice:
 
-* Too few data points,
-* Too few users,
-* Values often self-reported,
-* No exploitable time series.
+-   Too few data points,
+-   Too few users,
+-   Values often self-reported,
+-   No exploitable time series.
 
 [↑ Return to the beginning](#top)
