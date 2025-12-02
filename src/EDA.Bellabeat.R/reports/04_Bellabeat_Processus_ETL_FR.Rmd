@@ -214,12 +214,11 @@ Les contraintes SQL et les clés primaires garantissent :
 
 Les données sont maintenant **prêtes pour les analyses exploratoires**, l'écriture de requêtes analytiques, la création de vues agrégées ou une modélisation BI.
 
-# Schéma d’architecture
+## Schéma d’architecture
 
 L'ETL Bellabeat s'appuie sur une **couche RAW typée** générée via les OLE DB Destination SSIS, renforcée avec des types optimisés (`BIGINT`, `DECIMAL`) et des contraintes SQL strictes. Les 11 packages de chargement structurent les données CSV selon un schéma stable et contrôlé, incluant la suppression des doublons dans MinuteSleep. Le package maître orchestre l'ensemble de la chaîne, garantissant un pipeline reproductible, fiable et conforme aux exigences d'un projet analytique structuré.
 
-<div class="asciibox">
-
+::: asciibox
 ```text
 ┌──────────────────────────────┐
 │ Projet ETL.Bellabeat.SSIS    │
@@ -274,5 +273,36 @@ L'ETL Bellabeat s'appuie sur une **couche RAW typée** générée via les OLE DB
 │ et Modélisation BI           │
 └──────────────────────────────┘
 ```
+:::
 
-</div>
+
+# Gestion du schéma SQL avec SSDT et déploiement via DACPAC
+
+## Création du projet SSDT
+
+Pour gérer le schéma de la base de données de manière structurée et versionnée, j’ai ajouté un projet **SQL Server Database Project** (SSDT) à la solution Visual Studio 2022.  
+Ce projet a été initialisé en sélectionnant :
+
+- **Type de projet :** SQL Server Database Project  
+- **Nom du projet :** ETL.Bellabeat.Database  
+- **Serveur cible :** SQL Server 2019  
+
+SSDT génère ensuite automatiquement un fichier `.dacpac` lors de la compilation. Ce fichier représente la version complète et cohérente du schéma SQL. Le projet peut être versionné dans Git, ce qui garantit un suivi précis des modifications et permet de reconstruire la base de données à l’identique sur n’importe quel environnement.
+
+## Définition du schéma SQL et déploiement via DACPAC
+
+Pour garantir une gestion fiable, traçable et reproductible de la base de données utilisée par l’ETL Bellabeat, j’ai choisi d’utiliser un projet **SSDT (SQL Server Data Tools)** plutôt que de créer les tables manuellement dans SQL Server Management Studio. Grâce à SSDT, l’intégralité du modèle de données — tables, colonnes, types, clés, contraintes, index — est définie dans Visual Studio et versionnée dans Git.
+
+La publication du projet s’effectue via un **DACPAC**, un artefact de déploiement qui automatise la création ou la mise à jour de la base *bellabeat_data*. Cette approche élimine les divergences manuelles entre environnements et assure une infrastructure reconstruisible à l’identique, ce qui est essentiel dans une chaîne ETL.
+
+Un **DACPAC (Data-tier Application Component Package)** contient exclusivement le **schéma** d’une base SQL Server, notamment dans ce cas d'une couche **RAW typée** :  
+- les tables et colonnes,  
+- les types de données,  
+- les clés primaires,  
+- les vues.  
+
+Il ne contient **aucune donnée**, uniquement la structure. Le DACPAC représente un instantané cohérent du schéma tel qu’il est défini dans SSDT.
+
+Une fois la base *bellabeat_data* déployée via le DACPAC, les 11 packages SSIS — orchestrés par un package maître — chargent les fichiers CSV dans les tables définies par SSDT.
+
+Cette approche **schema-first** garantit que le typage des colonnes est maîtrisé, que les dates sont standardisées, et que des clés primaires sont imposées dès la création. SSIS importe ainsi les données dans un environnement propre, cohérent et adapté aux besoins analytiques.
