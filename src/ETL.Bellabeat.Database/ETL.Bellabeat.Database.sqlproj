@@ -79,6 +79,7 @@
     <Build Include="dbo\Tables\WeightLogInfo.sql" />
     <Build Include="Views\rpt\vUserHourlyIntensitySummaryWithDeciles.sql" />
     <Build Include="Security\rpt.sql" />
+    <Build Include="Views\rpt\vDailyActivity_Insights.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ETL.Bellabeat.Database.publish.xml" />
