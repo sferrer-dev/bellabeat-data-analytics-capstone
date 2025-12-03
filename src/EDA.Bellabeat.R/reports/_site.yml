@@ -33,6 +33,11 @@ navbar:
         - text: "ROCCC (FR)"
           href: 03_Bellabeat_ROCCC_FR.html
 
+    - text: "Analysis"
+      menu:
+        - text: "Analysis of daily activity"
+          href: 05_Bellabeat_Analyse_Daily_Activity.html
+        
 output:
   html_document:
     theme: cosmo

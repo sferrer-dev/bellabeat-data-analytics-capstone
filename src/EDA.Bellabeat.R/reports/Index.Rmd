@@ -1,6 +1,6 @@
 ---
 title: "Coursera Bellabeat – Reports Hub"
-author: "Stephane F."
+author: "FS"
 date: "`r format(as.Date('2025-12-01'), '%Y-%m-%d')`"
 output:
   html_document:
