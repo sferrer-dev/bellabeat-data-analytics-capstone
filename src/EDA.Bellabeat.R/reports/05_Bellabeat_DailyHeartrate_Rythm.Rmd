@@ -1,5 +1,5 @@
 ---
-title: "Bellabeat- Daily heart rate"
+title: "Bellabeat – Daily Heart Rate Rhythm"
 output:
   html_document:
     theme: cosmo
@@ -28,3 +28,174 @@ library(ggplot2)
 library(scales)
 library(tidyr)
 ```
+
+<!-- Loading the SQL Server view -->
+
+```{r connect-and-load}
+
+con <- dbConnect(
+  odbc(),
+  Driver   = "ODBC Driver 18 for SQL Server",
+  Server   = "localhost",
+  Database = "bellabeat_data",
+  Trusted_Connection = "Yes",
+  Encrypt  = "no"
+)
+
+df_hr <- dbGetQuery(con, "
+    SELECT *
+    FROM rpt.vHeartrate_DailyBiologicalRhythm
+")
+
+df_hr <- df_hr %>%
+  mutate(
+    ActivityDate = as.Date(ActivityDate),
+    TimeOfDay    = factor(
+      TimeOfDay,
+      levels = c('Night', 'Morning', 'Afternoon', 'Evening')
+    )
+  )
+```
+
+# Curves: Average Heart Rate
+
+```{r hr-dow-tod}
+# Define the weekday order once (Monday -> Sunday)
+dow_levels <- df_hr %>%
+  distinct(DayOfWeekNumber, DayOfWeekName) %>%
+  arrange(DayOfWeekNumber) %>%
+  pull(DayOfWeekName)
+
+df_hr_dow <- df_hr %>%
+  group_by(TimeOfDay, DayOfWeekNumber, DayOfWeekName) %>%
+  summarise(
+    AvgHR = mean(AvgHeartRate, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    DayOfWeekName = factor(DayOfWeekName, levels = dow_levels)
+  )
+
+ggplot(df_hr_dow, aes(x = DayOfWeekName, y = AvgHR, group = 1)) +
+  geom_line(linewidth = 0.7, color = "grey40") +
+  geom_point(size = 2, aes(color = TimeOfDay)) +
+  facet_wrap(~ TimeOfDay, ncol = 1) +   # same Y scale for all facets
+  labs(
+    title = "Average Heart Rate by Weekday and Time of Day",
+    x     = "Day of Week",
+    y     = "Average Heart Rate (bpm)",
+    color = "Time of Day"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    axis.text.x     = element_text(angle = 45, hjust = 1),
+    legend.position = "right"
+  )
+```
+
+## Weekly Variability in Heart Rate {.unnumbered}
+
+Heart rate follows a consistent circadian rhythm: lowest at night, rising in the morning, peaking in the afternoon, then decreasing in the evening.
+Differences **between weekdays** are modest compared to the strong variation **between times of day**.
+A slight weekend effect appears, particularly on **Sunday morning** and **Saturday evening**, which show slightly higher levels than other days.
+
+The afternoon consistently remains the most active period with high and stable heart rate across the week.
+
+Overall, the data reveals stable behavior patterns, a clear biological rhythm, and limited weekly variability, aside from small weekend deviations.
+
+# Box-and-Whisker Plot
+
+```{r boxplot-tod}
+ggplot(df_hr, aes(x = TimeOfDay, y = AvgHeartRate, fill = TimeOfDay)) +
+  geom_boxplot(alpha = 0.7) +
+  annotate(
+    "text",
+    x = -Inf, y = Inf,
+    hjust = -0.1, vjust = 1.1,
+    label = "Night: 21:00–06:00\nMorning: 06:00–12:00\nAfternoon: 12:00–18:00\nEvening: 18:00–21:00",
+    size = 3
+  ) +
+  labs(
+    title = "Distribution of Heart Rate by Time of Day",
+    x = "Time of Day",
+    y = "Average Heart Rate (bpm)"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = "none")
+```
+
+## Differences Between Times of Day {.unnumbered}
+
+| Time of Day | Heart Rate Level            |
+| ----------- | --------------------------- |
+| Night       | lowest (70–75 bpm)          |
+| Morning     | increasing (75–85 bpm)      |
+| Afternoon   | highest (85–90+ bpm)        |
+| Evening     | slight decrease (75–85 bpm) |
+
+# Heatmap: Average Heart Rate per Weekday and Time of Day
+
+```{r heatmap-hr}
+
+df_heat <- df_hr %>%
+  group_by(DayOfWeekName, DayOfWeekNumber, TimeOfDay) %>%
+  summarise(AvgHR = mean(AvgHeartRate), .groups = "drop")
+
+# Create an ordered unique weekday vector
+ordered_days <- df_heat %>%
+  select(DayOfWeekName, DayOfWeekNumber) %>%
+  distinct() %>%
+  arrange(DayOfWeekNumber) %>%
+  pull(DayOfWeekName)
+
+df_heat <- df_heat %>%
+  mutate(DayOfWeekName = factor(DayOfWeekName, levels = ordered_days))
+
+ggplot(df_heat, aes(x = DayOfWeekName, y = TimeOfDay, fill = AvgHR)) +
+  geom_tile() +
+  scale_fill_gradient(low = "#FEE5D9", high = "#A50F15") +
+  labs(
+    title = "Average Heart Rate by Weekday and Time of Day",
+    x = "Day of Week",
+    y = "Time of Day",
+    fill = "Avg HR (bpm)"
+  ) +
+  theme_minimal(base_size = 11)
+```
+
+Heart rate is consistently higher during the day—especially in the afternoon and evening—and reaches its lowest levels at night.
+
+# Daily Heart Rate Pattern by Weekday
+
+```{r dow-pattern-smooth}
+# Preparing the data
+df_dow <- df_hr %>%
+  mutate(DayName = weekdays(ActivityDate)) %>%
+  group_by(DayName, TimeOfDay) %>%
+  summarise(AvgHR = mean(AvgHeartRate), .groups = "drop") %>%
+  mutate(TimeOfDay = factor(TimeOfDay,
+                            levels = c("Night", "Morning", "Afternoon", "Evening")))
+
+# Plot with loess smoothing
+ggplot(df_dow, aes(x = TimeOfDay, y = AvgHR, group = DayName, color = DayName)) +
+  geom_point(size = 1.5) +
+  geom_smooth(se = FALSE, method = "loess", span = 1, linewidth = 1) +
+  labs(
+    title = "Daily Average BPM by Weekday",
+    x = "Time of Day",
+    y = "Heart Rate (bpm)",
+    color = "Day"
+  ) +
+  theme_minimal(base_size = 12)
+```
+
+Heart rate follows the same pattern across all days, with a clear rise from morning to afternoon and a slight drop in the evening.
+
+<!-- Disconnect -->
+
+```{r disconnect}
+if (exists("con") && DBI::dbIsValid(con)) {
+  DBI::dbDisconnect(con)
+}
+```
+

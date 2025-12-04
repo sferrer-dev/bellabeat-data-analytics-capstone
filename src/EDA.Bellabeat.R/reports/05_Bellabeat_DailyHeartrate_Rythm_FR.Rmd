@@ -104,6 +104,29 @@ L’après-midi reste la période la plus active avec une fréquence élevée et
 
 Globalement, les données révèlent des comportements stables, un cycle biologique clair et une faible variabilité hebdomadaire, hormis de modestes écarts en fin de semaine.
 
+# Box-and-whisker plot 
+
+```{r boxplot-tod}
+ggplot(df_hr, aes(x = TimeOfDay, y = AvgHeartRate, fill = TimeOfDay)) +
+  geom_boxplot(alpha = 0.7) +
+  annotate(
+    "text",
+    x = -Inf, y = Inf,
+    hjust = -0.1, vjust = 1.1,
+    label = "Night : 21h–6h\nMorning : 6h–12h\nAfternoon : 12h–18h\nEvening : 18h–21h",
+    size = 3
+  ) +
+  labs(
+    title = "Répartition de la fréquence cardiaque selon le moment de la journée",
+    x = "Moment de la journée",
+    y = "Fréquence cardiaque moyenne (bpm)"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = "none")
+```
+
+## Différences entre les périodes de la journée. {.unnumbered}
+
 | Période   | Niveau cardiaque           | 
 |-----------|-----------------------------|
 | Night     | le plus bas (70–75 bpm)     |
@@ -111,6 +134,66 @@ Globalement, les données révèlent des comportements stables, un cycle biologi
 | Afternoon | le plus élevé (85–90+ bpm)  |
 | Evening   | légère baisse (75–85 bpm)   |
 
+
+# Heatmap de la fréquence cardiaque moyenne par jour de la semaine et période de la journée  
+
+```{r heatmap-hr}
+
+df_heat <- df_hr %>%
+  group_by(DayOfWeekName, DayOfWeekNumber, TimeOfDay) %>%
+  summarise(AvgHR = mean(AvgHeartRate), .groups = "drop")
+
+# Création d'un vecteur unique et ordonné des jours
+ordered_days <- df_heat %>%
+  select(DayOfWeekName, DayOfWeekNumber) %>%
+  distinct() %>%
+  arrange(DayOfWeekNumber) %>%
+  pull(DayOfWeekName)
+
+df_heat <- df_heat %>%
+  mutate(DayOfWeekName = factor(DayOfWeekName, levels = ordered_days))
+
+ggplot(df_heat, aes(x = DayOfWeekName, y = TimeOfDay, fill = AvgHR)) +
+  geom_tile() +
+  scale_fill_gradient(low = "#FEE5D9", high = "#A50F15") +
+  labs(
+    title = "Fréquence cardiaque moyenne par jour et période de la journée",
+    x = "Jour de la semaine",
+    y = "Période de la journée",
+    fill = "Moyenne HR (bpm)"
+  ) +
+  theme_minimal(base_size = 11)
+```
+
+La fréquence cardiaque est systématiquement plus élevée en journée — surtout l’après-midi et le soir — et atteint ses niveaux les plus bas la nuit,
+
+
+# Rythme cardiaque quotidien moyen par jour de la semaine
+
+```{r dow-pattern-smooth}
+# Préparation des données
+df_dow <- df_hr %>%
+  mutate(DayName = weekdays(ActivityDate)) %>%
+  group_by(DayName, TimeOfDay) %>%
+  summarise(AvgHR = mean(AvgHeartRate), .groups = "drop") %>%
+  # Ordre logique des périodes de la journée
+  mutate(TimeOfDay = factor(TimeOfDay,
+                            levels = c("Night", "Morning", "Afternoon", "Evening")))
+
+# Graphique avec courbes lissées loess
+ggplot(df_dow, aes(x = TimeOfDay, y = AvgHR, group = DayName, color = DayName)) +
+  geom_point(size = 1.5) +
+  geom_smooth(se = FALSE, method = "loess", span = 1, linewidth = 1) +
+  labs(
+    title = "BPM quotidien moyen par jour",
+    x = "Période de la journée",
+    y = "Fréquence cardiaque (bpm)",
+    color = "Jour"
+  ) +
+  theme_minimal(base_size = 12)
+```
+
+La fréquence cardiaque suit le même rythme pour tous les jours, avec une montée nette du matin jusqu’à l’après-midi puis un léger repli le soir.
 
 <!-- Déconnexion -->
 
