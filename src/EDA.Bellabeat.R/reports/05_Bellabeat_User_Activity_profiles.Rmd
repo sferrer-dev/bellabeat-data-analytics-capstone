@@ -8,3 +8,155 @@ output:
     number_sections: true
     df_print: paged
 ---
+
+```{r setup, include=FALSE}
+# Global chunk options
+knitr::opts_chunk$set(
+  echo    = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+```{r libraries}
+library(DBI)
+library(odbc)
+library(dplyr)
+library(ggplot2)
+library(scales)
+library(tidyr)
+library(ggrepel)
+```
+
+<!-- Loading the SQL Server view -->
+
+```{r connect-and-load}
+
+con <- dbConnect(
+  odbc(),
+  Driver   = "ODBC Driver 18 for SQL Server",
+  Server   = "localhost",
+  Database = "bellabeat_data",
+  Trusted_Connection = "Yes",
+  Encrypt  = "no"
+)
+
+df_daily <- dbGetQuery(con, "
+    SELECT *
+    FROM rpt.vDailyIntensityFromMinutes;
+")
+```
+
+```{r features-per-user}
+# Agrégation des données journalières au niveau "utilisatrice".
+# L'objectif est de construire un ensemble de variables descriptives
+# (features) permettant d'analyser et de segmenter les profils d'activité.
+df_users <- df_daily %>%
+  
+  # Regroupement par identifiant d'utilisatrice
+  group_by(Id) %>%
+  
+  # Calcul des indicateurs moyens et cumulés sur l'ensemble de la période observée
+  summarise(
+    # Nombre total de jours disponibles pour cette utilisatrice
+    n_days = n(),
+    
+    # Volume moyen de pas par jour
+    mean_steps = mean(TotalSteps, na.rm = TRUE),
+    
+    # Dépense énergétique moyenne (calories)
+    mean_calories = mean(Calories, na.rm = TRUE),
+    
+    # Minutes moyennes passées en posture sédentaire
+    mean_sedentary_min = mean(SedentaryMinutes, na.rm = TRUE),
+    
+    # Minutes moyennes d'activité modérée + intense (Fairly + Very Active)
+    mean_active_min = mean(FairlyActiveMinutes + VeryActiveMinutes, na.rm = TRUE),
+    
+    # Minutes moyennes d'activité légère
+    mean_light_min = mean(LightlyActiveMinutes, na.rm = TRUE),
+    
+    # Intensité moyenne journalière issue de la vue consolidée
+    mean_intensity = mean(AvgIntensity, na.rm = TRUE),
+    
+    # Intensité maximale observée parmi les journées enregistrées
+    max_intensity = max(MaxIntensity, na.rm = TRUE),
+    
+    # Minutes moyennes par zone d'intensité (issues de l'agrégation minute)
+    mean_minutes_very   = mean(MinutesVery_Calc, na.rm = TRUE),
+    mean_minutes_moder  = mean(MinutesModerate_Calc, na.rm = TRUE),
+    mean_minutes_light  = mean(MinutesLight_Calc, na.rm = TRUE),
+    mean_minutes_sedent = mean(MinutesSedentary_Calc, na.rm = TRUE),
+    
+    # Proportion moyenne de minutes actives (moderate + very) rapportée
+    # au total des minutes enregistrées (toutes zones confondues)
+    prop_active_minutes = (mean_minutes_moder + mean_minutes_very) /
+                          (mean_minutes_sedent + mean_minutes_light +
+                           mean_minutes_moder + mean_minutes_very)
+  ) %>%
+  
+  # Retrait du regroupement
+  ungroup()
+```
+
+# Diagramme de dispersion des marches quotidiennes des utilisatrices
+
+```{r scatter-users-colored}
+# Préparer les données : Id en facteur pour une coloration discrète
+df_users_col <- df_users %>%
+  mutate(Id = factor(Id))
+
+ggplot(df_users_col,
+       aes(x = mean_steps, y = mean_intensity, colour = Id)) +
+  
+  # Nuage de points (une couleur par utilisatrice)
+  geom_point(size = 3, alpha = 0.9) +
+  
+  # Droite de régression (UNE seule pour tout l'ensemble)
+  geom_smooth(
+    aes(x = mean_steps, y = mean_intensity),
+    method = "lm",
+    se = FALSE,
+    colour = "black",
+    linewidth = 0.5,
+    inherit.aes = FALSE
+  ) +
+  
+  # Annotation
+  annotate(
+    "text",
+    x = 6000, y = 0.08,
+    label = "Plus le nombre moyen de pas est élevé,\nplus l'intensité journalière augmente.",
+    hjust = 0, vjust = 1,
+    size = 4
+  ) +
+  
+  scale_x_continuous(
+    labels = scales::label_comma(big.mark = " ", decimal.mark = ",")
+  ) +
+  
+  labs(
+    title  = "Profils d’utilisatrices : volume de pas et intensité moyenne",
+    x      = "Pas moyens par jour",
+    y      = "Intensité moyenne journalière",
+    colour = "Id utilisatrice"
+  ) +
+  
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(size = 12),
+    legend.position = "left",
+    legend.key.size = unit(0.4, "cm"),
+    legend.text = element_text(size = 8)
+  )
+```
+
+
+## L’intensité évolue en cohérence avec le volume de pas {.unnumbered}
+
+Le graphique révèle une relation directe entre volume de pas et intensité moyenne : plus les utilisatrices marchent, plus leur effort est soutenu. La corrélation est linéaire : un volume élevé s’accompagne d’une intensité plus forte, indiquant une combinaison de quantité et qualité d’effort. 
+
+Quelques profils atypiques présentent peu de pas mais une intensité élevée, suggérant des séances courtes et intenses.
+
+Les utilisatrices les plus actives cumulent déplacements et effort soutenu, tandis que les moins actives restent proches du sédentaire.
+
