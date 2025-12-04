@@ -37,6 +37,8 @@ navbar:
       menu:
         - text: "Analysis of daily activity"
           href: 05_Bellabeat_Analyse_Daily_Activity.html
+        - text: "Analyse de l'activité quotidienne"
+          href: 05_Bellabeat_Analyse_Daily_Activity_FR.html
         
 output:
   html_document:

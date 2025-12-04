@@ -1,0 +1,259 @@
+---
+title: "Bellabeat - Analyse Daily Activity"
+output:
+  html_document:
+    theme: cosmo
+    css: css/styles.css
+    highlight: tango
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+# Global chunk options
+knitr::opts_chunk$set(
+  echo    = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+```{r libraries}
+library(DBI)
+library(odbc)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(patchwork)
+library(scales)
+```
+
+<!-- Chargement de la vue SQL Server -->
+
+```{r connect-and-load}
+# Connexion SQL Server (localhost)
+con <- dbConnect(
+  odbc::odbc(),
+  Driver   = "ODBC Driver 18 for SQL Server",
+  Server   = "localhost",           
+  Database = "bellabeat_data",
+  Trusted_Connection = "Yes",
+  Encrypt  = "no"                   # utile en local pour éviter TLS obligatoire
+)
+
+# Lecture de la vue analytique
+df <- dbGetQuery(con, "
+  SELECT *
+  FROM rpt.vDailyActivity_Insights
+")
+
+# Nettoyage type Date + facteurs
+df <- df %>%
+  mutate(
+    ActivityDate = as.Date(ActivityDate),
+    DayOfWeek    = factor(DayOfWeek),
+    PartOfWeek   = factor(PartOfWeek)
+  )
+```
+
+
+# Courbes : Pas par jour
+
+```{r plot-steps-per-day}
+# Graphique brut
+p1 <- ggplot(df, aes(x = ActivityDate, y = TotalSteps)) +
+  geom_line(color = "steelblue", linewidth = 0.3) +
+  geom_point(color = "steelblue", size = 0.6) +
+  scale_x_date(
+    date_breaks = "1 week",
+    date_labels = "%A %d %b"
+  ) +
+  scale_y_continuous(
+    limits = c(0, 25000),
+    labels = label_comma(big.mark = " ", decimal.mark = ",")
+  ) +
+  labs(
+    title = "Évolution quotidienne \ndu nombre de pas",
+    x     = "Date de l'activité",
+    y     = "Nombre de pas"
+  ) +
+  theme(
+    plot.title   = element_text(size = 12),
+    axis.title.x = element_text(size = 10),
+    axis.title.y = element_text(size = 10),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+```
+
+```{r curve-mean-per-day}
+# Agrégation au niveau jour
+df_daily <- df %>%
+  group_by(ActivityDate) %>%
+  summarise(
+    AvgSteps = mean(TotalSteps, na.rm = TRUE),
+    .groups  = "drop"
+  )
+
+# Graphique de tendance journalière (moyenne)
+p2 <- ggplot(df_daily, aes(x = ActivityDate, y = AvgSteps)) +
+  geom_line(color = "black") +
+  geom_point(color = "black") +
+  scale_x_date(
+    date_breaks = "1 week",
+    date_labels = "%A %d %b"
+  ) +
+  scale_y_continuous(
+    limits = c(0, 25000),
+    labels = label_comma(big.mark = " ", decimal.mark = ",")
+  ) +
+  labs(
+    title = "Tendance journalière \ndu nombre moyen de pas",
+    x     = "Date d'activité",
+    y     = "Pas moyens par jour (toutes utilisatrices)"
+  ) +
+  theme(
+    plot.title   = element_text(size = 12),
+    axis.title.x = element_text(size = 10),
+    axis.title.y = element_text(size = 10),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+```
+
+```{r plot-compare-steps}
+(p1 | p2) +
+  plot_annotation(title = "Comparaison des pas bruts et de la moyenne journalière") +
+  plot_layout(widths = c(1.3, 1.3))
+
+```
+
+## Évolution quotidienne du nombre de pas {.unnumbered}
+
+L’évolution des pas met surtout en évidence une forte hétérogénéité individuelle : pour une même date, les volumes journaliers varient de quelques milliers à plus de 20 000 pas, ce qui crée une dispersion importante et des pics isolés. Ces valeurs reflètent d’abord les différences entre utilisatrices plutôt qu’un schéma temporel commun.
+
+En agrégeant les données par date, une tendance claire émerge : le nombre moyen de pas augmente progressivement de début mars à début avril, passant d’environ 3 000–4 000 à 6 000–7 500 pas. Plusieurs chutes ponctuelles apparaissent (vers le 18 mars, le 31 mars et le 12 avril), liées soit à une baisse d’activité générale, soit à une diminution du nombre d’utilisatrices actives ces jours-là. L’ensemble traduit une dynamique collective de plus grande activité au fil du temps.
+
+
+# Barplot : active minutes vs. sedentary minutes
+
+```{r barplot-active-vs-sedentary-minutes}
+df_long <- df %>%
+  select(ActivityDate, TotalActiveMinutes, SedentaryMinutes) %>%
+  pivot_longer(
+    cols      = c(TotalActiveMinutes, SedentaryMinutes),
+    names_to  = "TypeMinutes",
+    values_to = "Minutes"
+  ) %>%
+  mutate(
+    TypeMinutes = recode(
+      TypeMinutes,
+      TotalActiveMinutes = "Actives",
+      SedentaryMinutes   = "Sédentaires"
+    )
+  )
+
+# Graphique 
+ggplot(df_long, aes(x = ActivityDate, y = Minutes, fill = TypeMinutes)) +
+  geom_col(position = "stack") +
+  scale_x_date(
+    date_breaks = "1 week",
+    date_labels = "%A %d %b"
+  ) +
+  labs(
+    title = "Minutes actives vs. minutes sédentaires par jour",
+    x     = "Date",
+    y     = "Minutes",
+    fill  = "Type de minutes"
+  ) +
+  theme(
+    plot.title   = element_text(size = 12),
+    axis.title.x = element_text(size = 10),
+    axis.title.y = element_text(size = 10),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+```
+
+
+## Dominance nette des minutes sédentaires {.unnumbered}
+
+Les minutes sédentaires constituent l’essentiel du volume quotidien, ce qui traduit un comportement global majoritairement statique. À partir de la fin mars, puis surtout au début avril, on observe une hausse brusque du total des minutes enregistrées, liée à une augmentation du nombre d’utilisatrices actives dans les données. Les minutes actives progressent en parallèle, mais leur part reste nettement inférieure à celle des minutes sédentaires, même lors des journées où l’activité totale est la plus élevée.
+
+
+# Heatmap : activité par jour de la semaine
+
+```{r heatmap-activity-per-dow}
+df_heat <- df %>%
+  group_by(DayOfWeek, DayOfWeekNumber, PartOfWeek) %>%
+  summarise(
+    MeanSteps = mean(TotalSteps, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    DayOfWeek = factor(
+      DayOfWeek,
+      levels = DayOfWeek[order(DayOfWeekNumber)]
+    )
+  )
+
+# Graphique 
+ggplot(df_heat, aes(x = DayOfWeek, y = PartOfWeek, fill = MeanSteps)) +
+  geom_tile() +
+  scale_fill_gradient(
+    low  = "#F2F0F7",
+    high = "#54278F",
+    labels = label_comma(big.mark = " ", decimal.mark = ",")
+  ) +
+  labs(
+    title = "Pas moyens par jour de la semaine",
+    x     = "Jour de la semaine",
+    y     = "Type de jour",
+    fill  = "Pas moyens"
+  )
+```
+
+
+## Contraste week-end versus semaine {.unnumbered}
+
+L’analyse montre un schéma clair : les utilisatrices marchent davantage le week-end que la semaine. Le samedi est le jour le plus actif, suivi du dimanche, tandis que mardi est le moins actif. Au sein des jours ouvrés, seul le mercredi se démarque par une activité un peu supérieure.
+Cette répartition s’explique par la disponibilité plus grande durant le week-end, ce qui augmente naturellement le nombre de pas.
+
+
+# Corrélation entre les minutes actives et les calories brûlées
+
+```{r correlation-activity-calories}
+# Graphique
+ggplot(df, aes(x = TotalActiveMinutes, y = Calories)) +
+  geom_point(aes(color = PartOfWeek),
+             alpha = 0.55, size = 1.7) +
+  geom_smooth(method = "lm",
+              se = FALSE,
+              linewidth = 0.9,
+              color = "blue") +
+  labs(
+    title = "Relation entre activité et calories brûlées",
+    x     = "Minutes actives totales",
+    y     = "Calories brûlées",
+    color = "Part de semaine"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    panel.grid.minor = element_blank()
+  )
+
+```
+
+## Relation positive activité ↔ calories {.unnumbered}
+
+Le graphique montre une relation positive : plus les minutes actives augmentent, plus les calories brûlées sont élevées.
+Les catégories Weekday et Weekend suivent pratiquement la même dynamique.
+Les minutes actives sont le principal moteur de la dépense calorique, indépendamment du jour de la semaine.
+
+
+<!-- Déconnexion -->
+
+```{r disconnect}
+if (exists("con") && DBI::dbIsValid(con)) {
+  DBI::dbDisconnect(con)
+}

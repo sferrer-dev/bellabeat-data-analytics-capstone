@@ -18,17 +18,22 @@ This **Coursera Capstone Project** focuses on analyzing the **Fitabase dataset (
 
 # Exploratory Data Analysis {.unnumbered}
 
-- [01 – Data Profiling (EDA)](01_Bellabeat_Data_Profiling_EDA.html)
-- [02 – Files Overview](02_Bellabeat_Files_Overview.html)
-- [02 – Vue d’ensemble des fichiers](02_Bellabeat_Files_Overview_FR.html)
+- [Data Profiling (EDA)](01_Bellabeat_Data_Profiling_EDA.html)
+- [Files Overview](02_Bellabeat_Files_Overview.html)
+- [Vue d’ensemble des fichiers](02_Bellabeat_Files_Overview_FR.html)
 
 # Data Quality / ROCCC {.unnumbered}
 
-- [03 – ROCCC (EN)](03_Bellabeat_ROCCC.html)
-- [03 – ROCCC (FR)](03_Bellabeat_ROCCC_FR.html)
+- [ROCCC (EN)](03_Bellabeat_ROCCC.html)
+- [ROCCC (FR)](03_Bellabeat_ROCCC_FR.html)
 
 # ETL {.unnumbered}
 
-- [04 – ETL Process](04_Bellabeat_Processus_ETL.html)
-- [04 – Processus ETL](04_Bellabeat_Processus_ETL_FR.html)
+- [ETL Process](04_Bellabeat_Processus_ETL.html)
+- [Processus ETL](04_Bellabeat_Processus_ETL_FR.html)
+
+# Analysis {.unnumbered}
+
+- [Daily activity](05_Bellabeat_Analyse_Daily_Activity.html)
+- [Activité quotidienne](05_Bellabeat_Analyse_Daily_Activity_FR.html)
 
