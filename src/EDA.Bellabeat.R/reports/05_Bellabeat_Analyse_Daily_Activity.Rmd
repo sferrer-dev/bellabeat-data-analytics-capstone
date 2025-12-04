@@ -56,7 +56,6 @@ df <- df %>%
     DayOfWeek    = factor(DayOfWeek),
     PartOfWeek   = factor(PartOfWeek)
   )
-
 ```
 
 
@@ -180,6 +179,79 @@ ggplot(df_long, aes(x = ActivityDate, y = Minutes, fill = TypeMinutes)) +
 
 Les minutes sédentaires constituent l’essentiel du volume quotidien, ce qui traduit un comportement global majoritairement statique. À partir de la fin mars, puis surtout au début avril, on observe une hausse brusque du total des minutes enregistrées, liée à une augmentation du nombre d’utilisatrices actives dans les données. Les minutes actives progressent en parallèle, mais leur part reste nettement inférieure à celle des minutes sédentaires, même lors des journées où l’activité totale est la plus élevée.
 
+
+# Heatmap : activité par jour de la semaine
+
+```{r heatmap-activity-per-dow}
+df_heat <- df %>%
+  group_by(DayOfWeek, DayOfWeekNumber, PartOfWeek) %>%
+  summarise(
+    MeanSteps = mean(TotalSteps, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    DayOfWeek = factor(
+      DayOfWeek,
+      levels = DayOfWeek[order(DayOfWeekNumber)]
+    )
+  )
+
+# Graphique 
+ggplot(df_heat, aes(x = DayOfWeek, y = PartOfWeek, fill = MeanSteps)) +
+  geom_tile() +
+  scale_fill_gradient(
+    low  = "#F2F0F7",
+    high = "#54278F",
+    labels = label_comma(big.mark = " ", decimal.mark = ",")
+  ) +
+  labs(
+    title = "Pas moyens par jour de la semaine",
+    x     = "Jour de la semaine",
+    y     = "Type de jour",
+    fill  = "Pas moyens"
+  )
+```
+
+
+## Contraste week-end versus semaine {.unnumbered}
+
+L’analyse montre un schéma clair : les utilisatrices marchent davantage le week-end que la semaine. Le samedi est le jour le plus actif, suivi du dimanche, tandis que mardi est le moins actif. Au sein des jours ouvrés, seul le mercredi se démarque par une activité un peu supérieure.
+Cette répartition s’explique par la disponibilité plus grande durant le week-end, ce qui augmente naturellement le nombre de pas.
+
+
+# Corrélation entre les minutes actives et les calories brûlées
+
+```{r correlation-activity-calories}
+# Graphique
+ggplot(df, aes(x = TotalActiveMinutes, y = Calories)) +
+  geom_point(aes(color = PartOfWeek),
+             alpha = 0.55, size = 1.7) +
+  geom_smooth(method = "lm",
+              se = FALSE,
+              linewidth = 0.9,
+              color = "blue") +
+  labs(
+    title = "Relation entre activité et calories brûlées",
+    x     = "Minutes actives totales",
+    y     = "Calories brûlées",
+    color = "Part de semaine"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    panel.grid.minor = element_blank()
+  )
+
+```
+
+## Relation positive activité ↔ calories {.unnumbered}
+
+Le graphique montre une relation positive : plus les minutes actives augmentent, plus les calories brûlées sont élevées.
+Les catégories Weekday et Weekend suivent pratiquement la même dynamique.
+Les minutes actives sont le principal moteur de la dépense calorique, indépendamment du jour de la semaine.
+
+
+<!-- Déconnexion -->
 
 ```{r disconnect}
 if (exists("con") && DBI::dbIsValid(con)) {
