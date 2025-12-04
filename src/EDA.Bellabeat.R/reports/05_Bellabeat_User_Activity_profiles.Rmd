@@ -1,0 +1,10 @@
+---
+title: "Profils d'activité des utilisatrices"
+output:
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    df_print: paged
+---

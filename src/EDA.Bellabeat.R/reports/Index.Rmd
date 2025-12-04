@@ -33,4 +33,4 @@ This **Coursera Capstone Project** focuses on analyzing the **Fitabase dataset (
 
 - [Daily activity](05_Bellabeat_Analyse_Daily_Activity.html) - [Activité quotidienne](05_Bellabeat_Analyse_Daily_Activity_FR.html)
 - [Daily heart rate](05_Bellabeat_DailyHeartrate_Rythm.html) - [Rythme cardiaque quotidien](05_Bellabeat_DailyHeartrate_Rythm_FR.html)
-
+- [User activty profiles](05_Bellabeat_User_Activity_profiles.html) - [Profils d'activité des utilisatrice](05_Bellabeat_User_Activity_profiles_FR.html)
