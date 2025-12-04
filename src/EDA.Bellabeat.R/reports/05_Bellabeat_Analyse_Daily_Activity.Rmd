@@ -88,7 +88,7 @@ p1 <- ggplot(df, aes(x = ActivityDate, y = TotalSteps)) +
   )
 ```
 
-```{r plot-mean-per-day}
+```{r curve-mean-per-day}
 # Agrégation au niveau jour
 df_daily <- df %>%
   group_by(ActivityDate) %>%
@@ -134,6 +134,51 @@ p2 <- ggplot(df_daily, aes(x = ActivityDate, y = AvgSteps)) +
 L’évolution des pas met surtout en évidence une forte hétérogénéité individuelle : pour une même date, les volumes journaliers varient de quelques milliers à plus de 20 000 pas, ce qui crée une dispersion importante et des pics isolés. Ces valeurs reflètent d’abord les différences entre utilisatrices plutôt qu’un schéma temporel commun.
 
 En agrégeant les données par date, une tendance claire émerge : le nombre moyen de pas augmente progressivement de début mars à début avril, passant d’environ 3 000–4 000 à 6 000–7 500 pas. Plusieurs chutes ponctuelles apparaissent (vers le 18 mars, le 31 mars et le 12 avril), liées soit à une baisse d’activité générale, soit à une diminution du nombre d’utilisatrices actives ces jours-là. L’ensemble traduit une dynamique collective de plus grande activité au fil du temps.
+
+
+# Barplot : active minutes vs. sedentary minutes
+
+```{r barplot-active-vs-sedentary-minutes}
+df_long <- df %>%
+  select(ActivityDate, TotalActiveMinutes, SedentaryMinutes) %>%
+  pivot_longer(
+    cols      = c(TotalActiveMinutes, SedentaryMinutes),
+    names_to  = "TypeMinutes",
+    values_to = "Minutes"
+  ) %>%
+  mutate(
+    TypeMinutes = recode(
+      TypeMinutes,
+      TotalActiveMinutes = "Actives",
+      SedentaryMinutes   = "Sédentaires"
+    )
+  )
+
+# Graphique 
+ggplot(df_long, aes(x = ActivityDate, y = Minutes, fill = TypeMinutes)) +
+  geom_col(position = "stack") +
+  scale_x_date(
+    date_breaks = "1 week",
+    date_labels = "%A %d %b"
+  ) +
+  labs(
+    title = "Minutes actives vs. minutes sédentaires par jour",
+    x     = "Date",
+    y     = "Minutes",
+    fill  = "Type de minutes"
+  ) +
+  theme(
+    plot.title   = element_text(size = 12),
+    axis.title.x = element_text(size = 10),
+    axis.title.y = element_text(size = 10),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+```
+
+
+## Dominance nette des minutes sédentaires {.unnumbered}
+
+Les minutes sédentaires constituent l’essentiel du volume quotidien, ce qui traduit un comportement global majoritairement statique. À partir de la fin mars, puis surtout au début avril, on observe une hausse brusque du total des minutes enregistrées, liée à une augmentation du nombre d’utilisatrices actives dans les données. Les minutes actives progressent en parallèle, mais leur part reste nettement inférieure à celle des minutes sédentaires, même lors des journées où l’activité totale est la plus élevée.
 
 
 ```{r disconnect}
