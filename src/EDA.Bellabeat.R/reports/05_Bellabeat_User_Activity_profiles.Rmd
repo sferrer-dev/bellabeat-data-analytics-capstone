@@ -1,5 +1,5 @@
 ---
-title: "Profils d'activité des utilisatrices"
+title: "User Activity Profiles"
 output:
   html_document:
     theme: cosmo
@@ -48,71 +48,71 @@ df_daily <- dbGetQuery(con, "
 ```
 
 ```{r features-per-user}
-# Agrégation des données journalières au niveau "utilisatrice".
-# L'objectif est de construire un ensemble de variables descriptives
-# (features) permettant d'analyser et de segmenter les profils d'activité.
+# Aggregation of daily data at the "user" level.
+# The goal is to build a set of descriptive variables
+# (features) to analyze and segment activity profiles.
 df_users <- df_daily %>%
   
-  # Regroupement par identifiant d'utilisatrice
+  # Grouping by user identifier
   group_by(Id) %>%
   
-  # Calcul des indicateurs moyens et cumulés sur l'ensemble de la période observée
+  # Calculation of mean and cumulative indicators over the entire observed period
   summarise(
-    # Nombre total de jours disponibles pour cette utilisatrice
+    # Total number of available days for this user
     n_days = n(),
     
-    # Volume moyen de pas par jour
+    # Average daily step count
     mean_steps = mean(TotalSteps, na.rm = TRUE),
     
-    # Dépense énergétique moyenne (calories)
+    # Average energy expenditure (calories)
     mean_calories = mean(Calories, na.rm = TRUE),
     
-    # Minutes moyennes passées en posture sédentaire
+    # Average minutes spent sedentary
     mean_sedentary_min = mean(SedentaryMinutes, na.rm = TRUE),
     
-    # Minutes moyennes d'activité modérée + intense (Fairly + Very Active)
+    # Average minutes of moderate + vigorous activity (Fairly + Very Active)
     mean_active_min = mean(FairlyActiveMinutes + VeryActiveMinutes, na.rm = TRUE),
     
-    # Minutes moyennes d'activité légère
+    # Average minutes of light activity
     mean_light_min = mean(LightlyActiveMinutes, na.rm = TRUE),
     
-    # Intensité moyenne journalière issue de la vue consolidée
+    # Average daily intensity from the consolidated view
     mean_intensity = mean(AvgIntensity, na.rm = TRUE),
     
-    # Intensité maximale observée parmi les journées enregistrées
+    # Maximum intensity observed among recorded days
     max_intensity = max(MaxIntensity, na.rm = TRUE),
     
-    # Minutes moyennes par zone d'intensité (issues de l'agrégation minute)
+    # Average minutes per intensity zone (from minute-level aggregation)
     mean_minutes_very   = mean(MinutesVery_Calc, na.rm = TRUE),
     mean_minutes_moder  = mean(MinutesModerate_Calc, na.rm = TRUE),
     mean_minutes_light  = mean(MinutesLight_Calc, na.rm = TRUE),
     mean_minutes_sedent = mean(MinutesSedentary_Calc, na.rm = TRUE),
     
-    # Proportion moyenne de minutes actives (moderate + very) rapportée
-    # au total des minutes enregistrées (toutes zones confondues)
+    # Average proportion of active minutes (moderate + very)
+    # relative to all recorded minutes (all zones combined)
     prop_active_minutes = (mean_minutes_moder + mean_minutes_very) /
                           (mean_minutes_sedent + mean_minutes_light +
                            mean_minutes_moder + mean_minutes_very)
   ) %>%
   
-  # Retrait du regroupement
+  # Remove grouping
   ungroup()
 ```
 
-# Diagramme de dispersion des marches quotidiennes des utilisatrices
+# Scatter plot of users' daily walking activity
 
 ```{r scatter-users-colored}
-# Préparer les données : Id en facteur pour une coloration discrète
+# Prepare the data: convert Id to factor for discrete coloring
 df_users_col <- df_users %>%
   mutate(Id = factor(Id))
 
 ggplot(df_users_col,
        aes(x = mean_steps, y = mean_intensity, colour = Id)) +
   
-  # Nuage de points (une couleur par utilisatrice)
+  # Scatter plot (one color per user)
   geom_point(size = 3, alpha = 0.9) +
   
-  # Droite de régression (UNE seule pour tout l'ensemble)
+  # Regression line (a single one for all users)
   geom_smooth(
     aes(x = mean_steps, y = mean_intensity),
     method = "lm",
@@ -126,7 +126,7 @@ ggplot(df_users_col,
   annotate(
     "text",
     x = 6000, y = 0.08,
-    label = "Plus le nombre moyen de pas est élevé,\nplus l'intensité journalière augmente.",
+    label = "Higher average step counts\ncorrespond to higher daily intensity.",
     hjust = 0, vjust = 1,
     size = 4
   ) +
@@ -136,10 +136,10 @@ ggplot(df_users_col,
   ) +
   
   labs(
-    title  = "Profils d’utilisatrices : volume de pas et intensité moyenne",
-    x      = "Pas moyens par jour",
-    y      = "Intensité moyenne journalière",
-    colour = "Id utilisatrice"
+    title  = "User Profiles: Step Volume and Average Intensity",
+    x      = "Average steps per day",
+    y      = "Average daily intensity",
+    colour = "User Id"
   ) +
   
   theme_minimal(base_size = 12) +
@@ -151,12 +151,58 @@ ggplot(df_users_col,
   )
 ```
 
+## Intensity increases consistently with step volume {.unnumbered}
 
-## L’intensité évolue en cohérence avec le volume de pas {.unnumbered}
+The chart reveals a direct relationship between step volume and average intensity: the more users walk, the higher their sustained effort.
+The correlation is linear: higher volume is accompanied by higher intensity, reflecting a combination of quantity and quality of effort.
 
-Le graphique révèle une relation directe entre volume de pas et intensité moyenne : plus les utilisatrices marchent, plus leur effort est soutenu. La corrélation est linéaire : un volume élevé s’accompagne d’une intensité plus forte, indiquant une combinaison de quantité et qualité d’effort. 
+A few atypical users exhibit few steps but high intensity, suggesting short but intense workouts.
 
-Quelques profils atypiques présentent peu de pas mais une intensité élevée, suggérant des séances courtes et intenses.
+The most active users combine frequent movement with sustained effort, whereas the least active users remain close to sedentary behavior.
 
-Les utilisatrices les plus actives cumulent déplacements et effort soutenu, tandis que les moins actives restent proches du sédentaire.
+# Barplot: Analysis of calorie expenditure by daily intensity level
 
+```{r barplot-calorie-intensity}
+# Simple categorization of average intensity
+df_intensity_cal <- df_users %>%
+  mutate(
+    intensity_group = case_when(
+      mean_intensity < 0.12 ~ "Low intensity",
+      mean_intensity < 0.22 ~ "Moderate intensity",
+      TRUE                  ~ "High intensity"
+    )
+  ) %>%
+  group_by(intensity_group) %>%
+  summarise(
+    mean_calories = mean(mean_calories, na.rm = TRUE),
+    n_users = n(),
+    .groups = "drop"
+  )
+
+# Barplot
+ggplot(df_intensity_cal, aes(x = intensity_group, y = mean_calories, fill = intensity_group)) +
+  geom_col(alpha = 0.85) +
+  scale_y_continuous(labels = scales::label_comma(big.mark = " ", decimal.mark = ",")) +
+  labs(
+    title = "Average Calories by Daily Intensity Level",
+    x = "Intensity group",
+    y = "Average calories burned per day",
+    fill = "Intensity level"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(size = 13)
+  )
+```
+
+## Higher daily intensity leads to higher calorie expenditure {.unnumbered}
+
+Three levels stand out clearly:
+
+* **High intensity**: ~2400 kcal/day, driven by a large volume of moderate to vigorous minutes, indicating strong physical engagement.
+* **Moderate intensity**: ~2100 kcal/day, an active profile with fewer effort peaks, consistent with regular but not strenuous activity.
+* **Low intensity**: ~1950 kcal/day, marked by predominantly sedentary behavior and few true effort episodes.
+
+Intensity is therefore a key driver of energy expenditure, beyond step count.
+This hierarchical relationship allows segmentation of user profiles and supports recommendations encouraging more sustained effort to increase daily calorie burn.
