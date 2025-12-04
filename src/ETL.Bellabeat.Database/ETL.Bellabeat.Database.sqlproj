@@ -81,6 +81,7 @@
     <Build Include="Security\rpt.sql" />
     <Build Include="Views\rpt\vDailyActivity_Insights.sql" />
     <Build Include="Views\rpt\vHeartrate_DailyBiologicalRhythm.sql" />
+    <Build Include="Views\rpt\vDailyIntensityFromMinutes.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ETL.Bellabeat.Database.publish.xml" />
