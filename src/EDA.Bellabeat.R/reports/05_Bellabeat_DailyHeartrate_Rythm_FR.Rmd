@@ -1,0 +1,121 @@
+---
+title: "Bellabeat- Rythme cardiaque quotidien"
+output:
+  html_document:
+    theme: cosmo
+    css: css/styles.css
+    highlight: tango
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+# Global chunk options
+knitr::opts_chunk$set(
+  echo    = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+```{r libraries}
+library(DBI)
+library(odbc)
+library(dplyr)
+library(ggplot2)
+library(scales)
+library(tidyr)
+```
+
+<!-- Chargement de la vue SQL Server -->
+
+```{r connect-and-load}
+
+
+con <- dbConnect(
+  odbc(),
+  Driver   = "ODBC Driver 18 for SQL Server",
+  Server   = "localhost",
+  Database = "bellabeat_data",
+  Trusted_Connection = "Yes",
+  Encrypt  = "no"
+)
+
+df_hr <- dbGetQuery(con, "
+    SELECT *
+    FROM rpt.vHeartrate_DailyBiologicalRhythm
+")
+
+df_hr <- df_hr %>%
+  mutate(
+    ActivityDate = as.Date(ActivityDate),
+    TimeOfDay    = factor(
+      TimeOfDay,
+      levels = c('Night', 'Morning', 'Afternoon', 'Evening')
+    )
+  )
+```
+
+# Courbes : Fréquence cardiaque moyenne
+
+```{r hr-dow-tod}
+# Déterminer l'ordre des jours une fois pour toutes (Lundi -> Dimanche)
+dow_levels <- df_hr %>%
+  distinct(DayOfWeekNumber, DayOfWeekName) %>%
+  arrange(DayOfWeekNumber) %>%
+  pull(DayOfWeekName)
+
+df_hr_dow <- df_hr %>%
+  group_by(TimeOfDay, DayOfWeekNumber, DayOfWeekName) %>%
+  summarise(
+    AvgHR = mean(AvgHeartRate, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    DayOfWeekName = factor(DayOfWeekName, levels = dow_levels)
+  )
+
+ggplot(df_hr_dow, aes(x = DayOfWeekName, y = AvgHR, group = 1)) +
+  geom_line(linewidth = 0.7, color = "grey40") +
+  geom_point(size = 2, aes(color = TimeOfDay)) +
+  facet_wrap(~ TimeOfDay, ncol = 1) +   # même échelle Y pour toutes les facettes
+  labs(
+    title = "Fréquence cardiaque moyenne par jour de la semaine et par période de la journéé",
+    x     = "Jour de la semaine",
+    y     = "Fréquence cardiaque moyenne (bpm)",
+    color = "Période de la journée"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    axis.text.x     = element_text(angle = 45, hjust = 1),
+    legend.position = "right"
+  )
+```
+
+## Variabilité hebdomadaire de la fréquence cardiaque {.unnumbered}
+
+La fréquence cardiaque suit un rythme circadien constant : minimale la nuit, en hausse le matin, maximale l’après-midi puis en baisse le soir. 
+Les différences entre les jours de la semaine sont moins marquées que les différences entre les périodes de la journée.
+Un léger effet week-end, surtout dans deux périodes dimanche matin et le samedi soir présente un niveau cardiaque un peu plus élevé que les autres soirées.
+
+L’après-midi reste la période la plus active avec une fréquence élevée et régulière sur toute la semaine.
+
+Globalement, les données révèlent des comportements stables, un cycle biologique clair et une faible variabilité hebdomadaire, hormis de modestes écarts en fin de semaine.
+
+| Période   | Niveau cardiaque           | 
+|-----------|-----------------------------|
+| Night     | le plus bas (70–75 bpm)     |
+| Morning   | en hausse (75–85 bpm)       |
+| Afternoon | le plus élevé (85–90+ bpm)  |
+| Evening   | légère baisse (75–85 bpm)   |
+
+
+<!-- Déconnexion -->
+
+```{r disconnect}
+if (exists("con") && DBI::dbIsValid(con)) {
+  DBI::dbDisconnect(con)
+}
+```

@@ -1,5 +1,5 @@
 ---
-title: "Bellabeat - Analyse Daily Activity"
+title: "Bellabeat - Analyse de l'activité quotidienne"
 output:
   html_document:
     theme: cosmo

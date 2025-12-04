@@ -1,0 +1,30 @@
+---
+title: "Bellabeat- Daily heart rate"
+output:
+  html_document:
+    theme: cosmo
+    css: css/styles.css
+    highlight: tango
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+# Global chunk options
+knitr::opts_chunk$set(
+  echo    = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+```{r libraries}
+library(DBI)
+library(odbc)
+library(dplyr)
+library(ggplot2)
+library(scales)
+library(tidyr)
+```

@@ -39,6 +39,10 @@ navbar:
           href: 05_Bellabeat_Analyse_Daily_Activity.html
         - text: "Analyse de l'activité quotidienne"
           href: 05_Bellabeat_Analyse_Daily_Activity_FR.html
+        - text: "Daily heart rate analysis"
+          href: 05_Bellabeat_DailyHeartrate_Rythm.html
+        - text: "Analyse du rythme cardiaque quotidien"
+          href: 05_Bellabeat_DailyHeartrate_Rythm_FR.html
         
 output:
   html_document:

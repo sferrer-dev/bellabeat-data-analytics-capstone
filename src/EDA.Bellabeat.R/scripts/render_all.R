@@ -21,8 +21,10 @@ rmd_files <- c(
   here("reports", "04_Bellabeat_Processus_ETL.Rmd"),
   here("reports", "04_Bellabeat_Processus_ETL_FR.Rmd"),
   here("reports", "05_Bellabeat_Analyse_Daily_Activity.Rmd"),
-  here("reports", "05_Bellabeat_Analyse_Daily_Activity_FR.Rmd")
-)
+  here("reports", "05_Bellabeat_Analyse_Daily_Activity_FR.Rmd"),
+  here("reports", "05_Bellabeat_DailyHeartrate_Rythm.Rmd"),
+  here("reports", "05_Bellabeat_DailyHeartrate_Rythm_FR.Rmd")
+ )
 
 for (rmd in rmd_files) {
   
