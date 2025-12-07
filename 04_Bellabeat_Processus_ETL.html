@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Bellabeat – ETL Process Documentation</title>
+
+<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="css/styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Bellabeat</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    EDA
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_Bellabeat_Data_Profiling_EDA.html">Data Profiling</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Files
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="02_Bellabeat_Files_Overview.html">Files Overview</a>
+    </li>
+    <li>
+      <a href="02_Bellabeat_Files_Overview_FR.html">Vue d’ensemble des fichiers</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    ETL
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="04_Bellabeat_Processus_ETL.html">ETL Process</a>
+    </li>
+    <li>
+      <a href="04_Bellabeat_Processus_ETL_FR.html">Processus ETL</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    ROCCC / Quality
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="03_Bellabeat_ROCCC.html">ROCCC</a>
+    </li>
+    <li>
+      <a href="03_Bellabeat_ROCCC_FR.html">ROCCC (FR)</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="05_Bellabeat_Analyse_Daily_Activity.html">Analysis of daily activity</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_Analyse_Daily_Activity_FR.html">Analyse de l'activité quotidienne</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_DailyHeartrate_Rythm.html">Daily heart rate analysis</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_DailyHeartrate_Rythm_FR.html">Analyse du rythme cardiaque quotidien</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_User_Activity_profiles.html">User activity profiles</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_User_Activity_profiles_FR.html">Profils d'activité des utilisatrices</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Bellabeat – ETL Process Documentation</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#environment-setup" id="toc-environment-setup"><span
+class="toc-section-number">1</span> Environment Setup</a>
+<ul>
+<li><a href="#creating-the-ssis-project"
+id="toc-creating-the-ssis-project"><span
+class="toc-section-number">1.1</span> Creating the SSIS project</a></li>
+<li><a href="#creating-typed-raw-tables-from-ole-db-destinations"
+id="toc-creating-typed-raw-tables-from-ole-db-destinations"><span
+class="toc-section-number">1.2</span> Creating typed RAW tables from OLE
+DB Destinations</a></li>
+<li><a href="#choosing-data-types" id="toc-choosing-data-types"><span
+class="toc-section-number">1.3</span> Choosing data types</a></li>
+<li><a href="#ssis-sql-server-mapping-table"
+id="toc-ssis-sql-server-mapping-table"><span
+class="toc-section-number">1.4</span> SSIS → SQL Server mapping
+table</a></li>
+<li><a href="#building-the-11-ssis-packages-to-load-csv-files"
+id="toc-building-the-11-ssis-packages-to-load-csv-files"><span
+class="toc-section-number">1.5</span> Building the 11 SSIS packages to
+load CSV files</a></li>
+<li><a href="#deduplicating-minutesleep_merged.csv"
+id="toc-deduplicating-minutesleep_merged.csv"><span
+class="toc-section-number">1.6</span> Deduplicating
+<em>minuteSleep_merged.csv</em></a></li>
+</ul></li>
+<li><a href="#locale-and-encoding-settings-for-csv-import-in-ssis"
+id="toc-locale-and-encoding-settings-for-csv-import-in-ssis"><span
+class="toc-section-number">2</span> Locale and Encoding Settings for CSV
+Import in SSIS</a></li>
+<li><a href="#validation-and-data-integrity-checks-in-ssis"
+id="toc-validation-and-data-integrity-checks-in-ssis"><span
+class="toc-section-number">3</span> Validation and data integrity checks
+in SSIS</a>
+<ul>
+<li><a href="#structural-checks" id="toc-structural-checks"><span
+class="toc-section-number">3.1</span> Structural checks</a></li>
+<li><a href="#data-type-checks" id="toc-data-type-checks"><span
+class="toc-section-number">3.2</span> Data type checks</a></li>
+<li><a href="#consistency-checks" id="toc-consistency-checks"><span
+class="toc-section-number">3.3</span> Consistency checks</a></li>
+<li><a href="#duplicate-checks" id="toc-duplicate-checks"><span
+class="toc-section-number">3.4</span> Duplicate checks</a></li>
+</ul></li>
+<li><a href="#orchestration-via-the-master-package"
+id="toc-orchestration-via-the-master-package"><span
+class="toc-section-number">4</span> Orchestration via the master
+package</a></li>
+<li><a href="#post-load-validation-and-analysis-readiness"
+id="toc-post-load-validation-and-analysis-readiness"><span
+class="toc-section-number">5</span> Post-load validation and analysis
+readiness</a>
+<ul>
+<li><a href="#row-count-checks" id="toc-row-count-checks"><span
+class="toc-section-number">5.1</span> Row count checks</a></li>
+<li><a href="#data-type-checks-1" id="toc-data-type-checks-1"><span
+class="toc-section-number">5.2</span> Data type checks</a></li>
+<li><a href="#cross-table-consistency-checks"
+id="toc-cross-table-consistency-checks"><span
+class="toc-section-number">5.3</span> Cross-table consistency
+checks</a></li>
+<li><a href="#consistency-of-the-typed-raw-layer"
+id="toc-consistency-of-the-typed-raw-layer"><span
+class="toc-section-number">5.4</span> Consistency of the typed RAW
+layer</a></li>
+<li><a href="#architecture-diagram" id="toc-architecture-diagram"><span
+class="toc-section-number">5.5</span> Architecture diagram</a></li>
+</ul></li>
+<li><a href="#sql-schema-management-with-ssdt-and-deployment-via-dacpac"
+id="toc-sql-schema-management-with-ssdt-and-deployment-via-dacpac"><span
+class="toc-section-number">6</span> SQL Schema Management with SSDT and
+Deployment via DACPAC</a>
+<ul>
+<li><a href="#creating-the-ssdt-project"
+id="toc-creating-the-ssdt-project"><span
+class="toc-section-number">6.1</span> Creating the SSDT Project</a></li>
+<li><a href="#sql-schema-definition-and-deployment-via-dacpac"
+id="toc-sql-schema-definition-and-deployment-via-dacpac"><span
+class="toc-section-number">6.2</span> SQL Schema Definition and
+Deployment via DACPAC</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="environment-setup" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Environment Setup</h1>
+<div id="creating-the-ssis-project" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Creating the SSIS
+project</h2>
+<p>An <strong>Integration Services (SSIS) project</strong> was created
+in <strong>Visual Studio 2022</strong> with the name<br />
+<strong>ETL.Bellabeat.SSIS (SQL Server 2019)</strong>.</p>
+<p>Its purpose is to build <strong>automated data and control
+flows</strong> that orchestrate the complete <strong>ETL</strong>
+process (Extract – Transform – Load).</p>
+<p>The core of the project contains 11 <strong>load packages</strong>,
+each dedicated to a single CSV source file. Each package includes:</p>
+<ul>
+<li>One <strong>Flat File Connection Manager</strong> per CSV file;</li>
+<li>SSIS <strong>transformations</strong> (type conversion, cleaning,
+deduplication);</li>
+<li>An <strong>OLE DB Destination</strong> creating and loading a typed
+RAW table in the SQL Server database.</li>
+</ul>
+<p>A <strong>master package</strong> orchestrates the sequential
+execution of the 11 load packages in order to provide a complete,
+stable, and reproducible pipeline.</p>
+</div>
+<div id="creating-typed-raw-tables-from-ole-db-destinations"
+class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Creating typed RAW
+tables from OLE DB Destinations</h2>
+<p>I implemented a <strong>typed RAW</strong> approach: the tables that
+receive the loaded data are created with their final data types and
+constraints (PK, NOT NULL), instead of using an intermediate staging
+layer in plain NVARCHAR. This strategy allows quality to be enforced as
+early as the CSV load.</p>
+<p>For each package:</p>
+<ol style="list-style-type: decimal">
+<li>Configure the <strong>Flat File Source</strong> to analyze the
+structure of the CSV file.</li>
+<li>Add an <strong>OLE DB Destination</strong> → click
+<strong>New…</strong> to automatically generate a
+<code>CREATE TABLE</code> statement.</li>
+<li><strong>Manually edit the SQL script</strong> to:
+<ul>
+<li>refine the generated SQL Server data types;</li>
+<li>add <code>PRIMARY KEY</code>;</li>
+<li>add <code>NOT NULL</code> on mandatory columns;</li>
+<li>reject duplicates or inconsistencies directly in the RAW layer.</li>
+</ul></li>
+</ol>
+<p>These tables form the <strong>typed RAW layer</strong>, used directly
+in the ETL.</p>
+</div>
+<div id="choosing-data-types" class="section level2" number="1.3">
+<h2><span class="header-section-number">1.3</span> Choosing data
+types</h2>
+<p>I followed a structured approach to determine SQL Server data types
+based on the actual granularity of the CSVs.</p>
+<p><strong>Id columns → BIGINT</strong></p>
+<p>I chose <code>BIGINT</code> for <code>Id</code> columns because:</p>
+<ul>
+<li>the actual range of values (Fitbit identifiers) is much larger than
+<code>INT</code>;</li>
+<li><code>BIGINT</code> performs well in analytical joins.</li>
+</ul>
+<p><strong>Decimal columns (distance, METs, weight, BMI) → DECIMAL(p,
+s)</strong></p>
+<p>I chose the <strong>precision (p)</strong> and <strong>scale
+(s)</strong> by inspecting the real values in the CSVs:</p>
+<ul>
+<li>decimal places for distances and METs are preserved without
+loss;</li>
+<li>no unnecessary rounding;</li>
+<li>good compatibility with SSIS (avoids ambiguous floating-point
+conversions).</li>
+</ul>
+<p><strong>Integer numeric columns</strong> (steps, minutes, calories,
+intensities…)<br />
+→ <code>DT_I4</code> in SSIS, then <strong><code>INT</code></strong> in
+SQL Server.</p>
+<p><strong>Date/time columns</strong> from the CSVs<br />
+→ <code>DT_DBTIMESTAMP</code> in SSIS, then
+<strong><code>DATETIME</code></strong> (or <code>DATETIME2</code> if
+required) in SQL Server.</p>
+<p>These choices ensure <strong>fidelity to the source files</strong>,
+which is essential for the analytical project.</p>
+</div>
+<div id="ssis-sql-server-mapping-table" class="section level2"
+number="1.4">
+<h2><span class="header-section-number">1.4</span> SSIS → SQL Server
+mapping table</h2>
+<table>
+<colgroup>
+<col width="37%" />
+<col width="23%" />
+<col width="38%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Usage (Bellabeat)</th>
+<th>SSIS type (Data Flow)</th>
+<th>SQL Server type created in RAW tables</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Identifiers <code>Id</code>, <code>LogId</code></td>
+<td><code>DT_I8</code> (64-bit integer)</td>
+<td><code>BIGINT</code></td>
+</tr>
+<tr class="even">
+<td>Technical keys, counters, minutes</td>
+<td><code>DT_I4</code> (32-bit integer)</td>
+<td><code>INT</code></td>
+</tr>
+<tr class="odd">
+<td>Distance, METs, weight, BMI, decimal values</td>
+<td><code>DT_NUMERIC</code></td>
+<td><code>DECIMAL(p, s)</code> (p, s based on actual granularity)</td>
+</tr>
+<tr class="even">
+<td>Full date/time columns</td>
+<td><code>DT_DBTIMESTAMP</code></td>
+<td><code>DATETIME</code></td>
+</tr>
+<tr class="odd">
+<td>Date-only columns</td>
+<td><code>DT_DBDATE</code></td>
+<td><code>DATE</code></td>
+</tr>
+<tr class="even">
+<td>Time-only columns (when used)</td>
+<td><code>DT_DBTIME</code></td>
+<td><code>TIME</code></td>
+</tr>
+<tr class="odd">
+<td>Short text (e.g. categories, labels)</td>
+<td><code>DT_STR</code></td>
+<td><code>VARCHAR(n)</code></td>
+</tr>
+<tr class="even">
+<td>Unicode text</td>
+<td><code>DT_WSTR</code></td>
+<td><code>NVARCHAR(n)</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="building-the-11-ssis-packages-to-load-csv-files"
+class="section level2" number="1.5">
+<h2><span class="header-section-number">1.5</span> Building the 11 SSIS
+packages to load CSV files</h2>
+<p>Each CSV file is handled in a dedicated package:
+<strong><code>01_Load_*.dtsx</code></strong>.</p>
+<p><strong>Common structure of the Data Flow Tasks:</strong></p>
+<ul>
+<li><code>Flat File Source</code>;</li>
+<li>optional transformations (sorting, conversion, derivation);</li>
+<li><code>OLE DB Destination</code> (fast load) → corresponding typed
+RAW table.</li>
+</ul>
+</div>
+<div id="deduplicating-minutesleep_merged.csv" class="section level2"
+number="1.6">
+<h2><span class="header-section-number">1.6</span> Deduplicating
+<em>minuteSleep_merged.csv</em></h2>
+<p>This file contains duplicate rows.</p>
+<p>In the package <strong>01_Load_MinuteSleep.dtsx</strong>:</p>
+<ul>
+<li>a <strong>Sort</strong> component is added with:
+<ul>
+<li>sorting on <code>(Id, Date, LogId)</code>;</li>
+<li><strong>Remove duplicates</strong> option enabled.</li>
+</ul></li>
+</ul>
+<p>This component ensures that <strong>only unique rows</strong> are
+sent to the RAW table.</p>
+<p>This is a critical step: without deduplication, the primary key would
+fail in SQL Server.</p>
+</div>
+</div>
+<div id="locale-and-encoding-settings-for-csv-import-in-ssis"
+class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Locale and Encoding
+Settings for CSV Import in SSIS</h1>
+<p>Because the Bellabeat CSV files are formatted using <strong>US
+conventions</strong> (en-US), I had to change the locale of the
+<strong>Flat File Connection Manager</strong> from my default
+<strong>French (fr-FR)</strong> environment to <strong>English (United
+States)</strong>.</p>
+<p>The French locale uses: - commas as decimal separators
+(<code>3,57</code>), - day-first dates (<code>dd/MM/yyyy</code>), -
+semicolons as separators (<code>;</code>),</p>
+<p>while the Bellabeat files use: - dots as decimals
+(<code>3.57</code>), - US dates (<code>MM/dd/yyyy</code>), - commas as
+separators (<code>,</code>).</p>
+<p>If I had kept the French locale, SSIS would not parse numbers or
+dates correctly, leading to <strong>Data Conversion Failed</strong>
+errors when converting to <code>INT</code>, <code>DECIMAL</code>, or
+<code>DATETIME</code>.</p>
+<p>I also replaced the default <strong>ANSI 1252</strong> code page with
+<strong>UTF-8</strong>, because the CSV files are encoded in UTF-8.
+Keeping ANSI could cause character corruption, parsing issues, or column
+misalignment.</p>
+<p>Using <strong>en-US + UTF-8</strong> ensures that SSIS reads the CSV
+structure correctly and loads clean, valid data into the RAW SQL
+layer.</p>
+</div>
+<div id="validation-and-data-integrity-checks-in-ssis"
+class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Validation and data
+integrity checks in SSIS</h1>
+<p>The following mechanisms were implemented to guarantee data quality
+during the load.</p>
+<div id="structural-checks" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Structural
+checks</h2>
+<ul>
+<li>exact column mapping between CSV columns and SQL RAW columns;</li>
+<li>immediate rejection of invalid rows thanks to SQL constraints
+(<code>NOT NULL</code>, <code>PRIMARY KEY</code>).</li>
+</ul>
+</div>
+<div id="data-type-checks" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Data type checks</h2>
+<ul>
+<li>correct conversion to <code>BIGINT</code> / <code>INT</code> /
+<code>DECIMAL</code> / <code>DATETIME</code>;</li>
+<li>no truncation caused by incorrectly sized columns.</li>
+</ul>
+</div>
+<div id="consistency-checks" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Consistency
+checks</h2>
+<ul>
+<li>ensure that time-related values can be converted to
+<code>DATETIME</code>;</li>
+<li>ensure that column <code>Id</code> is present in every file.</li>
+</ul>
+</div>
+<div id="duplicate-checks" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> Duplicate checks</h2>
+<ul>
+<li><strong>Sort</strong> component + SQL Server primary keys → strict
+record uniqueness.</li>
+</ul>
+</div>
+</div>
+<div id="orchestration-via-the-master-package" class="section level1"
+number="4">
+<h1><span class="header-section-number">4</span> Orchestration via the
+master package</h1>
+<p>A master package <strong>04_Master_Load_Bellabeat.dtsx</strong>
+orchestrates the 11 packages:</p>
+<ul>
+<li>add one <strong>Execute Package Task</strong> per load package;</li>
+<li>run them sequentially by granularity:
+<ol style="list-style-type: decimal">
+<li>Daily<br />
+</li>
+<li>Hourly<br />
+</li>
+<li>Minute<br />
+</li>
+<li>Weight</li>
+</ol></li>
+<li>automatically stop the chain if any error occurs.</li>
+</ul>
+<p>This orchestration guarantees a <strong>reproducible
+execution</strong> of the whole ETL pipeline.</p>
+</div>
+<div id="post-load-validation-and-analysis-readiness"
+class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Post-load validation
+and analysis readiness</h1>
+<p>After loading, several checks were performed:</p>
+<div id="row-count-checks" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Row count checks</h2>
+<p>Comparison between:</p>
+<ul>
+<li>number of rows in the CSVs;</li>
+<li>number of rows in the RAW tables<br />
+(with deduplication for MinuteSleep).</li>
+</ul>
+</div>
+<div id="data-type-checks-1" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Data type checks</h2>
+<p>SQL Server types match the source formats exactly:</p>
+<ul>
+<li>identifiers: <code>BIGINT</code>;</li>
+<li>distances, METs: <code>DECIMAL(p, s)</code>;</li>
+<li>steps / calories / intensity: <code>INT</code>;</li>
+<li>date and time: <code>DATETIME</code> / <code>DATETIME2</code>.</li>
+</ul>
+</div>
+<div id="cross-table-consistency-checks" class="section level2"
+number="5.3">
+<h2><span class="header-section-number">5.3</span> Cross-table
+consistency checks</h2>
+<ul>
+<li>presence of <code>Id</code> in each table;</li>
+<li>temporal integrity: Date/Minute/Hour columns correctly
+converted;</li>
+<li>wide comparison to verify <code>Id</code> values shared across
+granularities.</li>
+</ul>
+</div>
+<div id="consistency-of-the-typed-raw-layer" class="section level2"
+number="5.4">
+<h2><span class="header-section-number">5.4</span> Consistency of the
+typed RAW layer</h2>
+<p>SQL constraints and primary keys guarantee:</p>
+<ul>
+<li>clean data;</li>
+<li>no duplicates;</li>
+<li>no invalid values;</li>
+<li>no structural inconsistencies.</li>
+</ul>
+<p>The data is now <strong>ready for exploratory data analysis
+(EDA)</strong>, analytical SQL queries, aggregated views, or BI
+modelling.</p>
+</div>
+<div id="architecture-diagram" class="section level2" number="5.5">
+<h2><span class="header-section-number">5.5</span> Architecture
+diagram</h2>
+<p>The Bellabeat ETL relies on a <strong>typed RAW layer</strong>
+generated via SSIS OLE DB Destinations, strengthened with optimised data
+types (<code>BIGINT</code>, <code>DECIMAL</code>) and strict SQL
+constraints. The 11 load packages structure the CSV data into a stable,
+controlled schema, including duplicate removal for MinuteSleep. The
+master package orchestrates the entire chain, providing a reproducible
+and reliable pipeline that meets the requirements of a structured
+analytics project.</p>
+<div class="asciibox">
+<pre class="text"><code>┌──────────────────────────────┐
+│ Project ETL.Bellabeat.SSIS   │
+│ Visual Studio 2022           │
+└───────────────┬──────────────┘
+                │
+                ▼
+┌──────────────────────────────┐
+│ Master Package (04_Master)   │
+│ Orchestration of 11 packages │
+└───────────────┬──────────────┘
+                │
+                ▼
+┌──────────────────────────────┐
+│ Packages 01_Load_*           │
+│ (Daily, Hourly, Minute,      │
+│  WeightLogInfo)              │
+└───────────────┬──────────────┘
+                │
+                ▼
+┌──────────────────────────────┐
+│ Flat File Source             │
+│ Read CSV                     │
+└───────────────┬──────────────┘
+                │
+                ▼
+┌──────────────────────────────┐
+│ SSIS Transformations         │
+│ - Type conversion            │
+│ - Derived Column             │
+│ - Cleaning                   │
+│ MinuteSleep: Sort + Dedup    │
+└───────────────┬──────────────┘
+                │
+                ▼
+┌──────────────────────────────┐
+│ OLE DB Destination           │
+│ Table creation + typing      │
+│ PK / NOT NULL / DECIMAL /    │
+│ BIGINT / DATETIME            │
+└───────────────┬──────────────┘
+                │
+                ▼
+┌──────────────────────────────┐
+│ Typed RAW SQL layer          │
+│ bellabeat_data (11 tables)   │
+└───────────────┬──────────────┘
+                │
+                ▼
+┌──────────────────────────────┐
+│ Data ready for EDA, SQL      │
+│ and BI modelling             │
+└──────────────────────────────┘</code></pre>
+</div>
+</div>
+</div>
+<div id="sql-schema-management-with-ssdt-and-deployment-via-dacpac"
+class="section level1" number="6">
+<h1><span class="header-section-number">6</span> SQL Schema Management
+with SSDT and Deployment via DACPAC</h1>
+<div id="creating-the-ssdt-project" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> Creating the SSDT
+Project</h2>
+<p>To manage the database schema in a structured and version-controlled
+way, I added a <strong>SQL Server Database Project</strong> (SSDT) to
+the Visual Studio 2022 solution.<br />
+The project was initialized with the following configuration:</p>
+<ul>
+<li><strong>Project type:</strong> SQL Server Database Project<br />
+</li>
+<li><strong>Project name:</strong> ETL.Bellabeat.Database<br />
+</li>
+<li><strong>Target server:</strong> SQL Server 2019</li>
+</ul>
+<p>SSDT then automatically generates a <code>.dacpac</code> file during
+the build process. This file represents a complete and consistent
+version of the SQL schema. The project can be versioned in Git, ensuring
+accurate tracking of changes and enabling the database to be rebuilt
+identically across any environment.</p>
+</div>
+<div id="sql-schema-definition-and-deployment-via-dacpac"
+class="section level2" number="6.2">
+<h2><span class="header-section-number">6.2</span> SQL Schema Definition
+and Deployment via DACPAC</h2>
+<p>To ensure reliable, traceable, and reproducible management of the
+database used by the Bellabeat ETL, I chose to use an <strong>SSDT (SQL
+Server Data Tools)</strong> project rather than creating tables manually
+in SQL Server Management Studio. With SSDT, the entire data
+model—tables, columns, data types, keys, constraints, and indexes—is
+defined directly in Visual Studio and versioned in Git.</p>
+<p>The project is published through a <strong>DACPAC</strong>, a
+deployment artifact that automates the creation or update of the
+<em>bellabeat_data</em> database. This approach eliminates manual
+discrepancies between environments and ensures an infrastructure that
+can be rebuilt identically, which is essential in an ETL workflow.</p>
+<p>A <strong>DACPAC (Data-tier Application Component Package)</strong>
+contains only the <strong>schema</strong> of a SQL Server database,
+which in this case corresponds to a <strong>typed RAW layer</strong>,
+including:<br />
+- tables and columns,<br />
+- data types,<br />
+- primary keys,<br />
+- views.</p>
+<p>It does <strong>not</strong> contain any data—only the structure. The
+DACPAC represents a consistent snapshot of the schema as defined in
+SSDT.</p>
+<p>Once the <em>bellabeat_data</em> database is deployed via the DACPAC,
+the 11 SSIS packages—coordinated by a master package—load the CSV files
+into the tables defined by SSDT.</p>
+<p>This <strong>schema-first</strong> approach ensures that column
+typing is controlled, dates are standardized, and primary keys are
+enforced from the start. SSIS therefore loads the data into a clean,
+consistent, and analytics-ready environment.</p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

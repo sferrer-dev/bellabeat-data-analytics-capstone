@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Bellabeat - Daily Activity Analysis</title>
+
+<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="css/styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Bellabeat</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    EDA
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_Bellabeat_Data_Profiling_EDA.html">Data Profiling</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Files
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="02_Bellabeat_Files_Overview.html">Files Overview</a>
+    </li>
+    <li>
+      <a href="02_Bellabeat_Files_Overview_FR.html">Vue d’ensemble des fichiers</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    ETL
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="04_Bellabeat_Processus_ETL.html">ETL Process</a>
+    </li>
+    <li>
+      <a href="04_Bellabeat_Processus_ETL_FR.html">Processus ETL</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    ROCCC / Quality
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="03_Bellabeat_ROCCC.html">ROCCC</a>
+    </li>
+    <li>
+      <a href="03_Bellabeat_ROCCC_FR.html">ROCCC (FR)</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="05_Bellabeat_Analyse_Daily_Activity.html">Analysis of daily activity</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_Analyse_Daily_Activity_FR.html">Analyse de l'activité quotidienne</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_DailyHeartrate_Rythm.html">Daily heart rate analysis</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_DailyHeartrate_Rythm_FR.html">Analyse du rythme cardiaque quotidien</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_User_Activity_profiles.html">User activity profiles</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_User_Activity_profiles_FR.html">Profils d'activité des utilisatrices</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Bellabeat - Daily Activity Analysis</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#line-charts-steps-per-day"
+id="toc-line-charts-steps-per-day"><span
+class="toc-section-number">1</span> Line Charts: Steps per Day</a>
+<ul>
+<li><a href="#daily-evolution-of-step-count"
+id="toc-daily-evolution-of-step-count">Daily Evolution of Step
+Count</a></li>
+</ul></li>
+<li><a href="#barplot-active-vs-sedentary-minutes"
+id="toc-barplot-active-vs-sedentary-minutes"><span
+class="toc-section-number">2</span> Barplot: Active vs Sedentary
+Minutes</a>
+<ul>
+<li><a href="#clear-dominance-of-sedentary-minutes"
+id="toc-clear-dominance-of-sedentary-minutes">Clear Dominance of
+Sedentary Minutes</a></li>
+</ul></li>
+<li><a href="#heatmap-activity-by-day-of-week"
+id="toc-heatmap-activity-by-day-of-week"><span
+class="toc-section-number">3</span> Heatmap: Activity by Day of Week</a>
+<ul>
+<li><a href="#weekend-vs-weekday-contrast"
+id="toc-weekend-vs-weekday-contrast">Weekend vs Weekday
+Contrast</a></li>
+</ul></li>
+<li><a href="#correlation-between-active-minutes-and-calories-burned"
+id="toc-correlation-between-active-minutes-and-calories-burned"><span
+class="toc-section-number">4</span> Correlation Between Active Minutes
+and Calories Burned</a>
+<ul>
+<li><a href="#positive-relationship-between-activity-and-calories"
+id="toc-positive-relationship-between-activity-and-calories">Positive
+Relationship Between Activity and Calories</a></li>
+</ul></li>
+</ul>
+</div>
+
+<!-- Loading SQL Server view -->
+<div id="line-charts-steps-per-day" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Line Charts: Steps per
+Day</h1>
+<p><img src="05_Bellabeat_Analyse_Daily_Activity_files/figure-html/plot-compare-steps-1.png" width="672" /></p>
+<div id="daily-evolution-of-step-count"
+class="section level2 unnumbered">
+<h2 class="unnumbered">Daily Evolution of Step Count</h2>
+<p>The evolution of steps highlights strong individual variability: on a
+given day, step counts range from just a few thousand to over 20,000,
+creating significant dispersion and isolated peaks. These values
+primarily reflect differences between users rather than a shared
+temporal pattern.</p>
+<p>After aggregating by date, a clear trend appears: the average step
+count gradually increases from early March to early April, rising from
+around <strong>3,000–4,000</strong> to <strong>6,000–7,500</strong>
+steps. Several noticeable dips occur (around March 18, March 31, and
+April 12), caused either by a general drop in activity or a reduced
+number of active users. Overall, the trend indicates a collective
+increase in activity over time.</p>
+</div>
+</div>
+<div id="barplot-active-vs-sedentary-minutes" class="section level1"
+number="2">
+<h1><span class="header-section-number">2</span> Barplot: Active vs
+Sedentary Minutes</h1>
+<p><img src="05_Bellabeat_Analyse_Daily_Activity_files/figure-html/barplot-active-vs-sedentary-minutes-1.png" width="672" /></p>
+<div id="clear-dominance-of-sedentary-minutes"
+class="section level2 unnumbered">
+<h2 class="unnumbered">Clear Dominance of Sedentary Minutes</h2>
+<p>Sedentary minutes account for the vast majority of total daily time,
+indicating predominantly inactive behavior. From late March and
+especially early April, total minutes rise sharply, driven by an
+increase in the number of active users in the dataset. Active minutes
+also increase but remain far below sedentary minutes, even on the most
+active days.</p>
+</div>
+</div>
+<div id="heatmap-activity-by-day-of-week" class="section level1"
+number="3">
+<h1><span class="header-section-number">3</span> Heatmap: Activity by
+Day of Week</h1>
+<p><img src="05_Bellabeat_Analyse_Daily_Activity_files/figure-html/heatmap-activity-per-dow-1.png" width="672" /></p>
+<div id="weekend-vs-weekday-contrast" class="section level2 unnumbered">
+<h2 class="unnumbered">Weekend vs Weekday Contrast</h2>
+<p>The analysis reveals a clear pattern: users walk significantly more
+on weekends than during weekdays. Saturday is the most active day,
+followed by Sunday, while Tuesday is the least active. Among weekdays,
+Wednesday stands out with slightly higher activity.</p>
+<p>This distribution likely reflects increased availability during
+weekends, naturally boosting step counts.</p>
+</div>
+</div>
+<div id="correlation-between-active-minutes-and-calories-burned"
+class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Correlation Between
+Active Minutes and Calories Burned</h1>
+<p><img src="05_Bellabeat_Analyse_Daily_Activity_files/figure-html/correlation-activity-calories-1.png" width="672" /></p>
+<div id="positive-relationship-between-activity-and-calories"
+class="section level2 unnumbered">
+<h2 class="unnumbered">Positive Relationship Between Activity and
+Calories</h2>
+<p>The scatterplot shows a clear positive relationship: more active
+minutes correspond to more calories burned. Both weekday and weekend
+observations follow nearly the same trend. Active minutes are therefore
+the primary driver of caloric expenditure, regardless of the day of the
+week.</p>
+<!-- Disconnect -->
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

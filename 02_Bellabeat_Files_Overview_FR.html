@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Bellabeat – Overview of the 11 Fitabase Files</title>
+
+<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="css/styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Bellabeat</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    EDA
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_Bellabeat_Data_Profiling_EDA.html">Data Profiling</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Files
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="02_Bellabeat_Files_Overview.html">Files Overview</a>
+    </li>
+    <li>
+      <a href="02_Bellabeat_Files_Overview_FR.html">Vue d’ensemble des fichiers</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    ETL
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="04_Bellabeat_Processus_ETL.html">ETL Process</a>
+    </li>
+    <li>
+      <a href="04_Bellabeat_Processus_ETL_FR.html">Processus ETL</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    ROCCC / Quality
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="03_Bellabeat_ROCCC.html">ROCCC</a>
+    </li>
+    <li>
+      <a href="03_Bellabeat_ROCCC_FR.html">ROCCC (FR)</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="05_Bellabeat_Analyse_Daily_Activity.html">Analysis of daily activity</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_Analyse_Daily_Activity_FR.html">Analyse de l'activité quotidienne</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_DailyHeartrate_Rythm.html">Daily heart rate analysis</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_DailyHeartrate_Rythm_FR.html">Analyse du rythme cardiaque quotidien</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_User_Activity_profiles.html">User activity profiles</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_User_Activity_profiles_FR.html">Profils d'activité des utilisatrices</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Bellabeat – Overview of the 11 Fitabase
+Files</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction" id="toc-introduction">Introduction</a></li>
+<li><a href="#dailyActivity_merged" id="toc-dailyActivity_merged"><span
+class="toc-section-number">1</span> File: dailyActivity_merged.csv</a>
+<ul>
+<li><a href="#r%C3%A9sum%C3%A9-g%C3%A9n%C3%A9ral"
+id="toc-résumé-général"><span class="toc-section-number">1.1</span>
+Résumé général</a></li>
+<li><a href="#structure-des-donn%C3%A9es"
+id="toc-structure-des-données"><span
+class="toc-section-number">1.2</span> Structure des données</a></li>
+<li><a href="#apport-analytique-du-fichier"
+id="toc-apport-analytique-du-fichier"><span
+class="toc-section-number">1.3</span> Apport analytique du
+fichier</a></li>
+</ul></li>
+<li><a href="#heartrate_seconds_merged"
+id="toc-heartrate_seconds_merged"><span
+class="toc-section-number">2</span> File:
+heartrate_seconds_merged.csv</a>
+<ul>
+<li><a href="#r%C3%A9sum%C3%A9-g%C3%A9n%C3%A9ral-1"
+id="toc-résumé-général-1"><span class="toc-section-number">2.1</span>
+Résumé général</a></li>
+<li><a href="#structure-des-donn%C3%A9es-1"
+id="toc-structure-des-données-1"><span
+class="toc-section-number">2.2</span> Structure des données</a></li>
+<li><a href="#apport-analytique-du-fichier-1"
+id="toc-apport-analytique-du-fichier-1"><span
+class="toc-section-number">2.3</span> Apport analytique du
+fichier</a></li>
+</ul></li>
+<li><a href="#hourlyCalories_merged"
+id="toc-hourlyCalories_merged"><span class="toc-section-number">3</span>
+File: hourlyCalories_merged.csv</a>
+<ul>
+<li><a href="#r%C3%A9sum%C3%A9-g%C3%A9n%C3%A9ral-2"
+id="toc-résumé-général-2"><span class="toc-section-number">3.1</span>
+Résumé général</a></li>
+<li><a href="#structure-des-donn%C3%A9es-2"
+id="toc-structure-des-données-2"><span
+class="toc-section-number">3.2</span> Structure des données</a></li>
+<li><a href="#apport-analytique-du-fichier-2"
+id="toc-apport-analytique-du-fichier-2"><span
+class="toc-section-number">3.3</span> Apport analytique du
+fichier</a></li>
+</ul></li>
+<li><a href="#hourlyIntensities_merged"
+id="toc-hourlyIntensities_merged"><span
+class="toc-section-number">4</span> File:
+hourlyIntensities_merged.csv</a>
+<ul>
+<li><a href="#r%C3%A9sum%C3%A9-g%C3%A9n%C3%A9ral-3"
+id="toc-résumé-général-3"><span class="toc-section-number">4.1</span>
+Résumé général</a></li>
+<li><a href="#structure-des-donn%C3%A9es-3"
+id="toc-structure-des-données-3"><span
+class="toc-section-number">4.2</span> Structure des données</a></li>
+<li><a href="#apport-analytique-du-fichier-3"
+id="toc-apport-analytique-du-fichier-3"><span
+class="toc-section-number">4.3</span> Apport analytique du
+fichier</a></li>
+</ul></li>
+<li><a href="#hourlySteps_merged" id="toc-hourlySteps_merged"><span
+class="toc-section-number">5</span> File: hourlySteps_merged.csv</a>
+<ul>
+<li><a href="#r%C3%A9sum%C3%A9-g%C3%A9n%C3%A9ral-4"
+id="toc-résumé-général-4"><span class="toc-section-number">5.1</span>
+Résumé général</a></li>
+<li><a href="#structure-des-donn%C3%A9es-4"
+id="toc-structure-des-données-4"><span
+class="toc-section-number">5.2</span> Structure des données</a></li>
+<li><a href="#apport-analytique-du-fichier-4"
+id="toc-apport-analytique-du-fichier-4"><span
+class="toc-section-number">5.3</span> Apport analytique du
+fichier</a></li>
+</ul></li>
+<li><a href="#minuteCaloriesNarrow_merged"
+id="toc-minuteCaloriesNarrow_merged"><span
+class="toc-section-number">6</span> File:
+minuteCaloriesNarrow_merged.csv</a>
+<ul>
+<li><a href="#r%C3%A9sum%C3%A9-g%C3%A9n%C3%A9ral-5"
+id="toc-résumé-général-5"><span class="toc-section-number">6.1</span>
+Résumé général</a></li>
+<li><a href="#structure-des-donn%C3%A9es-5"
+id="toc-structure-des-données-5"><span
+class="toc-section-number">6.2</span> Structure des données</a></li>
+<li><a href="#apport-analytique-du-fichier-5"
+id="toc-apport-analytique-du-fichier-5"><span
+class="toc-section-number">6.3</span> Apport analytique du
+fichier</a></li>
+</ul></li>
+<li><a href="#minuteIntensitiesNarrow_merged"
+id="toc-minuteIntensitiesNarrow_merged"><span
+class="toc-section-number">7</span> File:
+minuteIntensitiesNarrow_merged.csv</a>
+<ul>
+<li><a href="#r%C3%A9sum%C3%A9-g%C3%A9n%C3%A9ral-6"
+id="toc-résumé-général-6"><span class="toc-section-number">7.1</span>
+Résumé général</a></li>
+<li><a href="#structure-des-donn%C3%A9es-6"
+id="toc-structure-des-données-6"><span
+class="toc-section-number">7.2</span> Structure des données</a></li>
+<li><a href="#apport-analytique-du-fichier-6"
+id="toc-apport-analytique-du-fichier-6"><span
+class="toc-section-number">7.3</span> Apport analytique du
+fichier</a></li>
+</ul></li>
+<li><a href="#minuteMETsNarrow_merged"
+id="toc-minuteMETsNarrow_merged"><span
+class="toc-section-number">8</span> File:
+minuteMETsNarrow_merged.csv</a>
+<ul>
+<li><a href="#r%C3%A9sum%C3%A9-g%C3%A9n%C3%A9ral-7"
+id="toc-résumé-général-7"><span class="toc-section-number">8.1</span>
+Résumé général</a></li>
+<li><a href="#structure-des-donn%C3%A9es-7"
+id="toc-structure-des-données-7"><span
+class="toc-section-number">8.2</span> Structure des données</a></li>
+<li><a href="#apport-analytique-du-fichier-7"
+id="toc-apport-analytique-du-fichier-7"><span
+class="toc-section-number">8.3</span> Apport analytique du
+fichier</a></li>
+</ul></li>
+<li><a href="#minuteSleep_merged" id="toc-minuteSleep_merged"><span
+class="toc-section-number">9</span> File: minuteSleep_merged.csv</a>
+<ul>
+<li><a href="#r%C3%A9sum%C3%A9-g%C3%A9n%C3%A9ral-8"
+id="toc-résumé-général-8"><span class="toc-section-number">9.1</span>
+Résumé général</a></li>
+<li><a href="#structure-des-donn%C3%A9es-8"
+id="toc-structure-des-données-8"><span
+class="toc-section-number">9.2</span> Structure des données</a></li>
+<li><a href="#apport-analytique-du-fichier-8"
+id="toc-apport-analytique-du-fichier-8"><span
+class="toc-section-number">9.3</span> Apport analytique du
+fichier</a></li>
+</ul></li>
+<li><a href="#minuteStepsNarrow_merged"
+id="toc-minuteStepsNarrow_merged"><span
+class="toc-section-number">10</span> File:
+minuteStepsNarrow_merged.csv</a>
+<ul>
+<li><a href="#r%C3%A9sum%C3%A9-g%C3%A9n%C3%A9ral-9"
+id="toc-résumé-général-9"><span class="toc-section-number">10.1</span>
+Résumé général</a></li>
+<li><a href="#structure-des-donn%C3%A9es-9"
+id="toc-structure-des-données-9"><span
+class="toc-section-number">10.2</span> Structure des données</a></li>
+<li><a href="#apport-analytique-du-fichier-9"
+id="toc-apport-analytique-du-fichier-9"><span
+class="toc-section-number">10.3</span> Apport analytique du
+fichier</a></li>
+</ul></li>
+<li><a href="#weightLogInfo_merged" id="toc-weightLogInfo_merged"><span
+class="toc-section-number">11</span> File: weightLogInfo_merged.csv</a>
+<ul>
+<li><a href="#r%C3%A9sum%C3%A9-g%C3%A9n%C3%A9ral-10"
+id="toc-résumé-général-10"><span class="toc-section-number">11.1</span>
+Résumé général</a></li>
+<li><a href="#structure-des-donn%C3%A9es-10"
+id="toc-structure-des-données-10"><span
+class="toc-section-number">11.2</span> Structure des données</a></li>
+<li><a href="#apport-analytique-du-fichier-10"
+id="toc-apport-analytique-du-fichier-10"><span
+class="toc-section-number">11.3</span> Apport analytique du
+fichier</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="introduction" class="section level1 unnumbered">
+<h1 class="unnumbered">Introduction</h1>
+<p>Ce rapport présente une vue d’ensemble structurée des <strong>11
+fichiers de données Fitabase/Bellabeat</strong> collectés entre le
+<strong>03/12/2016</strong> et le <strong>04/11/2016</strong>.<br />
+Il a pour objectif de documenter, pour chaque fichier :</p>
+<ul>
+<li>La <strong>structure des données</strong> (format large/long,
+granularité temporelle, variables clés, population couverte) ;</li>
+<li>Les <strong>forces et limites</strong> du jeu de données (taille de
+l’échantillon, complétude, cohérence, biais potentiels) ;</li>
+<li>Le <strong>potentiel analytique</strong> pour un projet d’analytique
+de données (EDA, modélisation, segmentation, analyses temporelles).</li>
+</ul>
+<table>
+<caption>Overview of the 11 Bellabeat data files</caption>
+<colgroup>
+<col width="25%" />
+<col width="16%" />
+<col width="24%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">File</th>
+<th align="center">Temporal granularity</th>
+<th align="center">Data type</th>
+<th align="left">Key variables</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">dailyActivity_merged.csv</td>
+<td align="center">Daily</td>
+<td align="center">Overall activity</td>
+<td align="left">Daily steps, calories, intensity, distance</td>
+</tr>
+<tr class="even">
+<td align="left">heartrate_seconds_merged.csv</td>
+<td align="center">Second</td>
+<td align="center">Heart rate</td>
+<td align="left">bpm, timestamp</td>
+</tr>
+<tr class="odd">
+<td align="left">hourlyCalories_merged.csv</td>
+<td align="center">Hourly</td>
+<td align="center">Energy expenditure</td>
+<td align="left">Calories per hour</td>
+</tr>
+<tr class="even">
+<td align="left">hourlyIntensities_merged.csv</td>
+<td align="center">Hourly</td>
+<td align="center">Activity intensity</td>
+<td align="left">Total, light, moderate, very active intensity</td>
+</tr>
+<tr class="odd">
+<td align="left">hourlySteps_merged.csv</td>
+<td align="center">Hourly</td>
+<td align="center">Walking activity</td>
+<td align="left">Steps per hour</td>
+</tr>
+<tr class="even">
+<td align="left">minuteCaloriesNarrow_merged.csv</td>
+<td align="center">Minute</td>
+<td align="center">Fine-grained energy expenditure</td>
+<td align="left">Calories per minute</td>
+</tr>
+<tr class="odd">
+<td align="left">minuteIntensitiesNarrow_merged.csv</td>
+<td align="center">Minute</td>
+<td align="center">Activity intensity</td>
+<td align="left">Intensity per minute</td>
+</tr>
+<tr class="even">
+<td align="left">minuteMETsNarrow_merged.csv</td>
+<td align="center">Minute</td>
+<td align="center">Expenditure / effort (METs)</td>
+<td align="left">METs</td>
+</tr>
+<tr class="odd">
+<td align="left">minuteSleep_merged.csv</td>
+<td align="center">Minute</td>
+<td align="center">Sleep (stages)</td>
+<td align="left">Sleep level, timestamp</td>
+</tr>
+<tr class="even">
+<td align="left">minuteStepsNarrow_merged.csv</td>
+<td align="center">Minute</td>
+<td align="center">Steps per minute</td>
+<td align="left">Steps per minute</td>
+</tr>
+<tr class="odd">
+<td align="left">weightLogInfo_merged.csv</td>
+<td align="center">Event / manual entry</td>
+<td align="center">Weight and BMI</td>
+<td align="left">Weight, BMI, is_manual</td>
+</tr>
+</tbody>
+</table>
+<p>Ce document sert de <strong>référence technique</strong> pour
+orienter les travaux d’exploration des données (EDA), de préparation, de
+visualisation et d’analyse plus avancée sur le dataset Bellabeat.</p>
+</div>
+<div id="dailyActivity_merged" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> File:
+dailyActivity_merged.csv</h1>
+<p><a href="01_Bellabeat_Data_Profiling_EDA.html#dailyActivity_merged">→
+Link to profiling report</a></p>
+<div id="résumé-général" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Résumé général</h2>
+<p>Le fichier présente des mesures quotidiennes d’activité au format
+large, avec une ligne par utilisateur et par date. L’ensemble est
+complet structurellement, sans valeurs manquantes. Le fichier est
+exploitable pour une EDA et l’analyse de tendances générales.</p>
+<p>Il pourrait y avoir quelques incohérences potentielles: minutes
+sédentaires bloquées à 1 440, minutes actives très élevées, distances
+actives atypiques, forte concentration de valeurs nulles.</p>
+</div>
+<div id="structure-des-données" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Structure des
+données</h2>
+<p>Le fichier est <strong>au format large</strong>. La présence d’une
+seule ligne par jour et par personne, avec de nombreux attributs
+simultanés, est caractéristique du <strong>wide format</strong>.</p>
+<p>Chaque ligne représente <strong>un utilisateur donné</strong>
+(<code>Id</code>) <strong>pour une journée</strong>
+(<code>ActivityDate</code>), et toutes les mesures quotidiennes sont
+placées <strong>en colonnes</strong> :</p>
+<ul>
+<li><code>TotalSteps</code>, <code>TotalDistance</code>,
+<code>TrackerDistance</code></li>
+<li>Distances par niveau d’activité</li>
+<li>Minutes actives / sédentaires</li>
+<li><code>Calories</code></li>
+</ul>
+</div>
+<div id="apport-analytique-du-fichier" class="section level2"
+number="1.3">
+<h2><span class="header-section-number">1.3</span> Apport analytique du
+fichier</h2>
+<p>Ce fichier est <strong>central</strong> pour répondre aux questions
+clés d’un analyste de données :</p>
+<p><strong>Comprendre l’activité physique globale</strong></p>
+<ul>
+<li>Nombre de pas, distances quotidiennes, intensité globale.</li>
+</ul>
+<p><strong>Étudier les niveaux d’activité</strong></p>
+<ul>
+<li>Minutes dans chaque zone active → utile pour segmenter les
+comportements.</li>
+</ul>
+<p><strong>Analyser les calories dépensées</strong></p>
+<ul>
+<li>Permet de relier dépense énergétique ↔︎ activité.</li>
+</ul>
+<p><strong>Détecter des tendances temporelles</strong></p>
+<p>Avec <code>ActivityDate</code>, on peut analyser :</p>
+<ul>
+<li>L’évolution sur la semaine,</li>
+<li>Une éventuelle saisonnalité,</li>
+<li>Les différences de comportements en semaine vs week-end.</li>
+</ul>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+<div id="heartrate_seconds_merged" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> File:
+heartrate_seconds_merged.csv</h1>
+<p><a
+href="01_Bellabeat_Data_Profiling_EDA.html#heartrate_seconds_merged">→
+Link to profiling report</a></p>
+<div id="résumé-général-1" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Résumé général</h2>
+<p>Le fichier est structuré en format long, chaque ligne correspondant à
+une mesure par seconde avec un identifiant, un horodatage et une valeur
+de fréquence cardiaque. L’échantillon est restreint à quatorze
+utilisatrices, générant plus d’un demi-million d’enregistrements.</p>
+<p>Les données sont brutes et présentent une couverture temporelle
+inégale selon les profils. Les valeurs sont complètes et plausibles,
+mais nécessitent des contrôles d’intégrité.</p>
+<p>Ce jeu de données permet d’analyser finement les variations de
+fréquence cardiaque, de réaliser des agrégations temporelles et de
+croiser les mesures avec l’activité quotidienne.</p>
+</div>
+<div id="structure-des-données-1" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Structure des
+données</h2>
+<p>Le fichier est au <strong>format long</strong>.</p>
+<p>Chaque ligne représente <strong>une mesure de fréquence cardiaque par
+seconde</strong> pour un utilisateur :</p>
+<ul>
+<li><code>Id</code> : identifiant de l’utilisatrice (14
+différentes),</li>
+<li><code>Time</code> : timestamp (date + heure + seconde),</li>
+<li><code>Value</code> : fréquence cardiaque (36 à 185 bpm).</li>
+</ul>
+<p>Cela génère un volume très important : <strong>510 597 timestamps
+distincts</strong>.</p>
+<p>Ce format long est adapté pour le suivi temporel fin, pour calculer
+des agrégations (par minute / heure / jour), ou pour détecter des
+schémas d’activité ou de repos.</p>
+</div>
+<div id="apport-analytique-du-fichier-1" class="section level2"
+number="2.3">
+<h2><span class="header-section-number">2.3</span> Apport analytique du
+fichier</h2>
+<p><strong>Comprendre la physiologie quotidienne</strong></p>
+<p>Les variations de fréquence cardiaque permettent d’observer :</p>
+<ul>
+<li>Les cycles veille / sommeil,</li>
+<li>Les pics d’activité,</li>
+<li>La récupération post-effort,</li>
+<li>Les périodes de repos.</li>
+</ul>
+<p><strong>Complément indispensable des données d’activité</strong></p>
+<p>En croisant avec <code>dailyActivity_merged.csv</code>, on peut
+analyser :</p>
+<ul>
+<li>La relation <em>intensité d’activité ↔︎ fréquence
+cardiaque</em>,</li>
+<li>La cohérence physiologique des niveaux d’activité mesurés.</li>
+</ul>
+<p><strong>Travail temporel</strong></p>
+<p>Le dataset permet :</p>
+<ul>
+<li>Des agrégations par minute / heure,</li>
+<li>La construction de séries temporelles,</li>
+<li>Des analyses circadiennes (rythme biologique journalier).</li>
+</ul>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+<div id="hourlyCalories_merged" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> File:
+hourlyCalories_merged.csv</h1>
+<p><a
+href="01_Bellabeat_Data_Profiling_EDA.html#hourlyCalories_merged">→ Link
+to profiling report</a></p>
+<div id="résumé-général-2" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Résumé général</h2>
+<p>Le fichier est structuré en format long, chaque ligne représentant
+une dépense calorique horaire associée à un identifiant et à un
+horodatage. L’échantillon comprend 34 utilisatrices pour plus de 700
+timestamps distincts.</p>
+<p>La couverture horaire propre à chaque profil. Les contrôles
+d’intégrité portent sur l’unicité du couple
+<code>Id</code>–<code>ActivityHour</code>, la cohérence des valeurs, la
+continuité temporelle et le parsing correct des horodatages.</p>
+<p>Ce jeu de données permet d’étudier les rythmes journaliers, les pics
+de dépense énergétique et les comportements horaires, notamment en
+croisant avec les pas ou la fréquence cardiaque.</p>
+</div>
+<div id="structure-des-données-2" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Structure des
+données</h2>
+<p>Le fichier est en <strong>format long</strong>.</p>
+<p>Chaque ligne correspond à :</p>
+<ul>
+<li>Une <strong>utilisatrice</strong> (<code>Id</code>),</li>
+<li>Une <strong>heure précise</strong> (<code>ActivityHour</code>,
+chaîne de caractères à convertir en datetime),</li>
+<li>Les <strong>calories brûlées durant cette heure</strong>
+(<code>Calories</code>).</li>
+</ul>
+<p>Caractéristiques :</p>
+<ul>
+<li>34 utilisatrices distinctes,</li>
+<li>755 timestamps horaires distincts,</li>
+<li>444 valeurs distinctes de calories.</li>
+</ul>
+<p>Ce format long est optimal pour des analyses temporelles par heure :
+tendances journalières, pics d’activité, comportements horaires,
+etc.</p>
+</div>
+<div id="apport-analytique-du-fichier-2" class="section level2"
+number="3.3">
+<h2><span class="header-section-number">3.3</span> Apport analytique du
+fichier</h2>
+<p>Ces données sont très utiles pour :</p>
+<p><strong>Analyser les rythmes journaliers</strong></p>
+<ul>
+<li>Pics de dépense calorique,</li>
+<li>Habitudes d’activité par heure,</li>
+<li>Comparaison semaine / week-end.</li>
+</ul>
+<p><strong>Croiser avec d’autres fichiers</strong></p>
+<p>Avec <code>hourlySteps_merged.csv</code> :</p>
+<ul>
+<li><code>Steps</code> → effort physique,</li>
+<li><code>Calories</code> → dépense énergétique.</li>
+</ul>
+<p>Avec <code>heartrate_seconds_merged.csv</code> :</p>
+<ul>
+<li>Croiser fréquence cardiaque ↔︎ calories heure par heure,</li>
+<li>Détecter des corrélations entre fréquence cardiaque et calories
+brûlées.</li>
+</ul>
+<p><strong>Identifier les comportements</strong></p>
+<ul>
+<li>Utilisatrices sédentaires vs actives,</li>
+<li>Analyse de la charge d’activité dans la journée,</li>
+<li>Création de profils de dépense énergétique (regroupement des
+utilisatrices selon leur niveau d’activité quotidienne).</li>
+</ul>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+<div id="hourlyIntensities_merged" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> File:
+hourlyIntensities_merged.csv</h1>
+<p><a
+href="01_Bellabeat_Data_Profiling_EDA.html#hourlyIntensities_merged">→
+Link to profiling report</a></p>
+<div id="résumé-général-3" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Résumé général</h2>
+<p>Le fichier est structuré en format long, chaque enregistrement
+associant un identifiant, un horodatage horaire et deux mesures
+d’intensité agrégées.</p>
+<p>L’ensemble est complet, sans valeurs manquantes, et repose sur un
+score minute par minute compilé sur une heure. Les valeurs, concentrées
+autour de niveaux faibles, reflètent une activité majoritairement
+sédentaire ponctuée de quelques épisodes plus soutenus.</p>
+<p>Les vérifications recommandées portent sur l’unicité des couples
+<code>Id</code>–<code>ActivityHour</code>, la cohérence entre
+<code>TotalIntensity</code> et <code>AverageIntensity</code>, la
+continuité temporelle et l’identification de valeurs extrêmes.</p>
+<p>Le fichier permet d’analyser les rythmes journaliers, de détecter les
+comportements sédentaires ou actifs et d’établir des corrélations avec
+les pas, les calories ou la fréquence cardiaque.</p>
+</div>
+<div id="structure-des-données-3" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Structure des
+données</h2>
+<p>Le fichier est en <strong>format long</strong>.</p>
+<p>Chaque ligne représente :</p>
+<ul>
+<li>Une <strong>utilisatrice</strong> (<code>Id</code>, 34
+personnes),</li>
+<li>Une <strong>heure précise</strong> (<code>ActivityHour</code>, texte
+à convertir en datetime),</li>
+<li>Une <strong>intensité totale de l’activité</strong> durant cette
+heure (<code>TotalIntensity</code>),</li>
+<li>L’intensité <strong>moyenne par minute</strong>
+(<code>AverageIntensity</code>).</li>
+</ul>
+<p>Le profil de colonnes montre :</p>
+<ul>
+<li><code>TotalIntensity</code> varie de <strong>0 à 180</strong>,</li>
+<li><code>AverageIntensity</code> varie de <strong>0 à 3</strong>.</li>
+</ul>
+<p>Le ratio 180 / 3 = 60 indique que <strong>Fitbit encode l’intensité
+minute par minute</strong>, probablement sur une échelle 0–3, puis
+agrège sur 60 minutes.</p>
+<p>Le fichier donne donc une <strong>mesure agrégée de l’effort physique
+horaire</strong>.</p>
+</div>
+<div id="apport-analytique-du-fichier-3" class="section level2"
+number="4.3">
+<h2><span class="header-section-number">4.3</span> Apport analytique du
+fichier</h2>
+<p>Ce fichier est central dans l’analyse comportementale horaire :</p>
+<p><strong>Comprendre les patterns journaliers d’activité</strong></p>
+<ul>
+<li>Heures les plus actives,</li>
+<li>Creux d’activité,</li>
+<li>Routines du matin ou du soir.</li>
+</ul>
+<p><strong>Identifier les comportements sédentaires</strong></p>
+<ul>
+<li>Grand nombre d’heures avec <code>AverageIntensity = 0</code> → forte
+sédentarité.</li>
+</ul>
+<p><strong>Croiser les données avec :</strong></p>
+<ul>
+<li><strong><code>hourlySteps_merged.csv</code></strong> → intensité vs
+nombre de pas,</li>
+<li><strong><code>hourlyCalories_merged.csv</code></strong> → intensité
+vs dépense énergétique,</li>
+<li><strong><code>heartrate_seconds_merged.csv</code></strong> →
+intensité vs fréquence cardiaque (corrélation physiologique).</li>
+</ul>
+<p><strong>Segmentation des utilisatrices</strong></p>
+<p>Construction de profils :</p>
+<ul>
+<li>Utilisatrices très actives : heures intenses régulières,</li>
+<li>Utilisatrices modérées : activité intermittente,</li>
+<li>Utilisatrices sédentaires : intensité quasi nulle.</li>
+</ul>
+<p><strong>Support aux analyses de rythmes circadiens</strong></p>
+<p>Identifier :</p>
+<ul>
+<li>Pics d’énergie,</li>
+<li>Périodes de repos,</li>
+<li>Rythme veille/sommeil indirect (faible intensité la nuit).</li>
+</ul>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+<div id="hourlySteps_merged" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> File:
+hourlySteps_merged.csv</h1>
+<p><a href="01_Bellabeat_Data_Profiling_EDA.html#hourlySteps_merged">→
+Link to profiling report</a></p>
+<div id="résumé-général-4" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Résumé général</h2>
+<p>Le fichier est structuré en format long, chaque enregistrement
+correspondant à un identifiant, un horodatage horaire et un nombre de
+pas. L’ensemble est complet, sans valeurs manquantes, et présente une
+couverture similaire aux autres jeux horaires, avec une distribution
+très concentrée sur de faibles volumes de pas et quelques pics
+d’activité.</p>
+<p>Les vérifications d’intégrité recommandées portent sur l’unicité des
+couples <code>Id</code>–<code>ActivityHour</code>, la continuité des
+séries, l’identification des valeurs extrêmes et la cohérence avec les
+calories et l’intensité.</p>
+<p>Ce fichier est utile pour l’analyse des routines horaires, la
+détection de comportements sédentaires et la segmentation des
+utilisatrices, surtout lorsqu’il est croisé avec les intensités, les
+calories ou la fréquence cardiaque.</p>
+</div>
+<div id="structure-des-données-4" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Structure des
+données</h2>
+<p>Le fichier est en <strong>format long</strong>.</p>
+<p>Chaque ligne correspond à :</p>
+<ul>
+<li>Un <strong>Id</strong> (utilisatrice),</li>
+<li>Une <strong>heure précise</strong> (<code>ActivityHour</code>, au
+format texte),</li>
+<li>Un <strong>nombre de pas réalisés durant cette heure</strong>
+(<code>StepTotal</code>).</li>
+</ul>
+<p>Caractéristiques issues du rapport :</p>
+<ul>
+<li>34 utilisatrices, comme les autres fichiers horaires,</li>
+<li>755 timestamps horaires distincts,</li>
+<li>Aucune valeur manquante.</li>
+</ul>
+<p>Ce format évènementiel « une ligne = une heure » est optimal pour
+analyser les comportements journaliers.</p>
+</div>
+<div id="apport-analytique-du-fichier-4" class="section level2"
+number="5.3">
+<h2><span class="header-section-number">5.3</span> Apport analytique du
+fichier</h2>
+<p>Ce fichier est central pour comprendre les comportements
+horaires.</p>
+<p><strong>Analyse des routines quotidiennes</strong></p>
+<ul>
+<li>Pics d’activité le matin ou le soir,</li>
+<li>Marche durant la pause de midi,</li>
+<li>Périodes de sédentarité prolongée.</li>
+</ul>
+<p><strong>Segmentation des profils d’utilisatrices</strong></p>
+<ul>
+<li>Très actives,</li>
+<li>Modérément actives,</li>
+<li>Sédentaires.</li>
+</ul>
+<p><strong>Croisement avec :</strong></p>
+<ul>
+<li><strong><code>hourlyIntensities_merged.csv</code></strong> →
+comprendre si les pas correspondent à des activités intenses ou
+légères,</li>
+<li><strong><code>hourlyCalories_merged.csv</code></strong> → calories
+brûlées par heure selon les pas,</li>
+<li><strong><code>dailyActivity_merged.csv</code></strong> →
+reconstituer le total journalier à partir de l’horaire.</li>
+</ul>
+<p><strong>Préparation à des visualisations structurantes</strong></p>
+<ul>
+<li>Heatmaps hebdomadaires (jours × heures),</li>
+<li>Graphiques de tendance horaire,</li>
+<li>Analyse circadienne complète.</li>
+</ul>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+<div id="minuteCaloriesNarrow_merged" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> File:
+minuteCaloriesNarrow_merged.csv</h1>
+<p><a
+href="01_Bellabeat_Data_Profiling_EDA.html#minuteCaloriesNarrow_merged">→
+Link to profiling report</a></p>
+<div id="résumé-général-5" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> Résumé général</h2>
+<p>Le fichier contient des données minute par minute pour 34
+utilisatrices, soit environ 45 300 enregistrements structurés en format
+long. Chaque ligne associe un identifiant, un horodatage et une
+estimation calorique. Les valeurs sont complètes, sans données
+manquantes.</p>
+<p>Les calories varient de 0 à 23 kcal/min, avec une médiane de 1,22.
+Les valeurs extrêmes peuvent indiquer une activité intense.</p>
+<p>Le format long facilite les analyses temporelles : séries minute par
+minute, agrégations horaires ou journalières, détection de pics et
+comparaison entre utilisatrices. L’agrégation améliore la fiabilité, car
+les mesures minute-level sont instables.</p>
+<p>Des vérifications comme l’unicité du couple <code>Id</code> +
+timestamp, la continuité temporelle et l’examen des valeurs extrêmes
+sont nécessaires.</p>
+<p>Croisé avec <code>minuteIntensitiesNarrow</code>,
+<code>minuteStepsNarrow</code>, <code>minuteMETsNarrow</code> ou les
+fichiers horaires/journaliers, il permet une analyse complète des
+comportements et de la dépense énergétique.</p>
+</div>
+<div id="structure-des-données-5" class="section level2" number="6.2">
+<h2><span class="header-section-number">6.2</span> Structure des
+données</h2>
+<p>Le fichier est en <strong>format long</strong> (narrow) : <strong>1
+ligne = 1 minute d’activité pour une utilisatrice</strong>.</p>
+<p>Il contient trois colonnes :</p>
+<ul>
+<li><code>Id</code>,</li>
+<li>Horodatage minute,</li>
+<li><code>Calories</code>.</li>
+</ul>
+<p>Le fichier couvre 34 utilisatrices sur un mois, avec <strong>45 300
+minutes horodatées</strong>.</p>
+<p>La colonne <code>Calories</code> représente la <strong>dépense
+énergétique estimée chaque minute</strong> par Fitbit.</p>
+<p>Statistiques issues du rapport :</p>
+<ul>
+<li>Min = 0,</li>
+<li>Max = 23.01,</li>
+<li>Moyenne = 1.57,</li>
+<li>Médiane = 1.22.</li>
+</ul>
+<p><strong>Interprétation :</strong></p>
+<ul>
+<li>Une minute complètement inactive → ~ 0 à 1 kcal,</li>
+<li>Une activité modérée → ~ 2 à 5 kcal/min,</li>
+<li>Une activité intense → ~ 6 à 10 kcal/min,</li>
+<li>La valeur maximale de 23 kcal/min suggère un effort très intense (à
+interpréter avec prudence).</li>
+</ul>
+</div>
+<div id="apport-analytique-du-fichier-5" class="section level2"
+number="6.3">
+<h2><span class="header-section-number">6.3</span> Apport analytique du
+fichier</h2>
+<p><strong>Analyse de l’effort minute par minute</strong></p>
+<ul>
+<li>Détecter les pics d’activité,</li>
+<li>Repérer les périodes d’activité intense,</li>
+<li>Analyser les cycles jour/nuit.</li>
+</ul>
+<p><strong>Agrégation à des niveaux supérieurs</strong></p>
+<ul>
+<li>Calories par heure (vérification contre
+<code>hourlyCalories_merged.csv</code>),</li>
+<li>Calories par jour pour valider
+<code>dailyActivity_merged.csv</code>.</li>
+</ul>
+<p><strong>Analyse comportementale fine</strong></p>
+<ul>
+<li>Routine quotidienne (temps actif vs inactif),</li>
+<li>Comparaison du style de vie entre utilisatrices,</li>
+<li>Construction d’indicateurs dérivés (calories actives quotidiennes,
+charge d’entraînement, etc.).</li>
+</ul>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+<div id="minuteIntensitiesNarrow_merged" class="section level1"
+number="7">
+<h1><span class="header-section-number">7</span> File:
+minuteIntensitiesNarrow_merged.csv</h1>
+<p><a
+href="01_Bellabeat_Data_Profiling_EDA.html#minuteIntensitiesNarrow_merged">→
+Link to profiling report</a></p>
+<div id="résumé-général-6" class="section level2" number="7.1">
+<h2><span class="header-section-number">7.1</span> Résumé général</h2>
+<p>Le fichier fournit des mesures d’intensité minute par minute pour 34
+utilisatrices, en format long, sans valeurs manquantes. Chaque ligne
+associe un identifiant, un horodatage et un score d’intensité.</p>
+<p>L’échelle comprend quatre niveaux (0 à 3). La distribution est très
+déséquilibrée, dominée par les intensités nulles, ce qui nécessite de
+vérifier la continuité temporelle et la cohérence des minutes
+actives.</p>
+<p>Le dataset est propre et structuré. Il permet d’analyser les
+transitions d’activité, les patterns circadiens et les minutes actives,
+surtout via l’agrégation quotidienne ou horaire. Croisé avec
+<code>minuteCaloriesNarrow</code>, <code>minuteMETsNarrow</code> ou
+<code>dailyActivity_merged.csv</code>, il devient utile pour comprendre
+les comportements et identifier les séquences actives ou
+sédentaires.</p>
+</div>
+<div id="structure-des-données-6" class="section level2" number="7.2">
+<h2><span class="header-section-number">7.2</span> Structure des
+données</h2>
+<p>Le fichier est en <strong>format long</strong> (narrow format),
+c’est-à-dire : <strong>une ligne = 1 minute de mesure pour une
+utilisatrice</strong>.</p>
+<p>Le fichier n’a <strong>aucune valeur manquante</strong>, comme les
+autres fichiers minute.</p>
+<p>La variable <code>Intensity</code> suit une échelle Fitbit minute par
+minute :</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">Intensité</th>
+<th align="left">Signification</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">0</td>
+<td align="left">Sédentaire / repos</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="left">Activité légère</td>
+</tr>
+<tr class="odd">
+<td align="center">2</td>
+<td align="left">Activité modérée</td>
+</tr>
+<tr class="even">
+<td align="center">3</td>
+<td align="left">Activité intense</td>
+</tr>
+</tbody>
+</table>
+<p>C’est un score dérivé, basé sur les mouvements.</p>
+</div>
+<div id="apport-analytique-du-fichier-6" class="section level2"
+number="7.3">
+<h2><span class="header-section-number">7.3</span> Apport analytique du
+fichier</h2>
+<p>Le fichier <code>minuteIntensitiesNarrow_merged.csv</code> est un des
+plus informatifs pour les analyses temporelles fines.</p>
+<p><strong>Identifier les comportements minute à minute</strong></p>
+<ul>
+<li>Transitions repos → activité,</li>
+<li>Activité sporadique vs activité continue,</li>
+<li>Agitation nocturne (corrélations possibles avec
+<code>minuteSleep_merged.csv</code>).</li>
+</ul>
+<p><strong>Détection des patterns d’activité</strong></p>
+<ul>
+<li>Analyse circadienne à haute résolution,</li>
+<li>Heatmaps minute par minute,</li>
+<li>Analyse des pics d’intensité.</li>
+</ul>
+<p><strong>Construction d’indicateurs dérivés</strong></p>
+<ul>
+<li>Total de minutes actives par jour,</li>
+<li>Ratio minutes actives / minutes sédentaires,</li>
+<li>Durée des épisodes actifs consécutifs.</li>
+</ul>
+<p><strong>Croisements</strong></p>
+<ul>
+<li>Avec <code>minuteCaloriesNarrow_merged.csv</code> → intensité ↔︎
+dépense énergétique,</li>
+<li>Avec <code>minuteMETsNarrow_merged.csv</code> → intensité ↔︎
+équivalent métabolique,</li>
+<li>Avec <code>dailyActivity_merged.csv</code> → consolidation
+journalière,</li>
+<li>Avec <code>hourlyIntensities_merged.csv</code> → validation de
+l’agrégation horaire.</li>
+</ul>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+<div id="minuteMETsNarrow_merged" class="section level1" number="8">
+<h1><span class="header-section-number">8</span> File:
+minuteMETsNarrow_merged.csv</h1>
+<p><a
+href="01_Bellabeat_Data_Profiling_EDA.html#minuteMETsNarrow_merged">→
+Link to profiling report</a></p>
+<div id="résumé-général-7" class="section level2" number="8.1">
+<h2><span class="header-section-number">8.1</span> Résumé général</h2>
+<p>Le fichier regroupe des mesures minute par minute pour 34
+utilisatrices, sans valeurs manquantes, avec trois colonnes
+(<code>Id</code>, horodatage, <code>METs</code>). Les données couvrent
+environ 45 300 minutes et présentent 141 valeurs distinctes pour les
+METs.</p>
+<p>Le MET (Metabolic Equivalent of Task) est normalement une unité
+physiologique :</p>
+<ul>
+<li><strong>1 MET</strong> = métabolisme de base (repos),</li>
+<li><strong>3 METs</strong> = marche modérée,</li>
+<li><strong>6 METs</strong> = course légère,</li>
+<li><strong>&gt; 10 METs</strong> = activité intense.</li>
+</ul>
+<p>Les statistiques montrent une distribution très asymétrique, avec une
+médiane à 10 et des valeurs extrêmes pouvant atteindre 189. Les METs
+élevés traduisent essentiellement des pics d’activité, mais certains
+niveaux sont physiologiquement impossibles.</p>
+<p>Le format long permet des analyses temporelles détaillées : détection
+des variations minute par minute, construction de profils journaliers,
+agrégation en MET-minutes et repérage des épisodes d’activité. Les
+limitations incluent les surévaluations possibles et l’incohérence avec
+les METs standards.</p>
+</div>
+<div id="structure-des-données-7" class="section level2" number="8.2">
+<h2><span class="header-section-number">8.2</span> Structure des
+données</h2>
+<p>Le fichier est en <strong>format long</strong>, avec une granularité
+<strong>minute par minute</strong>.</p>
+<p>Chaque ligne représente la valeur <code>METs</code> (Metabolic
+Equivalent of Task) estimée par Fitbit pour une minute d’activité d’une
+utilisatrice.</p>
+<p>Statistiques issues du rapport :</p>
+<ul>
+<li>Min = 0,</li>
+<li>Max = 189,</li>
+<li>Moyenne = 14.23,</li>
+<li>Médiane = 10.</li>
+</ul>
+<p>Un MET supérieur à 20 est déjà physiologiquement improbable. Un MET à
+189 est impossible physiologiquement.</p>
+<p>Le fichier est propre, complet, et couvre 34 utilisatrices sur un
+mois (~ 45k minutes).</p>
+</div>
+<div id="apport-analytique-du-fichier-7" class="section level2"
+number="8.3">
+<h2><span class="header-section-number">8.3</span> Apport analytique du
+fichier</h2>
+<ul>
+<li>Calcul des <strong>zones d’effort</strong> (repos, léger, modéré,
+intense) à partir des METs (en filtrant ou plafonnant les valeurs
+extrêmes).</li>
+<li>Comparaison entre utilisatrices ou entre journées sur la base d’un
+indicateur physiologique standardisé (METs).</li>
+<li>Validation de la cohérence entre METs, intensité, pas et
+calories.</li>
+<li>Construction d’indicateurs comme les MET-minutes journaliers (somme
+des METs sur une journée), utiles pour des recommandations d’activité
+physique.</li>
+</ul>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+<div id="minuteSleep_merged" class="section level1" number="9">
+<h1><span class="header-section-number">9</span> File:
+minuteSleep_merged.csv</h1>
+<p><a href="01_Bellabeat_Data_Profiling_EDA.html#minuteSleep_merged">→
+Link to profiling report</a></p>
+<div id="résumé-général-8" class="section level2" number="9.1">
+<h2><span class="header-section-number">9.1</span> Résumé général</h2>
+<p>Ce fichier est particulier dans le dataset Bellabeat/Fitbit car il
+concerne <strong>le sommeil minute par minute</strong>, avec une
+granularité fine. Il contient des données en format long : une ligne par
+minute et par utilisatrice. Il comporte 4 colonnes sans valeurs
+manquantes : <code>Id</code> (23 utilisatrices seulement),
+<code>date</code> (timestamp minute à convertir), <code>value</code>
+(état de sommeil codé 1 = asleep, 2 = restless, 3 = awake) et
+<code>logId</code> (identifiant de session de sommeil/nuit).</p>
+<p>Les données sont organisées par sessions de sommeil via
+<code>logId</code>, ce qui permet de reconstruire chaque nuit et de
+suivre, minute par minute, les transitions entre sommeil, agitation et
+éveil. Elles sont adaptées aux analyses temporelles fines (structure
+interne du sommeil, fragmentation, cycles veille/sommeil).</p>
+<p>Le fichier permet de calculer des indicateurs clés (durée totale de
+sommeil, temps éveillé/restless, nombre de réveils, efficacité du
+sommeil, heures de coucher/lever) et d’étudier les comportements
+nocturnes et leur variabilité.</p>
+<p>Le croisement avec les fichiers d’activité (steps, intensities,
+calories) ouvre la voie à des analyses sommeil ↔︎ activité physique.</p>
+</div>
+<div id="structure-des-données-8" class="section level2" number="9.2">
+<h2><span class="header-section-number">9.2</span> Structure des
+données</h2>
+<p>Le fichier est en <strong>format long</strong>, comme tous les
+fichiers minute-by-minute.</p>
+<ul>
+<li>Une ligne = 1 minute de mesure de sommeil pour une
+utilisatrice.</li>
+</ul>
+<p>Seulement <strong>23 utilisatrices</strong> ont des données de
+sommeil (moins que dans les fichiers d’activité et de pas).</p>
+<p>Les variables importantes :</p>
+<ul>
+<li><p><code>Id</code> : identifiant de l’utilisatrice,</p></li>
+<li><p><code>date</code> : timestamp minute (à convertir en
+<code>POSIXct</code>),</p></li>
+<li><p><code>value</code> :</p>
+<ul>
+<li>1 → <em>Asleep</em>,</li>
+<li>2 → <em>Restless</em>,</li>
+<li>3 → <em>Awake</em>,</li>
+</ul></li>
+<li><p><code>logId</code> : identifiant de session de sommeil (permet de
+regrouper les nuits).</p></li>
+</ul>
+<p>Ce fichier permet d’analyser <strong>la structure interne du
+sommeil</strong>, minute par minute.</p>
+</div>
+<div id="apport-analytique-du-fichier-8" class="section level2"
+number="9.3">
+<h2><span class="header-section-number">9.3</span> Apport analytique du
+fichier</h2>
+<p>Ce fichier est riche pour comprendre <strong>la qualité du
+sommeil</strong>.</p>
+<p><strong>Analyser la structure du sommeil</strong></p>
+<ul>
+<li>Périodes “asleep”, “restless”, “awake” minute par minute,</li>
+<li>Fragmentation du sommeil,</li>
+<li>Cycles veille/sommeil.</li>
+</ul>
+<p><strong>Calculer les indicateurs clés</strong></p>
+<ul>
+<li>Durée totale de sommeil,</li>
+<li>Durée éveillé / restless,</li>
+<li>Nombre de réveils nocturnes,</li>
+<li>Efficacité du sommeil (%),</li>
+<li>Heures d’endormissement / réveil.</li>
+</ul>
+<p><strong>Étudier les comportements</strong></p>
+<ul>
+<li>Heures de coucher et lever,</li>
+<li>Variabilité d’une nuit à l’autre,</li>
+<li>Impact de l’activité physique sur la qualité du sommeil
+(corrélations possibles avec steps/intensities/calories).</li>
+</ul>
+<p>Le fichier <code>minuteSleep_merged.csv</code> est bien adapté à une
+étude exploratoire, car sa granularité minute par minute permet
+d’observer les cycles nocturnes, les réveils, les phases de sommeil
+agité ou éveillé, et d’analyser la qualité et la régularité du sommeil
+des utilisatrices.</p>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+<div id="minuteStepsNarrow_merged" class="section level1" number="10">
+<h1><span class="header-section-number">10</span> File:
+minuteStepsNarrow_merged.csv</h1>
+<p><a
+href="01_Bellabeat_Data_Profiling_EDA.html#minuteStepsNarrow_merged">→
+Link to profiling report</a></p>
+<div id="résumé-général-9" class="section level2" number="10.1">
+<h2><span class="header-section-number">10.1</span> Résumé général</h2>
+<p>Le fichier contient environ 1,4 million de lignes structurées minute
+par minute pour 34 utilisatrices, sans doublons ni valeurs
+manquantes.</p>
+<p>Chaque enregistrement associe un horodatage et un nombre de pas, avec
+une distribution fortement asymétrique : la médiane est nulle et les
+valeurs élevées restent limitées, confirmant une majorité de minutes
+inactives. Le suivi temporel est continu et cohérent, ce qui permet de
+reconstituer les séquences d’activité.</p>
+<p>Les minutes avec un nombre de pas élevé sont plausibles, mais doivent
+être croisées avec les intensités, les calories ou les METs pour valider
+la cohérence.</p>
+<p>Le fichier est particulièrement adapté à l’étude des rythmes
+circadiens, des épisodes actifs, des routines journalières et de la
+cadence minute par minute, ainsi qu’à la construction d’agrégations
+horaires ou journalières.</p>
+</div>
+<div id="structure-des-données-9" class="section level2" number="10.2">
+<h2><span class="header-section-number">10.2</span> Structure des
+données</h2>
+<p>Chaque ligne représente <strong>une minute</strong> d’activité pour
+une utilisatrice.</p>
+<p>Nombre d’utilisatrices cohérent : <strong>34</strong>, ce qui
+correspond aux fichiers horaires et journaliers → <strong>cohérence
+multi-fichiers</strong>.</p>
+<p><strong>Format long / narrow</strong></p>
+<ul>
+<li>Nombre d’observations : 1 445 040,</li>
+<li>Environ 45 300 timestamps distincts (granularité minute ×
+utilisatrices sur un mois),</li>
+<li>Nombre de colonnes : 3 (<code>Id</code>, horodatage,
+<code>Steps</code>),</li>
+<li>0 doublons détectés,</li>
+<li>0 valeurs manquantes dans toutes les colonnes.</li>
+</ul>
+<p>Résumé statistique des pas :</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Min</th>
+<th align="left">Max</th>
+<th align="left">Mean</th>
+<th align="left">Median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Steps</td>
+<td align="left">0</td>
+<td align="left">204</td>
+<td align="left">4.77</td>
+<td align="left">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Interprétation :</strong></p>
+<ul>
+<li>Min = 0 → minutes totalement inactives,</li>
+<li>Max = 204 → ~ 200 pas/min ≈ marche rapide,</li>
+<li>Moyenne = 4.77 pas/min → les utilisatrices étaient globalement
+sédentaires,</li>
+<li>Médiane = 0 → plus de 50 % du temps = aucune marche minute par
+minute.</li>
+</ul>
+<p>La distribution est donc très <strong>asymétrique</strong>,
+caractéristique des données minute-level d’activité physique.</p>
+</div>
+<div id="apport-analytique-du-fichier-9" class="section level2"
+number="10.3">
+<h2><span class="header-section-number">10.3</span> Apport analytique du
+fichier</h2>
+<p>Le fichier <code>minuteStepsNarrow_merged.csv</code> est un fichier
+riche et informatif du dataset Fitbit/Bellabeat.</p>
+<p><strong>Atouts majeurs</strong></p>
+<ul>
+<li>Granularité minute,</li>
+<li>Dataset complet (0 NA, 0 doublons),</li>
+<li>Cohérence temporelle,</li>
+<li>Grande pertinence pour des analyses comportementales fines,</li>
+<li>Support idéal pour des visualisations (heatmaps, séries
+temporelles).</li>
+</ul>
+<p>C’est un fichier clé pour l’exploration du comportement utilisateur
+minute par minute. Il doit être croisé avec intensité, calories, METs et
+sommeil pour produire des insights fiables.</p>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+<div id="weightLogInfo_merged" class="section level1" number="11">
+<h1><span class="header-section-number">11</span> File:
+weightLogInfo_merged.csv</h1>
+<p><a href="01_Bellabeat_Data_Profiling_EDA.html#weightLogInfo_merged">→
+Link to profiling report</a></p>
+<div id="résumé-général-10" class="section level2" number="11.1">
+<h2><span class="header-section-number">11.1</span> Résumé général</h2>
+<p>Le fichier contient des mesures ponctuelles de poids, structurées
+ligne par ligne avec des valeurs associées comme le BMI ou le
+pourcentage de masse grasse. L’ensemble est propre en apparence mais
+très peu fourni : seules quelques utilisatrices ont enregistré des
+données et la fréquence des mesures est trop faible pour dégager une
+tendance fiable.</p>
+<p>La majorité des colonnes sont vides ou auto-rapportées, ce qui limite
+fortement la fiabilité analytique.</p>
+<p>L’intérêt analytique reste marginal : l’échantillon est trop réduit,
+la variabilité temporelle quasi nulle et la mesure dépend d’une saisie
+manuelle souvent imprécise.</p>
+</div>
+<div id="structure-des-données-10" class="section level2" number="11.2">
+<h2><span class="header-section-number">11.2</span> Structure des
+données</h2>
+<p>Le fichier <code>weightLogInfo_merged.csv</code> contient les
+enregistrements de poids saisis par les utilisatrices.</p>
+<p>Format : <strong>wide</strong>. Chaque ligne = une mesure de
+poids.</p>
+<p>Toutes les variables descriptives sont en colonnes, ce qui est adapté
+aux analyses descriptives simples.</p>
+<p>C’est le fichier <strong>le moins fourni et le moins
+exploitable</strong> du dataset :</p>
+<ul>
+<li>Très peu d’enregistrements (souvent &lt; 70 au total),</li>
+<li>Seules ~ 8 utilisatrices ont saisi leur poids,</li>
+<li>Beaucoup de colonnes sont vides ou rarement renseignées
+(<code>Fat</code>, <code>BMI</code>, etc.).</li>
+</ul>
+<p>Des données horodatées sont présentes et permettent en théorie
+d’analyser les variations de poids dans le temps, mais seulement si
+suffisamment de données existent (ce qui n’est pas le cas ici).</p>
+</div>
+<div id="apport-analytique-du-fichier-10" class="section level2"
+number="11.3">
+<h2><span class="header-section-number">11.3</span> Apport analytique du
+fichier</h2>
+<p>Utilité très limitée dans le cadre Bellabeat Coursera :</p>
+<ul>
+<li>Évaluation ponctuelle de l’IMC (BMI),</li>
+<li>Éventuelle segmentation d’utilisatrices par catégorie de poids, si
+les données étaient plus complètes,</li>
+<li>Corrélation très rudimentaire entre poids et niveau d’activité
+physique.</li>
+</ul>
+<p>En pratique :</p>
+<ul>
+<li>Trop peu de données,</li>
+<li>Trop peu d’utilisatrices,</li>
+<li>Valeurs souvent auto-rapportées,</li>
+<li>Pas de séries temporelles exploitables.</li>
+</ul>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

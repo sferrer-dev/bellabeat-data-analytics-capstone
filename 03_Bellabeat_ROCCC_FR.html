@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Bellabeat – Analyse globale ROCCC</title>
+
+<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="css/styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Bellabeat</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    EDA
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_Bellabeat_Data_Profiling_EDA.html">Data Profiling</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Files
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="02_Bellabeat_Files_Overview.html">Files Overview</a>
+    </li>
+    <li>
+      <a href="02_Bellabeat_Files_Overview_FR.html">Vue d’ensemble des fichiers</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    ETL
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="04_Bellabeat_Processus_ETL.html">ETL Process</a>
+    </li>
+    <li>
+      <a href="04_Bellabeat_Processus_ETL_FR.html">Processus ETL</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    ROCCC / Quality
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="03_Bellabeat_ROCCC.html">ROCCC</a>
+    </li>
+    <li>
+      <a href="03_Bellabeat_ROCCC_FR.html">ROCCC (FR)</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="05_Bellabeat_Analyse_Daily_Activity.html">Analysis of daily activity</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_Analyse_Daily_Activity_FR.html">Analyse de l'activité quotidienne</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_DailyHeartrate_Rythm.html">Daily heart rate analysis</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_DailyHeartrate_Rythm_FR.html">Analyse du rythme cardiaque quotidien</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_User_Activity_profiles.html">User activity profiles</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_User_Activity_profiles_FR.html">Profils d'activité des utilisatrices</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Bellabeat – Analyse globale ROCCC</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#reliability-fiabilit%C3%A9-des-donn%C3%A9es"
+id="toc-reliability-fiabilité-des-données"><span
+class="toc-section-number">1</span> <strong>R</strong>eliability
+(Fiabilité des données)</a>
+<ul>
+<li><a href="#forces" id="toc-forces"><span
+class="toc-section-number">1.1</span> Forces</a></li>
+<li><a href="#faiblesses" id="toc-faiblesses"><span
+class="toc-section-number">1.2</span> Faiblesses</a></li>
+</ul></li>
+<li><a href="#originality-caract%C3%A8re-unique-apport-analytique"
+id="toc-originality-caractère-unique-apport-analytique"><span
+class="toc-section-number">2</span> <strong>O</strong>riginality
+(Caractère unique / apport analytique)</a>
+<ul>
+<li><a href="#ce-que-les-donn%C3%A9es-permettent-danalyser"
+id="toc-ce-que-les-données-permettent-danalyser"><span
+class="toc-section-number">2.1</span> Ce que les données permettent
+d’analyser</a></li>
+<li><a href="#limites" id="toc-limites"><span
+class="toc-section-number">2.2</span> Limites</a></li>
+</ul></li>
+<li><a
+href="#comprehensiveness-exhaustivit%C3%A9-couverture-fonctionnelle"
+id="toc-comprehensiveness-exhaustivité-couverture-fonctionnelle"><span
+class="toc-section-number">3</span> <strong>C</strong>omprehensiveness
+(Exhaustivité / couverture fonctionnelle)</a>
+<ul>
+<li><a href="#couverture-analytique-apport%C3%A9e-par-les-11-fichiers"
+id="toc-couverture-analytique-apportée-par-les-11-fichiers"><span
+class="toc-section-number">3.1</span> Couverture analytique apportée par
+les 11 fichiers</a></li>
+<li><a href="#exhaustivit%C3%A9-temporelle"
+id="toc-exhaustivité-temporelle"><span
+class="toc-section-number">3.2</span> Exhaustivité temporelle</a></li>
+</ul></li>
+<li><a
+href="#citation-documentation-tra%C3%A7abilit%C3%A9-reproductibilit%C3%A9"
+id="toc-citation-documentation-traçabilité-reproductibilité"><span
+class="toc-section-number">4</span> <strong>C</strong>itation
+(Documentation / traçabilité / reproductibilité)</a>
+<ul>
+<li><a href="#points-positifs" id="toc-points-positifs"><span
+class="toc-section-number">4.1</span> Points positifs</a></li>
+<li><a href="#points-faibles" id="toc-points-faibles"><span
+class="toc-section-number">4.2</span> Points faibles</a></li>
+</ul></li>
+<li><a href="#currency-actualit%C3%A9-des-donn%C3%A9es"
+id="toc-currency-actualité-des-données"><span
+class="toc-section-number">5</span> <strong>C</strong>urrency (Actualité
+des données)</a>
+<ul>
+<li><a href="#cons%C3%A9quences" id="toc-conséquences"><span
+class="toc-section-number">5.1</span> Conséquences</a></li>
+</ul></li>
+<li><a href="#synth%C3%A8se-finale-roccc"
+id="toc-synthèse-finale-roccc">Synthèse Finale ROCCC</a>
+<ul>
+<li><a href="#forces-1" id="toc-forces-1"><span
+class="toc-section-number">5.2</span> Forces</a></li>
+<li><a href="#faiblesses-1" id="toc-faiblesses-1"><span
+class="toc-section-number">5.3</span> Faiblesses</a></li>
+<li><a href="#conclusion" id="toc-conclusion"><span
+class="toc-section-number">5.4</span> Conclusion</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="reliability-fiabilité-des-données" class="section level1"
+number="1">
+<h1><span class="header-section-number">1</span>
+<strong>R</strong>eliability (Fiabilité des données)</h1>
+<p>La fiabilité des données Fitabase/Bellabeat est <strong>globalement
+modérée</strong>, avec plusieurs limites.</p>
+<div id="forces" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Forces</h2>
+<ul>
+<li><strong>Données issues de capteurs réels</strong> (Fitbit), donc
+mesures objectives : pas d’auto-déclaration.</li>
+<li><strong>Horodatage cohérent</strong> dans l’ensemble des fichiers
+minute-by-minute, hourly et daily.</li>
+<li><strong>Aucune valeur manquante critique</strong> dans les colonnes
+temporelles et les identifiants utilisateur.</li>
+<li><strong>Granularité riche</strong> : minute, heure, jour → favorable
+aux analyses temporelles et à la détection de patterns.</li>
+</ul>
+</div>
+<div id="faiblesses" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Faiblesses</h2>
+<ul>
+<li><strong>Échantillon très réduit : 30 utilisateurs
+seulement</strong>, fortement limitant pour la généralisation.</li>
+<li><strong>Distribution hétérogène des contributions</strong> :
+certains utilisateurs fournissent beaucoup de données cardiaques,
+d’autres presque rien (p. ex.
+<code>heartrate_seconds_merged</code>).</li>
+<li><strong>Déséquilibre dans certaines métriques</strong> :
+<ul>
+<li><code>minuteMETsNarrow_merged</code> : distribution extrêmement
+asymétrique ;<br />
+</li>
+<li><code>weightLogInfo_merged</code> : très faible couverture → biais
+potentiel.</li>
+</ul></li>
+<li><strong>Données issues d’une période courte</strong> (31 jours) →
+pas de saisonnalité annuelle.</li>
+</ul>
+<blockquote>
+<p><strong>Conclusion fiabilité</strong> – Suffisante pour un projet
+exploratoire pédagogique, insuffisante pour produire des recommandations
+robustes de type <em>market research</em>.</p>
+</blockquote>
+<hr />
+</div>
+</div>
+<div id="originality-caractère-unique-apport-analytique"
+class="section level1" number="2">
+<h1><span class="header-section-number">2</span>
+<strong>O</strong>riginality (Caractère unique / apport analytique)</h1>
+<div id="ce-que-les-données-permettent-danalyser" class="section level2"
+number="2.1">
+<h2><span class="header-section-number">2.1</span> Ce que les données
+permettent d’analyser</h2>
+<ul>
+<li><strong>Patterns circadiens</strong> grâce aux fichiers à
+granularité minute et heure.</li>
+<li><strong>Analyse comportementale globale</strong> : activité,
+sommeil, calories, rythmes cardiaques.</li>
+<li><strong>Combinaison multi-granularité</strong> → rare et précieuse
+pour modéliser la journée type.</li>
+<li><strong>Possibilité d’assembler un parcours utilisateur
+complet</strong> :
+<ul>
+<li>sommeil → réveil ;</li>
+<li>activité / intensité → calories → METs → comportement
+journalier.</li>
+</ul></li>
+</ul>
+</div>
+<div id="limites" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Limites</h2>
+<ul>
+<li>Pas de variables socio-démographiques → pas d’analyse par profil
+(âge, sexe, IMC généralisable, etc.).</li>
+</ul>
+<blockquote>
+<p><strong>Conclusion originalité</strong> – La diversité des niveaux de
+détail est l’atout du jeu de données.</p>
+</blockquote>
+<hr />
+</div>
+</div>
+<div id="comprehensiveness-exhaustivité-couverture-fonctionnelle"
+class="section level1" number="3">
+<h1><span class="header-section-number">3</span>
+<strong>C</strong>omprehensiveness (Exhaustivité / couverture
+fonctionnelle)</h1>
+<div id="couverture-analytique-apportée-par-les-11-fichiers"
+class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Couverture analytique
+apportée par les 11 fichiers</h2>
+<table>
+<colgroup>
+<col width="20%" />
+<col width="20%" />
+<col width="58%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Domaine</th>
+<th>Niveau de couverture</th>
+<th>Commentaire</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Activité journalière</td>
+<td><strong>Élevé</strong></td>
+<td><code>dailyActivity</code>, <code>dailyIntensities</code>,
+<code>dailySteps</code> → vision globale complète.</td>
+</tr>
+<tr class="even">
+<td>Activité horaire</td>
+<td><strong>Très élevé</strong></td>
+<td><code>hourlyCalories</code>, <code>hourlyIntensities</code>,
+<code>hourlySteps</code> → analyses circadiennes robustes.</td>
+</tr>
+<tr class="odd">
+<td>Activité minute</td>
+<td><strong>Très élevé</strong></td>
+<td>Granularité fine pour modélisation ou détection de pics
+d’activité.</td>
+</tr>
+<tr class="even">
+<td>Calories / dépense énergétique</td>
+<td><strong>Élevé</strong></td>
+<td><code>minuteCaloriesNarrow</code> + <code>hourlyCalories</code> →
+cohérence des mesures.</td>
+</tr>
+<tr class="odd">
+<td>METs (intensité physiologique)</td>
+<td><strong>Élevé</strong></td>
+<td>Donnée rare mais fortement asymétrique.</td>
+</tr>
+<tr class="even">
+<td>Sommeil</td>
+<td><strong>Modéré</strong></td>
+<td><code>minuteSleep_merged</code> → bon niveau de détail mais sans
+phases de sommeil.</td>
+</tr>
+<tr class="odd">
+<td>Rythme cardiaque</td>
+<td><strong>Faible</strong></td>
+<td><code>heartrate_seconds_merged</code> incomplet selon les
+utilisateurs.</td>
+</tr>
+<tr class="even">
+<td>Poids / IMC</td>
+<td><strong>Très faible</strong></td>
+<td><code>weightLogInfo_merged</code> quasi inutilisable pour des
+analyses globales.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="exhaustivité-temporelle" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Exhaustivité
+temporelle</h2>
+<ul>
+<li><strong>31 jours</strong> → suffisant pour :
+<ul>
+<li>patterns journaliers ;</li>
+<li>clustering comportemental ;</li>
+<li>quantification d’habitudes.</li>
+</ul></li>
+<li><strong>Insuffisant</strong> pour :
+<ul>
+<li>saisonnalité ;</li>
+<li>changement de comportement long terme.</li>
+</ul></li>
+</ul>
+<blockquote>
+<p><strong>Conclusion exhaustivité</strong> – Élevée sur l’activité,
+modérée sur le sommeil, faible sur cardio/poids.</p>
+</blockquote>
+<hr />
+</div>
+</div>
+<div id="citation-documentation-traçabilité-reproductibilité"
+class="section level1" number="4">
+<h1><span class="header-section-number">4</span>
+<strong>C</strong>itation (Documentation / traçabilité /
+reproductibilité)</h1>
+<div id="points-positifs" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Points positifs</h2>
+<ul>
+<li>Fichiers nommés clairement.</li>
+<li>Colonnes homogènes entre fichiers (<code>Id</code>,
+<code>dateTime</code>, <code>value</code>).</li>
+<li>Documentation Fitabase disponible publiquement.</li>
+</ul>
+</div>
+<div id="points-faibles" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Points faibles</h2>
+<ul>
+<li>Pas de métadonnées intégrées aux fichiers.</li>
+<li>Pas d’identifiants de device → perte d’information
+contextuelle.</li>
+<li>Pas de README officiel complet.</li>
+</ul>
+<blockquote>
+<p><strong>Conclusion citation</strong> – Faible intrinsèquement dans
+les fichiers bruts.</p>
+</blockquote>
+<hr />
+</div>
+</div>
+<div id="currency-actualité-des-données" class="section level1"
+number="5">
+<h1><span class="header-section-number">5</span>
+<strong>C</strong>urrency (Actualité des données)</h1>
+<p>Les données datent de <strong>2016</strong>.</p>
+<div id="conséquences" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Conséquences</h2>
+<ul>
+<li>Appareils Fitbit 2016 → <strong>biais technologique</strong>
+important.</li>
+<li>Les normes de santé, recommandations d’activité et classifications
+d’intensité ont évolué.</li>
+<li>Les comportements utilisateurs ont changé (plus d’intégration
+smartphone, plus de capteurs modernes).</li>
+</ul>
+<blockquote>
+<p><strong>Conclusion actualité</strong> – Faible pour un usage
+opérationnel, mais adéquate pour un projet analytique académique.</p>
+</blockquote>
+<hr />
+</div>
+</div>
+<div id="synthèse-finale-roccc" class="section level1 unnumbered">
+<h1 class="unnumbered">Synthèse Finale ROCCC</h1>
+<div id="forces-1" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Forces</h2>
+<ul>
+<li>Granularité exceptionnellement riche (minute → heure → jour).</li>
+<li>Cohérence temporelle.</li>
+<li>Données réelles, non déclaratives.</li>
+<li>Potentiel élevé pour analyses comportementales et segmentation.</li>
+<li>Dataset adapté pour pratiquer EDA, cleaning, profilage, clustering
+et analyses circadiennes.</li>
+</ul>
+</div>
+<div id="faiblesses-1" class="section level2" number="5.3">
+<h2><span class="header-section-number">5.3</span> Faiblesses</h2>
+<ul>
+<li>Échantillon trop petit (30 utilisateurs → faible fiabilité
+statistique).</li>
+<li>Données anciennes (2016).</li>
+<li>Distributions très asymétriques sur METs, intensité et calories
+minute.</li>
+<li>Absence de variables démographiques.</li>
+</ul>
+</div>
+<div id="conclusion" class="section level2" number="5.4">
+<h2><span class="header-section-number">5.4</span> Conclusion</h2>
+<p>Les 11 fichiers Bellabeat constituent un <strong>excellent terrain
+d’apprentissage en analytique de données</strong> : profiling, EDA,
+contrôle qualité, intégration ETL, visualisation, segmentation, et
+construction d’un narratif analytique.</p>
+<p>Cependant, ils sont <strong>trop limités</strong> pour un usage
+décisionnel réel, principalement en raison :</p>
+<ul>
+<li>de la petite taille d’échantillon ;</li>
+<li>de la faible diversité des utilisateurs ;</li>
+<li>de l’ancienneté des données.</li>
+</ul>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

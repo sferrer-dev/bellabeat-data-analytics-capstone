@@ -1,0 +1,3864 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Bellabeat – Data Profiling and Exploratory Data Analysis</title>
+
+<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="css/styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Bellabeat</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    EDA
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_Bellabeat_Data_Profiling_EDA.html">Data Profiling</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Files
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="02_Bellabeat_Files_Overview.html">Files Overview</a>
+    </li>
+    <li>
+      <a href="02_Bellabeat_Files_Overview_FR.html">Vue d’ensemble des fichiers</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    ETL
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="04_Bellabeat_Processus_ETL.html">ETL Process</a>
+    </li>
+    <li>
+      <a href="04_Bellabeat_Processus_ETL_FR.html">Processus ETL</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    ROCCC / Quality
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="03_Bellabeat_ROCCC.html">ROCCC</a>
+    </li>
+    <li>
+      <a href="03_Bellabeat_ROCCC_FR.html">ROCCC (FR)</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="05_Bellabeat_Analyse_Daily_Activity.html">Analysis of daily activity</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_Analyse_Daily_Activity_FR.html">Analyse de l'activité quotidienne</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_DailyHeartrate_Rythm.html">Daily heart rate analysis</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_DailyHeartrate_Rythm_FR.html">Analyse du rythme cardiaque quotidien</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_User_Activity_profiles.html">User activity profiles</a>
+    </li>
+    <li>
+      <a href="05_Bellabeat_User_Activity_profiles_FR.html">Profils d'activité des utilisatrices</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Bellabeat – Data Profiling and Exploratory
+Data Analysis</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction" id="toc-introduction">Introduction</a>
+<ul>
+<li><a href="#overview" id="toc-overview">Overview</a></li>
+<li><a href="#technical-keys" id="toc-technical-keys">Technical
+Keys</a></li>
+</ul></li>
+<li><a href="#dailyActivity_merged" id="toc-dailyActivity_merged"><span
+class="toc-section-number">1</span> File: dailyActivity_merged.csv</a>
+<ul>
+<li><a href="#column-profile" id="toc-column-profile"><span
+class="toc-section-number">1.1</span> Column profile</a></li>
+<li><a href="#date-statistics" id="toc-date-statistics"><span
+class="toc-section-number">1.2</span> Date statistics</a></li>
+<li><a href="#numerical-statistics" id="toc-numerical-statistics"><span
+class="toc-section-number">1.3</span> Numerical statistics</a></li>
+<li><a href="#skimr-summary" id="toc-skimr-summary"><span
+class="toc-section-number">1.4</span> Skimr summary</a></li>
+<li><a href="#raw-data-overview" id="toc-raw-data-overview"><span
+class="toc-section-number">1.5</span> Raw data overview</a></li>
+</ul></li>
+<li><a href="#heartrate_seconds_merged"
+id="toc-heartrate_seconds_merged"><span
+class="toc-section-number">2</span> File:
+heartrate_seconds_merged.csv</a>
+<ul>
+<li><a href="#column-profile-1" id="toc-column-profile-1"><span
+class="toc-section-number">2.1</span> Column profile</a></li>
+<li><a href="#date-statistics-1" id="toc-date-statistics-1"><span
+class="toc-section-number">2.2</span> Date statistics</a></li>
+<li><a href="#numerical-statistics-1"
+id="toc-numerical-statistics-1"><span
+class="toc-section-number">2.3</span> Numerical statistics</a></li>
+<li><a href="#skimr-summary-1" id="toc-skimr-summary-1"><span
+class="toc-section-number">2.4</span> Skimr summary</a></li>
+<li><a href="#raw-data-overview-1" id="toc-raw-data-overview-1"><span
+class="toc-section-number">2.5</span> Raw data overview</a></li>
+</ul></li>
+<li><a href="#hourlyCalories_merged"
+id="toc-hourlyCalories_merged"><span class="toc-section-number">3</span>
+File: hourlyCalories_merged.csv</a>
+<ul>
+<li><a href="#column-profile-2" id="toc-column-profile-2"><span
+class="toc-section-number">3.1</span> Column profile</a></li>
+<li><a href="#date-statistics-2" id="toc-date-statistics-2"><span
+class="toc-section-number">3.2</span> Date statistics</a></li>
+<li><a href="#numerical-statistics-2"
+id="toc-numerical-statistics-2"><span
+class="toc-section-number">3.3</span> Numerical statistics</a></li>
+<li><a href="#skimr-summary-2" id="toc-skimr-summary-2"><span
+class="toc-section-number">3.4</span> Skimr summary</a></li>
+<li><a href="#raw-data-overview-2" id="toc-raw-data-overview-2"><span
+class="toc-section-number">3.5</span> Raw data overview</a></li>
+</ul></li>
+<li><a href="#hourlyIntensities_merged"
+id="toc-hourlyIntensities_merged"><span
+class="toc-section-number">4</span> File:
+hourlyIntensities_merged.csv</a>
+<ul>
+<li><a href="#column-profile-3" id="toc-column-profile-3"><span
+class="toc-section-number">4.1</span> Column profile</a></li>
+<li><a href="#date-statistics-3" id="toc-date-statistics-3"><span
+class="toc-section-number">4.2</span> Date statistics</a></li>
+<li><a href="#numerical-statistics-3"
+id="toc-numerical-statistics-3"><span
+class="toc-section-number">4.3</span> Numerical statistics</a></li>
+<li><a href="#skimr-summary-3" id="toc-skimr-summary-3"><span
+class="toc-section-number">4.4</span> Skimr summary</a></li>
+<li><a href="#raw-data-overview-3" id="toc-raw-data-overview-3"><span
+class="toc-section-number">4.5</span> Raw data overview</a></li>
+</ul></li>
+<li><a href="#hourlySteps_merged" id="toc-hourlySteps_merged"><span
+class="toc-section-number">5</span> File: hourlySteps_merged.csv</a>
+<ul>
+<li><a href="#column-profile-4" id="toc-column-profile-4"><span
+class="toc-section-number">5.1</span> Column profile</a></li>
+<li><a href="#date-statistics-4" id="toc-date-statistics-4"><span
+class="toc-section-number">5.2</span> Date statistics</a></li>
+<li><a href="#numerical-statistics-4"
+id="toc-numerical-statistics-4"><span
+class="toc-section-number">5.3</span> Numerical statistics</a></li>
+<li><a href="#skimr-summary-4" id="toc-skimr-summary-4"><span
+class="toc-section-number">5.4</span> Skimr summary</a></li>
+<li><a href="#raw-data-overview-4" id="toc-raw-data-overview-4"><span
+class="toc-section-number">5.5</span> Raw data overview</a></li>
+</ul></li>
+<li><a href="#minuteCaloriesNarrow_merged"
+id="toc-minuteCaloriesNarrow_merged"><span
+class="toc-section-number">6</span> File:
+minuteCaloriesNarrow_merged.csv</a>
+<ul>
+<li><a href="#column-profile-5" id="toc-column-profile-5"><span
+class="toc-section-number">6.1</span> Column profile</a></li>
+<li><a href="#date-statistics-5" id="toc-date-statistics-5"><span
+class="toc-section-number">6.2</span> Date statistics</a></li>
+<li><a href="#numerical-statistics-5"
+id="toc-numerical-statistics-5"><span
+class="toc-section-number">6.3</span> Numerical statistics</a></li>
+<li><a href="#skimr-summary-5" id="toc-skimr-summary-5"><span
+class="toc-section-number">6.4</span> Skimr summary</a></li>
+<li><a href="#raw-data-overview-5" id="toc-raw-data-overview-5"><span
+class="toc-section-number">6.5</span> Raw data overview</a></li>
+</ul></li>
+<li><a href="#minuteIntensitiesNarrow_merged"
+id="toc-minuteIntensitiesNarrow_merged"><span
+class="toc-section-number">7</span> File:
+minuteIntensitiesNarrow_merged.csv</a>
+<ul>
+<li><a href="#column-profile-6" id="toc-column-profile-6"><span
+class="toc-section-number">7.1</span> Column profile</a></li>
+<li><a href="#date-statistics-6" id="toc-date-statistics-6"><span
+class="toc-section-number">7.2</span> Date statistics</a></li>
+<li><a href="#numerical-statistics-6"
+id="toc-numerical-statistics-6"><span
+class="toc-section-number">7.3</span> Numerical statistics</a></li>
+<li><a href="#skimr-summary-6" id="toc-skimr-summary-6"><span
+class="toc-section-number">7.4</span> Skimr summary</a></li>
+<li><a href="#raw-data-overview-6" id="toc-raw-data-overview-6"><span
+class="toc-section-number">7.5</span> Raw data overview</a></li>
+</ul></li>
+<li><a href="#minuteMETsNarrow_merged"
+id="toc-minuteMETsNarrow_merged"><span
+class="toc-section-number">8</span> File:
+minuteMETsNarrow_merged.csv</a>
+<ul>
+<li><a href="#column-profile-7" id="toc-column-profile-7"><span
+class="toc-section-number">8.1</span> Column profile</a></li>
+<li><a href="#date-statistics-7" id="toc-date-statistics-7"><span
+class="toc-section-number">8.2</span> Date statistics</a></li>
+<li><a href="#numerical-statistics-7"
+id="toc-numerical-statistics-7"><span
+class="toc-section-number">8.3</span> Numerical statistics</a></li>
+<li><a href="#skimr-summary-7" id="toc-skimr-summary-7"><span
+class="toc-section-number">8.4</span> Skimr summary</a></li>
+<li><a href="#raw-data-overview-7" id="toc-raw-data-overview-7"><span
+class="toc-section-number">8.5</span> Raw data overview</a></li>
+</ul></li>
+<li><a href="#minuteSleep_merged" id="toc-minuteSleep_merged"><span
+class="toc-section-number">9</span> File: minuteSleep_merged.csv</a>
+<ul>
+<li><a href="#column-profile-8" id="toc-column-profile-8"><span
+class="toc-section-number">9.1</span> Column profile</a></li>
+<li><a href="#date-statistics-8" id="toc-date-statistics-8"><span
+class="toc-section-number">9.2</span> Date statistics</a></li>
+<li><a href="#numerical-statistics-8"
+id="toc-numerical-statistics-8"><span
+class="toc-section-number">9.3</span> Numerical statistics</a></li>
+<li><a href="#skimr-summary-8" id="toc-skimr-summary-8"><span
+class="toc-section-number">9.4</span> Skimr summary</a></li>
+<li><a href="#raw-data-overview-8" id="toc-raw-data-overview-8"><span
+class="toc-section-number">9.5</span> Raw data overview</a></li>
+<li><a href="#overview-duplicated" id="toc-overview-duplicated"><span
+class="toc-section-number">9.6</span> Overview duplicated **</a></li>
+</ul></li>
+<li><a href="#minuteStepsNarrow_merged"
+id="toc-minuteStepsNarrow_merged"><span
+class="toc-section-number">10</span> File:
+minuteStepsNarrow_merged.csv</a>
+<ul>
+<li><a href="#column-profile-9" id="toc-column-profile-9"><span
+class="toc-section-number">10.1</span> Column profile</a></li>
+<li><a href="#date-statistics-9" id="toc-date-statistics-9"><span
+class="toc-section-number">10.2</span> Date statistics</a></li>
+<li><a href="#numerical-statistics-9"
+id="toc-numerical-statistics-9"><span
+class="toc-section-number">10.3</span> Numerical statistics</a></li>
+<li><a href="#skimr-summary-9" id="toc-skimr-summary-9"><span
+class="toc-section-number">10.4</span> Skimr summary</a></li>
+<li><a href="#raw-data-overview-9" id="toc-raw-data-overview-9"><span
+class="toc-section-number">10.5</span> Raw data overview</a></li>
+</ul></li>
+<li><a href="#weightLogInfo_merged" id="toc-weightLogInfo_merged"><span
+class="toc-section-number">11</span> File: weightLogInfo_merged.csv</a>
+<ul>
+<li><a href="#column-profile-10" id="toc-column-profile-10"><span
+class="toc-section-number">11.1</span> Column profile</a></li>
+<li><a href="#date-statistics-10" id="toc-date-statistics-10"><span
+class="toc-section-number">11.2</span> Date statistics</a></li>
+<li><a href="#numerical-statistics-10"
+id="toc-numerical-statistics-10"><span
+class="toc-section-number">11.3</span> Numerical statistics</a></li>
+<li><a href="#skimr-summary-10" id="toc-skimr-summary-10"><span
+class="toc-section-number">11.4</span> Skimr summary</a></li>
+<li><a href="#raw-data-overview-10" id="toc-raw-data-overview-10"><span
+class="toc-section-number">11.5</span> Raw data overview</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="introduction" class="section level1 unnumbered">
+<h1 class="unnumbered">Introduction</h1>
+<div id="overview" class="section level2 unnumbered">
+<h2 class="unnumbered">Overview</h2>
+<p>This document presents an <strong>automated and fully reproducible R
+pipeline</strong> designed for data profiling and exploratory data
+analysis (EDA) on the Bellabeat datasets.<br />
+It establishes a foundation for all subsequent analytical, modelling,
+and reporting activities.</p>
+<p>The pipeline performs a comprehensive assessment of the raw data to
+validate their <strong>structure</strong>, <strong>quality</strong>, and
+<strong>temporal coherence</strong> prior to any advanced analysis. It
+covers <strong>eleven datasets</strong> of
+<code>Fitabase Data 3.12.16–4.11.16</code> sourced from
+activity-tracking sensors and examines:</p>
+<ul>
+<li>dataset volume and dimensionality,</li>
+<li>variable types and inferred classes,</li>
+<li>missing-value patterns,</li>
+<li>duplicates and structural inconsistencies,</li>
+<li>temporal ranges and granularity,</li>
+<li>key descriptive statistics.</li>
+</ul>
+</div>
+<div id="technical-keys" class="section level2 unnumbered">
+<h2 class="unnumbered">Technical Keys</h2>
+<p>A central function, <strong><code>profile_csv()</code></strong>,
+standardizes all quality checks across datasets: automated type
+detection, missing-value assessment, cardinality analysis, descriptive
+statistics, temporal auditing, duplicate identification, and enhanced
+summaries via <strong>skimr</strong>.</p>
+<p>Batch execution through <strong><code>purrr::map()</code></strong>
+ensures <strong>homogeneity, reproducibility, and scalability</strong>
+across the entire processing workflow.</p>
+<p>The function <strong><code>auto_parse_datetime()</code></strong>
+automatically handles the detection and conversion of temporal columns,
+ensuring reliable interpretation of dates and timestamps despite the
+variety of formats present in the raw data. It provides consistent
+timestamp handling and delivers the uniformity required for all
+time-based analyses in the pipeline. By centralizing this logic, the
+pipeline enforces coherent normalization and eliminates ambiguities
+associated with textual time formats.</p>
+<p>Together, these elements provide a <strong>technical
+backbone</strong> for subsequent phases of data cleaning, feature
+engineering, aggregation, and analytical modelling.</p>
+</div>
+</div>
+<div id="dailyActivity_merged" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> File:
+dailyActivity_merged.csv</h1>
+<p><a href="02_Bellabeat_Files_Overview.html#dailyActivity_merged">→
+Link to overview report</a></p>
+<ul>
+<li><p><strong>File name :</strong> dailyActivity_merged.csv</p></li>
+<li><p><strong>File size :</strong> 0.05 Mo</p></li>
+<li><p><strong>Number of observations :</strong> 457</p></li>
+<li><p><strong>Number of columns :</strong> 15</p></li>
+<li><p><strong>Duplicates detecteds :</strong> Non</p></li>
+<li><p><strong>Number of duplicated lines :</strong> 0</p></li>
+</ul>
+<div id="column-profile" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Column profile</h2>
+<table>
+<caption>Variable profile - dailyActivity_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">column</th>
+<th align="left">type</th>
+<th align="right">n_missing</th>
+<th align="right">pct_missing</th>
+<th align="right">n_distinct</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Id</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">35</td>
+</tr>
+<tr class="even">
+<td align="left">ActivityDate</td>
+<td align="left">POSIXct</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">32</td>
+</tr>
+<tr class="odd">
+<td align="left">TotalSteps</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">389</td>
+</tr>
+<tr class="even">
+<td align="left">TotalDistance</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">334</td>
+</tr>
+<tr class="odd">
+<td align="left">TrackerDistance</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">336</td>
+</tr>
+<tr class="even">
+<td align="left">LoggedActivitiesDistance</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">20</td>
+</tr>
+<tr class="odd">
+<td align="left">VeryActiveDistance</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">170</td>
+</tr>
+<tr class="even">
+<td align="left">ModeratelyActiveDistance</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">140</td>
+</tr>
+<tr class="odd">
+<td align="left">LightActiveDistance</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">295</td>
+</tr>
+<tr class="even">
+<td align="left">SedentaryActiveDistance</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">8</td>
+</tr>
+<tr class="odd">
+<td align="left">VeryActiveMinutes</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">85</td>
+</tr>
+<tr class="even">
+<td align="left">FairlyActiveMinutes</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">62</td>
+</tr>
+<tr class="odd">
+<td align="left">LightlyActiveMinutes</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">251</td>
+</tr>
+<tr class="even">
+<td align="left">SedentaryMinutes</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">315</td>
+</tr>
+<tr class="odd">
+<td align="left">Calories</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">383</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="date-statistics" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Date statistics</h2>
+<table>
+<caption>Date statistics - dailyActivity_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">mean</th>
+<th align="left">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ActivityDate</td>
+<td align="left">2016-03-12</td>
+<td align="left">2016-04-12</td>
+<td align="left">2016-04-04 04:40:26</td>
+<td align="left">2016-04-05</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="numerical-statistics" class="section level2" number="1.3">
+<h2><span class="header-section-number">1.3</span> Numerical
+statistics</h2>
+<table>
+<caption>Numerical statistics - dailyActivity_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">mean</th>
+<th align="right">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">TotalSteps</td>
+<td align="right">0</td>
+<td align="right">28497.000000</td>
+<td align="right">6546.5623632</td>
+<td align="right">5986.00</td>
+</tr>
+<tr class="even">
+<td align="left">TotalDistance</td>
+<td align="right">0</td>
+<td align="right">27.530001</td>
+<td align="right">4.6635230</td>
+<td align="right">4.09</td>
+</tr>
+<tr class="odd">
+<td align="left">TrackerDistance</td>
+<td align="right">0</td>
+<td align="right">27.530001</td>
+<td align="right">4.6098468</td>
+<td align="right">4.09</td>
+</tr>
+<tr class="even">
+<td align="left">LoggedActivitiesDistance</td>
+<td align="right">0</td>
+<td align="right">6.727057</td>
+<td align="right">0.1794274</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">VeryActiveDistance</td>
+<td align="right">0</td>
+<td align="right">21.920000</td>
+<td align="right">1.1808972</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">ModeratelyActiveDistance</td>
+<td align="right">0</td>
+<td align="right">6.400000</td>
+<td align="right">0.4786433</td>
+<td align="right">0.02</td>
+</tr>
+<tr class="odd">
+<td align="left">LightActiveDistance</td>
+<td align="right">0</td>
+<td align="right">12.510000</td>
+<td align="right">2.8901969</td>
+<td align="right">2.93</td>
+</tr>
+<tr class="even">
+<td align="left">SedentaryActiveDistance</td>
+<td align="right">0</td>
+<td align="right">0.100000</td>
+<td align="right">0.0019037</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">VeryActiveMinutes</td>
+<td align="right">0</td>
+<td align="right">202.000000</td>
+<td align="right">16.6236324</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">FairlyActiveMinutes</td>
+<td align="right">0</td>
+<td align="right">660.000000</td>
+<td align="right">13.0700219</td>
+<td align="right">1.00</td>
+</tr>
+<tr class="odd">
+<td align="left">LightlyActiveMinutes</td>
+<td align="right">0</td>
+<td align="right">720.000000</td>
+<td align="right">170.0700219</td>
+<td align="right">181.00</td>
+</tr>
+<tr class="even">
+<td align="left">SedentaryMinutes</td>
+<td align="right">32</td>
+<td align="right">1440.000000</td>
+<td align="right">995.2822757</td>
+<td align="right">1057.00</td>
+</tr>
+<tr class="odd">
+<td align="left">Calories</td>
+<td align="right">0</td>
+<td align="right">4562.000000</td>
+<td align="right">2189.4529540</td>
+<td align="right">2062.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="skimr-summary" class="section level2" number="1.4">
+<h2><span class="header-section-number">1.4</span> Skimr summary</h2>
+<table>
+<caption>Skimr summary - dailyActivity_merged.csv</caption>
+<colgroup>
+<col width="6%" />
+<col width="17%" />
+<col width="6%" />
+<col width="9%" />
+<col width="8%" />
+<col width="8%" />
+<col width="7%" />
+<col width="8%" />
+<col width="8%" />
+<col width="8%" />
+<col width="8%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_type</th>
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">numeric.mean</th>
+<th align="right">numeric.sd</th>
+<th align="right">numeric.p0</th>
+<th align="right">numeric.p25</th>
+<th align="right">numeric.p50</th>
+<th align="right">numeric.p75</th>
+<th align="right">numeric.p100</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">TotalSteps</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">6546.5623632</td>
+<td align="right">5398.4930639</td>
+<td align="right">0</td>
+<td align="right">1988.00</td>
+<td align="right">5986.00</td>
+<td align="right">10198.00</td>
+<td align="right">28497.000000</td>
+</tr>
+<tr class="even">
+<td align="left">numeric</td>
+<td align="left">TotalDistance</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4.6635230</td>
+<td align="right">4.0820723</td>
+<td align="right">0</td>
+<td align="right">1.41</td>
+<td align="right">4.09</td>
+<td align="right">7.16</td>
+<td align="right">27.530001</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">TrackerDistance</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4.6098468</td>
+<td align="right">4.0685399</td>
+<td align="right">0</td>
+<td align="right">1.28</td>
+<td align="right">4.09</td>
+<td align="right">7.11</td>
+<td align="right">27.530001</td>
+</tr>
+<tr class="even">
+<td align="left">numeric</td>
+<td align="left">LoggedActivitiesDistance</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.1794274</td>
+<td align="right">0.8492318</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">6.727057</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">VeryActiveDistance</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1.1808972</td>
+<td align="right">2.4871586</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">1.31</td>
+<td align="right">21.920000</td>
+</tr>
+<tr class="even">
+<td align="left">numeric</td>
+<td align="left">ModeratelyActiveDistance</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.4786433</td>
+<td align="right">0.8309952</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0.02</td>
+<td align="right">0.67</td>
+<td align="right">6.400000</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">LightActiveDistance</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">2.8901969</td>
+<td align="right">2.2375233</td>
+<td align="right">0</td>
+<td align="right">0.87</td>
+<td align="right">2.93</td>
+<td align="right">4.46</td>
+<td align="right">12.510000</td>
+</tr>
+<tr class="even">
+<td align="left">numeric</td>
+<td align="left">SedentaryActiveDistance</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.0019037</td>
+<td align="right">0.0084868</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.100000</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">VeryActiveMinutes</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">16.6236324</td>
+<td align="right">28.9197037</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">25.00</td>
+<td align="right">202.000000</td>
+</tr>
+<tr class="even">
+<td align="left">numeric</td>
+<td align="left">FairlyActiveMinutes</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">13.0700219</td>
+<td align="right">36.2086352</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="right">16.00</td>
+<td align="right">660.000000</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">LightlyActiveMinutes</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">170.0700219</td>
+<td align="right">122.2053721</td>
+<td align="right">0</td>
+<td align="right">64.00</td>
+<td align="right">181.00</td>
+<td align="right">257.00</td>
+<td align="right">720.000000</td>
+</tr>
+<tr class="even">
+<td align="left">numeric</td>
+<td align="left">SedentaryMinutes</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">995.2822757</td>
+<td align="right">337.0214040</td>
+<td align="right">32</td>
+<td align="right">728.00</td>
+<td align="right">1057.00</td>
+<td align="right">1285.00</td>
+<td align="right">1440.000000</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">Calories</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">2189.4529540</td>
+<td align="right">815.4845229</td>
+<td align="right">0</td>
+<td align="right">1776.00</td>
+<td align="right">2062.00</td>
+<td align="right">2667.00</td>
+<td align="right">4562.000000</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="raw-data-overview" class="section level2" number="1.5">
+<h2><span class="header-section-number">1.5</span> Raw data
+overview</h2>
+<table>
+<caption>Overview (first 10 lines) - dailyActivity_merged.csv</caption>
+<colgroup>
+<col width="4%" />
+<col width="4%" />
+<col width="4%" />
+<col width="5%" />
+<col width="6%" />
+<col width="9%" />
+<col width="7%" />
+<col width="9%" />
+<col width="7%" />
+<col width="9%" />
+<col width="6%" />
+<col width="7%" />
+<col width="7%" />
+<col width="6%" />
+<col width="3%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Id</th>
+<th align="left">ActivityDate</th>
+<th align="left">TotalSteps</th>
+<th align="left">TotalDistance</th>
+<th align="left">TrackerDistance</th>
+<th align="left">LoggedActivitiesDistance</th>
+<th align="left">VeryActiveDistance</th>
+<th align="left">ModeratelyActiveDistance</th>
+<th align="left">LightActiveDistance</th>
+<th align="left">SedentaryActiveDistance</th>
+<th align="left">VeryActiveMinutes</th>
+<th align="left">FairlyActiveMinutes</th>
+<th align="left">LightlyActiveMinutes</th>
+<th align="left">SedentaryMinutes</th>
+<th align="left">Calories</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-25</td>
+<td align="left">11004</td>
+<td align="left">7.11</td>
+<td align="left">7.11</td>
+<td align="left">0</td>
+<td align="left">2.57</td>
+<td align="left">0.46</td>
+<td align="left">4.07</td>
+<td align="left">0</td>
+<td align="left">33</td>
+<td align="left">12</td>
+<td align="left">205</td>
+<td align="left">804</td>
+<td align="left">1819</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-26</td>
+<td align="left">17609</td>
+<td align="left">11.55</td>
+<td align="left">11.55</td>
+<td align="left">0</td>
+<td align="left">6.92</td>
+<td align="left">0.73</td>
+<td align="left">3.91</td>
+<td align="left">0</td>
+<td align="left">89</td>
+<td align="left">17</td>
+<td align="left">274</td>
+<td align="left">588</td>
+<td align="left">2154</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-27</td>
+<td align="left">12736</td>
+<td align="left">8.53</td>
+<td align="left">8.53</td>
+<td align="left">0</td>
+<td align="left">4.66</td>
+<td align="left">0.16</td>
+<td align="left">3.71</td>
+<td align="left">0</td>
+<td align="left">56</td>
+<td align="left">5</td>
+<td align="left">268</td>
+<td align="left">605</td>
+<td align="left">1944</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-28</td>
+<td align="left">13231</td>
+<td align="left">8.93</td>
+<td align="left">8.93</td>
+<td align="left">0</td>
+<td align="left">3.19</td>
+<td align="left">0.79</td>
+<td align="left">4.95</td>
+<td align="left">0</td>
+<td align="left">39</td>
+<td align="left">20</td>
+<td align="left">224</td>
+<td align="left">1080</td>
+<td align="left">1932</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-29</td>
+<td align="left">12041</td>
+<td align="left">7.85</td>
+<td align="left">7.85</td>
+<td align="left">0</td>
+<td align="left">2.16</td>
+<td align="left">1.09</td>
+<td align="left">4.61</td>
+<td align="left">0</td>
+<td align="left">28</td>
+<td align="left">28</td>
+<td align="left">243</td>
+<td align="left">763</td>
+<td align="left">1886</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-30</td>
+<td align="left">10970</td>
+<td align="left">7.16</td>
+<td align="left">7.16</td>
+<td align="left">0</td>
+<td align="left">2.36</td>
+<td align="left">0.51</td>
+<td align="left">4.29</td>
+<td align="left">0</td>
+<td align="left">30</td>
+<td align="left">13</td>
+<td align="left">223</td>
+<td align="left">1174</td>
+<td align="left">1820</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-31</td>
+<td align="left">12256</td>
+<td align="left">7.86</td>
+<td align="left">7.86</td>
+<td align="left">0</td>
+<td align="left">2.29</td>
+<td align="left">0.49</td>
+<td align="left">5.04</td>
+<td align="left">0</td>
+<td align="left">33</td>
+<td align="left">12</td>
+<td align="left">239</td>
+<td align="left">820</td>
+<td align="left">1889</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-04-01</td>
+<td align="left">12262</td>
+<td align="left">7.87</td>
+<td align="left">7.87</td>
+<td align="left">0</td>
+<td align="left">3.32</td>
+<td align="left">0.83</td>
+<td align="left">3.64</td>
+<td align="left">0</td>
+<td align="left">47</td>
+<td align="left">21</td>
+<td align="left">200</td>
+<td align="left">866</td>
+<td align="left">1868</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-04-02</td>
+<td align="left">11248</td>
+<td align="left">7.25</td>
+<td align="left">7.25</td>
+<td align="left">0</td>
+<td align="left">3.00</td>
+<td align="left">0.45</td>
+<td align="left">3.74</td>
+<td align="left">0</td>
+<td align="left">40</td>
+<td align="left">11</td>
+<td align="left">244</td>
+<td align="left">636</td>
+<td align="left">1843</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-04-03</td>
+<td align="left">10016</td>
+<td align="left">6.37</td>
+<td align="left">6.37</td>
+<td align="left">0</td>
+<td align="left">0.91</td>
+<td align="left">1.28</td>
+<td align="left">4.18</td>
+<td align="left">0</td>
+<td align="left">15</td>
+<td align="left">30</td>
+<td align="left">314</td>
+<td align="left">655</td>
+<td align="left">1850</td>
+</tr>
+</tbody>
+</table>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+<div id="heartrate_seconds_merged" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> File:
+heartrate_seconds_merged.csv</h1>
+<p><a href="02_Bellabeat_Files_Overview.html#heartrate_seconds_merged">→
+Link to overview report</a></p>
+<ul>
+<li><p><strong>File name :</strong>
+heartrate_seconds_merged.csv</p></li>
+<li><p><strong>File size :</strong> 39.17 Mo</p></li>
+<li><p><strong>Number of observations :</strong> 1154681</p></li>
+<li><p><strong>Number of columns :</strong> 3</p></li>
+<li><p><strong>Duplicates detecteds :</strong> Non</p></li>
+<li><p><strong>Number of duplicated lines :</strong> 0</p></li>
+</ul>
+<div id="column-profile-1" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Column profile</h2>
+<table>
+<caption>Variable profile - heartrate_seconds_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">column</th>
+<th align="left">type</th>
+<th align="right">n_missing</th>
+<th align="right">pct_missing</th>
+<th align="right">n_distinct</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Id</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">14</td>
+</tr>
+<tr class="even">
+<td align="left">Time</td>
+<td align="left">POSIXct</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">510597</td>
+</tr>
+<tr class="odd">
+<td align="left">Value</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">148</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="date-statistics-1" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Date statistics</h2>
+<table>
+<caption>Date statistics - heartrate_seconds_merged.csv</caption>
+<colgroup>
+<col width="10%" />
+<col width="22%" />
+<col width="22%" />
+<col width="22%" />
+<col width="22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">mean</th>
+<th align="left">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Time</td>
+<td align="left">2016-03-29 00:00:05</td>
+<td align="left">2016-04-12 11:03:15</td>
+<td align="left">2016-04-06 03:14:15</td>
+<td align="left">2016-04-06 03:55:07</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="numerical-statistics-1" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Numerical
+statistics</h2>
+<table>
+<caption>Numerical statistics - heartrate_seconds_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">mean</th>
+<th align="right">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Value</td>
+<td align="right">36</td>
+<td align="right">185</td>
+<td align="right">79.75687</td>
+<td align="right">77</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="skimr-summary-1" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Skimr summary</h2>
+<table>
+<caption>Skimr summary - heartrate_seconds_merged.csv</caption>
+<colgroup>
+<col width="7%" />
+<col width="10%" />
+<col width="7%" />
+<col width="10%" />
+<col width="9%" />
+<col width="8%" />
+<col width="8%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_type</th>
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">numeric.mean</th>
+<th align="right">numeric.sd</th>
+<th align="right">numeric.p0</th>
+<th align="right">numeric.p25</th>
+<th align="right">numeric.p50</th>
+<th align="right">numeric.p75</th>
+<th align="right">numeric.p100</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">Value</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">79.75687</td>
+<td align="right">18.72988</td>
+<td align="right">36</td>
+<td align="right">66</td>
+<td align="right">77</td>
+<td align="right">90</td>
+<td align="right">185</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="raw-data-overview-1" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> Raw data
+overview</h2>
+<table>
+<caption>Overview (first 10 lines) -
+heartrate_seconds_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">Id</th>
+<th align="left">Time</th>
+<th align="left">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2022484408</td>
+<td align="left">2016-04-01 07:54:00</td>
+<td align="left">93</td>
+</tr>
+<tr class="even">
+<td align="left">2022484408</td>
+<td align="left">2016-04-01 07:54:05</td>
+<td align="left">91</td>
+</tr>
+<tr class="odd">
+<td align="left">2022484408</td>
+<td align="left">2016-04-01 07:54:10</td>
+<td align="left">96</td>
+</tr>
+<tr class="even">
+<td align="left">2022484408</td>
+<td align="left">2016-04-01 07:54:15</td>
+<td align="left">98</td>
+</tr>
+<tr class="odd">
+<td align="left">2022484408</td>
+<td align="left">2016-04-01 07:54:20</td>
+<td align="left">100</td>
+</tr>
+<tr class="even">
+<td align="left">2022484408</td>
+<td align="left">2016-04-01 07:54:25</td>
+<td align="left">101</td>
+</tr>
+<tr class="odd">
+<td align="left">2022484408</td>
+<td align="left">2016-04-01 07:54:30</td>
+<td align="left">104</td>
+</tr>
+<tr class="even">
+<td align="left">2022484408</td>
+<td align="left">2016-04-01 07:54:35</td>
+<td align="left">105</td>
+</tr>
+<tr class="odd">
+<td align="left">2022484408</td>
+<td align="left">2016-04-01 07:54:45</td>
+<td align="left">102</td>
+</tr>
+<tr class="even">
+<td align="left">2022484408</td>
+<td align="left">2016-04-01 07:54:55</td>
+<td align="left">106</td>
+</tr>
+</tbody>
+</table>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+<div id="hourlyCalories_merged" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> File:
+hourlyCalories_merged.csv</h1>
+<p><a href="02_Bellabeat_Files_Overview.html#hourlyCalories_merged">→
+Link to overview report</a></p>
+<ul>
+<li><p><strong>File name :</strong> hourlyCalories_merged.csv</p></li>
+<li><p><strong>File size :</strong> 0.83 Mo</p></li>
+<li><p><strong>Number of observations :</strong> 24084</p></li>
+<li><p><strong>Number of columns :</strong> 3</p></li>
+<li><p><strong>Duplicates detecteds :</strong> Non</p></li>
+<li><p><strong>Number of duplicated lines :</strong> 0</p></li>
+</ul>
+<div id="column-profile-2" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Column profile</h2>
+<table>
+<caption>Variable profile - hourlyCalories_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">column</th>
+<th align="left">type</th>
+<th align="right">n_missing</th>
+<th align="right">pct_missing</th>
+<th align="right">n_distinct</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Id</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">34</td>
+</tr>
+<tr class="even">
+<td align="left">ActivityHour</td>
+<td align="left">POSIXct</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">755</td>
+</tr>
+<tr class="odd">
+<td align="left">Calories</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">444</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="date-statistics-2" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Date statistics</h2>
+<table>
+<caption>Date statistics - hourlyCalories_merged.csv</caption>
+<colgroup>
+<col width="15%" />
+<col width="13%" />
+<col width="23%" />
+<col width="23%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">mean</th>
+<th align="left">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ActivityHour</td>
+<td align="left">2016-03-12</td>
+<td align="left">2016-04-12 10:00:00</td>
+<td align="left">2016-03-27 05:47:23</td>
+<td align="left">2016-03-27 04:00:00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="numerical-statistics-2" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Numerical
+statistics</h2>
+<table>
+<caption>Numerical statistics - hourlyCalories_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">mean</th>
+<th align="right">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Calories</td>
+<td align="right">42</td>
+<td align="right">933</td>
+<td align="right">94.26669</td>
+<td align="right">77</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="skimr-summary-2" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> Skimr summary</h2>
+<table>
+<caption>Skimr summary - hourlyCalories_merged.csv</caption>
+<colgroup>
+<col width="7%" />
+<col width="10%" />
+<col width="7%" />
+<col width="10%" />
+<col width="9%" />
+<col width="8%" />
+<col width="8%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_type</th>
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">numeric.mean</th>
+<th align="right">numeric.sd</th>
+<th align="right">numeric.p0</th>
+<th align="right">numeric.p25</th>
+<th align="right">numeric.p50</th>
+<th align="right">numeric.p75</th>
+<th align="right">numeric.p100</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">Calories</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">94.26669</td>
+<td align="right">59.39571</td>
+<td align="right">42</td>
+<td align="right">61</td>
+<td align="right">77</td>
+<td align="right">104</td>
+<td align="right">933</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="raw-data-overview-2" class="section level2" number="3.5">
+<h2><span class="header-section-number">3.5</span> Raw data
+overview</h2>
+<table>
+<caption>Overview (first 10 lines) - hourlyCalories_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">Id</th>
+<th align="left">ActivityHour</th>
+<th align="left">Calories</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:00:00</td>
+<td align="left">48</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 01:00:00</td>
+<td align="left">48</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 02:00:00</td>
+<td align="left">48</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 03:00:00</td>
+<td align="left">48</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 04:00:00</td>
+<td align="left">48</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 05:00:00</td>
+<td align="left">48</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 06:00:00</td>
+<td align="left">48</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 07:00:00</td>
+<td align="left">48</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 08:00:00</td>
+<td align="left">48</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 09:00:00</td>
+<td align="left">49</td>
+</tr>
+</tbody>
+</table>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+<div id="hourlyIntensities_merged" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> File:
+hourlyIntensities_merged.csv</h1>
+<p><a href="02_Bellabeat_Files_Overview.html#hourlyIntensities_merged">→
+Link to overview report</a></p>
+<ul>
+<li><p><strong>File name :</strong>
+hourlyIntensities_merged.csv</p></li>
+<li><p><strong>File size :</strong> 0.93 Mo</p></li>
+<li><p><strong>Number of observations :</strong> 24084</p></li>
+<li><p><strong>Number of columns :</strong> 4</p></li>
+<li><p><strong>Duplicates detecteds :</strong> Non</p></li>
+<li><p><strong>Number of duplicated lines :</strong> 0</p></li>
+</ul>
+<div id="column-profile-3" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Column profile</h2>
+<table>
+<caption>Variable profile - hourlyIntensities_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">column</th>
+<th align="left">type</th>
+<th align="right">n_missing</th>
+<th align="right">pct_missing</th>
+<th align="right">n_distinct</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Id</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">34</td>
+</tr>
+<tr class="even">
+<td align="left">ActivityHour</td>
+<td align="left">POSIXct</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">755</td>
+</tr>
+<tr class="odd">
+<td align="left">TotalIntensity</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">173</td>
+</tr>
+<tr class="even">
+<td align="left">AverageIntensity</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">173</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="date-statistics-3" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Date statistics</h2>
+<table>
+<caption>Date statistics - hourlyIntensities_merged.csv</caption>
+<colgroup>
+<col width="15%" />
+<col width="13%" />
+<col width="23%" />
+<col width="23%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">mean</th>
+<th align="left">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ActivityHour</td>
+<td align="left">2016-03-12</td>
+<td align="left">2016-04-12 10:00:00</td>
+<td align="left">2016-03-27 05:47:23</td>
+<td align="left">2016-03-27 04:00:00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="numerical-statistics-3" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Numerical
+statistics</h2>
+<table>
+<caption>Numerical statistics - hourlyIntensities_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">mean</th>
+<th align="right">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">TotalIntensity</td>
+<td align="right">0</td>
+<td align="right">180</td>
+<td align="right">10.8263162</td>
+<td align="right">1.000000</td>
+</tr>
+<tr class="even">
+<td align="left">AverageIntensity</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">0.1804386</td>
+<td align="right">0.016667</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="skimr-summary-3" class="section level2" number="4.4">
+<h2><span class="header-section-number">4.4</span> Skimr summary</h2>
+<table>
+<caption>Skimr summary - hourlyIntensities_merged.csv</caption>
+<colgroup>
+<col width="7%" />
+<col width="12%" />
+<col width="7%" />
+<col width="10%" />
+<col width="9%" />
+<col width="8%" />
+<col width="8%" />
+<col width="8%" />
+<col width="8%" />
+<col width="8%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_type</th>
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">numeric.mean</th>
+<th align="right">numeric.sd</th>
+<th align="right">numeric.p0</th>
+<th align="right">numeric.p25</th>
+<th align="right">numeric.p50</th>
+<th align="right">numeric.p75</th>
+<th align="right">numeric.p100</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">TotalIntensity</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">10.8263162</td>
+<td align="right">20.3143122</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1.000000</td>
+<td align="right">14.000000</td>
+<td align="right">180</td>
+</tr>
+<tr class="even">
+<td align="left">numeric</td>
+<td align="left">AverageIntensity</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.1804386</td>
+<td align="right">0.3385719</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.016667</td>
+<td align="right">0.233333</td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="raw-data-overview-3" class="section level2" number="4.5">
+<h2><span class="header-section-number">4.5</span> Raw data
+overview</h2>
+<table>
+<caption>Overview (first 10 lines) -
+hourlyIntensities_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">Id</th>
+<th align="left">ActivityHour</th>
+<th align="left">TotalIntensity</th>
+<th align="left">AverageIntensity</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:00:00</td>
+<td align="left">0</td>
+<td align="left">0.000000</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 01:00:00</td>
+<td align="left">0</td>
+<td align="left">0.000000</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 02:00:00</td>
+<td align="left">0</td>
+<td align="left">0.000000</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 03:00:00</td>
+<td align="left">0</td>
+<td align="left">0.000000</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 04:00:00</td>
+<td align="left">0</td>
+<td align="left">0.000000</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 05:00:00</td>
+<td align="left">0</td>
+<td align="left">0.000000</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 06:00:00</td>
+<td align="left">0</td>
+<td align="left">0.000000</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 07:00:00</td>
+<td align="left">0</td>
+<td align="left">0.000000</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 08:00:00</td>
+<td align="left">0</td>
+<td align="left">0.000000</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 09:00:00</td>
+<td align="left">1</td>
+<td align="left">0.016667</td>
+</tr>
+</tbody>
+</table>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+<div id="hourlySteps_merged" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> File:
+hourlySteps_merged.csv</h1>
+<p><a href="02_Bellabeat_Files_Overview.html#hourlySteps_merged">→ Link
+to overview report</a></p>
+<ul>
+<li><p><strong>File name :</strong> hourlySteps_merged.csv</p></li>
+<li><p><strong>File size :</strong> 0.83 Mo</p></li>
+<li><p><strong>Number of observations :</strong> 24084</p></li>
+<li><p><strong>Number of columns :</strong> 3</p></li>
+<li><p><strong>Duplicates detecteds :</strong> Non</p></li>
+<li><p><strong>Number of duplicated lines :</strong> 0</p></li>
+</ul>
+<div id="column-profile-4" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Column profile</h2>
+<table>
+<caption>Variable profile - hourlySteps_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">column</th>
+<th align="left">type</th>
+<th align="right">n_missing</th>
+<th align="right">pct_missing</th>
+<th align="right">n_distinct</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Id</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">34</td>
+</tr>
+<tr class="even">
+<td align="left">ActivityHour</td>
+<td align="left">POSIXct</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">755</td>
+</tr>
+<tr class="odd">
+<td align="left">StepTotal</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">2216</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="date-statistics-4" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Date statistics</h2>
+<table>
+<caption>Date statistics - hourlySteps_merged.csv</caption>
+<colgroup>
+<col width="15%" />
+<col width="13%" />
+<col width="23%" />
+<col width="23%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">mean</th>
+<th align="left">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ActivityHour</td>
+<td align="left">2016-03-12</td>
+<td align="left">2016-04-12 10:00:00</td>
+<td align="left">2016-03-27 05:47:23</td>
+<td align="left">2016-03-27 04:00:00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="numerical-statistics-4" class="section level2" number="5.3">
+<h2><span class="header-section-number">5.3</span> Numerical
+statistics</h2>
+<table>
+<caption>Numerical statistics - hourlySteps_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">mean</th>
+<th align="right">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">StepTotal</td>
+<td align="right">0</td>
+<td align="right">10565</td>
+<td align="right">286.2187</td>
+<td align="right">10</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="skimr-summary-4" class="section level2" number="5.4">
+<h2><span class="header-section-number">5.4</span> Skimr summary</h2>
+<table>
+<caption>Skimr summary - hourlySteps_merged.csv</caption>
+<colgroup>
+<col width="7%" />
+<col width="10%" />
+<col width="7%" />
+<col width="10%" />
+<col width="9%" />
+<col width="8%" />
+<col width="8%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_type</th>
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">numeric.mean</th>
+<th align="right">numeric.sd</th>
+<th align="right">numeric.p0</th>
+<th align="right">numeric.p25</th>
+<th align="right">numeric.p50</th>
+<th align="right">numeric.p75</th>
+<th align="right">numeric.p100</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">StepTotal</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">286.2187</td>
+<td align="right">664.9242</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">10</td>
+<td align="right">289</td>
+<td align="right">10565</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="raw-data-overview-4" class="section level2" number="5.5">
+<h2><span class="header-section-number">5.5</span> Raw data
+overview</h2>
+<table>
+<caption>Overview (first 10 lines) - hourlySteps_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">Id</th>
+<th align="left">ActivityHour</th>
+<th align="left">StepTotal</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:00:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 01:00:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 02:00:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 03:00:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 04:00:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 05:00:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 06:00:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 07:00:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 08:00:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 09:00:00</td>
+<td align="left">8</td>
+</tr>
+</tbody>
+</table>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+<div id="minuteCaloriesNarrow_merged" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> File:
+minuteCaloriesNarrow_merged.csv</h1>
+<p><a
+href="02_Bellabeat_Files_Overview.html#minuteCaloriesNarrow_merged">→
+Link to overview report</a></p>
+<ul>
+<li><p><strong>File name :</strong>
+minuteCaloriesNarrow_merged.csv</p></li>
+<li><p><strong>File size :</strong> 69.11 Mo</p></li>
+<li><p><strong>Number of observations :</strong> 1445040</p></li>
+<li><p><strong>Number of columns :</strong> 3</p></li>
+<li><p><strong>Duplicates detecteds :</strong> Non</p></li>
+<li><p><strong>Number of duplicated lines :</strong> 0</p></li>
+</ul>
+<div id="column-profile-5" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> Column profile</h2>
+<table>
+<caption>Variable profile - minuteCaloriesNarrow_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">column</th>
+<th align="left">type</th>
+<th align="right">n_missing</th>
+<th align="right">pct_missing</th>
+<th align="right">n_distinct</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Id</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">34</td>
+</tr>
+<tr class="even">
+<td align="left">ActivityMinute</td>
+<td align="left">POSIXct</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">45300</td>
+</tr>
+<tr class="odd">
+<td align="left">Calories</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">6345</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="date-statistics-5" class="section level2" number="6.2">
+<h2><span class="header-section-number">6.2</span> Date statistics</h2>
+<table style="width:100%;">
+<caption>Date statistics - minuteCaloriesNarrow_merged.csv</caption>
+<colgroup>
+<col width="17%" />
+<col width="12%" />
+<col width="23%" />
+<col width="23%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">mean</th>
+<th align="left">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ActivityMinute</td>
+<td align="left">2016-03-12</td>
+<td align="left">2016-04-12 10:59:00</td>
+<td align="left">2016-03-27 06:16:53</td>
+<td align="left">2016-03-27 04:54:00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="numerical-statistics-5" class="section level2" number="6.3">
+<h2><span class="header-section-number">6.3</span> Numerical
+statistics</h2>
+<table>
+<caption>Numerical statistics -
+minuteCaloriesNarrow_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">mean</th>
+<th align="right">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Calories</td>
+<td align="right">0</td>
+<td align="right">23.01264</td>
+<td align="right">1.571299</td>
+<td align="right">1.2176</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="skimr-summary-5" class="section level2" number="6.4">
+<h2><span class="header-section-number">6.4</span> Skimr summary</h2>
+<table>
+<caption>Skimr summary - minuteCaloriesNarrow_merged.csv</caption>
+<colgroup>
+<col width="7%" />
+<col width="10%" />
+<col width="7%" />
+<col width="10%" />
+<col width="9%" />
+<col width="8%" />
+<col width="8%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_type</th>
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">numeric.mean</th>
+<th align="right">numeric.sd</th>
+<th align="right">numeric.p0</th>
+<th align="right">numeric.p25</th>
+<th align="right">numeric.p50</th>
+<th align="right">numeric.p75</th>
+<th align="right">numeric.p100</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">Calories</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1.571299</td>
+<td align="right">1.361955</td>
+<td align="right">0</td>
+<td align="right">0.9357</td>
+<td align="right">1.2176</td>
+<td align="right">1.406</td>
+<td align="right">23.01264</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="raw-data-overview-5" class="section level2" number="6.5">
+<h2><span class="header-section-number">6.5</span> Raw data
+overview</h2>
+<table>
+<caption>Overview (first 10 lines) -
+minuteCaloriesNarrow_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">Id</th>
+<th align="left">ActivityMinute</th>
+<th align="left">Calories</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:00:00</td>
+<td align="left">0.7973</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:01:00</td>
+<td align="left">0.7973</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:02:00</td>
+<td align="left">0.7973</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:03:00</td>
+<td align="left">0.7973</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:04:00</td>
+<td align="left">0.7973</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:05:00</td>
+<td align="left">0.7973</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:06:00</td>
+<td align="left">0.7973</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:07:00</td>
+<td align="left">0.7973</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:08:00</td>
+<td align="left">0.7973</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:09:00</td>
+<td align="left">0.7973</td>
+</tr>
+</tbody>
+</table>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+<div id="minuteIntensitiesNarrow_merged" class="section level1"
+number="7">
+<h1><span class="header-section-number">7</span> File:
+minuteIntensitiesNarrow_merged.csv</h1>
+<p><a
+href="02_Bellabeat_Files_Overview.html#minuteIntensitiesNarrow_merged">→
+Link to overview report</a></p>
+<ul>
+<li><p><strong>File name :</strong>
+minuteIntensitiesNarrow_merged.csv</p></li>
+<li><p><strong>File size :</strong> 48.18 Mo</p></li>
+<li><p><strong>Number of observations :</strong> 1445040</p></li>
+<li><p><strong>Number of columns :</strong> 3</p></li>
+<li><p><strong>Duplicates detecteds :</strong> Non</p></li>
+<li><p><strong>Number of duplicated lines :</strong> 0</p></li>
+</ul>
+<div id="column-profile-6" class="section level2" number="7.1">
+<h2><span class="header-section-number">7.1</span> Column profile</h2>
+<table>
+<caption>Variable profile - minuteIntensitiesNarrow_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">column</th>
+<th align="left">type</th>
+<th align="right">n_missing</th>
+<th align="right">pct_missing</th>
+<th align="right">n_distinct</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Id</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">34</td>
+</tr>
+<tr class="even">
+<td align="left">ActivityMinute</td>
+<td align="left">POSIXct</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">45300</td>
+</tr>
+<tr class="odd">
+<td align="left">Intensity</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">4</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="date-statistics-6" class="section level2" number="7.2">
+<h2><span class="header-section-number">7.2</span> Date statistics</h2>
+<table style="width:100%;">
+<caption>Date statistics - minuteIntensitiesNarrow_merged.csv</caption>
+<colgroup>
+<col width="17%" />
+<col width="12%" />
+<col width="23%" />
+<col width="23%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">mean</th>
+<th align="left">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ActivityMinute</td>
+<td align="left">2016-03-12</td>
+<td align="left">2016-04-12 10:59:00</td>
+<td align="left">2016-03-27 06:16:53</td>
+<td align="left">2016-03-27 04:54:00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="numerical-statistics-6" class="section level2" number="7.3">
+<h2><span class="header-section-number">7.3</span> Numerical
+statistics</h2>
+<table>
+<caption>Numerical statistics -
+minuteIntensitiesNarrow_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">mean</th>
+<th align="right">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Intensity</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">0.1804386</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="skimr-summary-6" class="section level2" number="7.4">
+<h2><span class="header-section-number">7.4</span> Skimr summary</h2>
+<table>
+<caption>Skimr summary - minuteIntensitiesNarrow_merged.csv</caption>
+<colgroup>
+<col width="7%" />
+<col width="10%" />
+<col width="7%" />
+<col width="10%" />
+<col width="9%" />
+<col width="8%" />
+<col width="8%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_type</th>
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">numeric.mean</th>
+<th align="right">numeric.sd</th>
+<th align="right">numeric.p0</th>
+<th align="right">numeric.p25</th>
+<th align="right">numeric.p50</th>
+<th align="right">numeric.p75</th>
+<th align="right">numeric.p100</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">Intensity</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.1804386</td>
+<td align="right">0.4942197</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="raw-data-overview-6" class="section level2" number="7.5">
+<h2><span class="header-section-number">7.5</span> Raw data
+overview</h2>
+<table>
+<caption>Overview (first 10 lines) -
+minuteIntensitiesNarrow_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">Id</th>
+<th align="left">ActivityMinute</th>
+<th align="left">Intensity</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:00:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:01:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:02:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:03:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:04:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:05:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:06:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:07:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:08:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:09:00</td>
+<td align="left">0</td>
+</tr>
+</tbody>
+</table>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+<div id="minuteMETsNarrow_merged" class="section level1" number="8">
+<h1><span class="header-section-number">8</span> File:
+minuteMETsNarrow_merged.csv</h1>
+<p><a href="02_Bellabeat_Files_Overview.html#minuteMETsNarrow_merged">→
+Link to overview report</a></p>
+<ul>
+<li><p><strong>File name :</strong> minuteMETsNarrow_merged.csv</p></li>
+<li><p><strong>File size :</strong> 49.56 Mo</p></li>
+<li><p><strong>Number of observations :</strong> 1445040</p></li>
+<li><p><strong>Number of columns :</strong> 3</p></li>
+<li><p><strong>Duplicates detecteds :</strong> Non</p></li>
+<li><p><strong>Number of duplicated lines :</strong> 0</p></li>
+</ul>
+<div id="column-profile-7" class="section level2" number="8.1">
+<h2><span class="header-section-number">8.1</span> Column profile</h2>
+<table>
+<caption>Variable profile - minuteMETsNarrow_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">column</th>
+<th align="left">type</th>
+<th align="right">n_missing</th>
+<th align="right">pct_missing</th>
+<th align="right">n_distinct</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Id</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">34</td>
+</tr>
+<tr class="even">
+<td align="left">ActivityMinute</td>
+<td align="left">POSIXct</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">45300</td>
+</tr>
+<tr class="odd">
+<td align="left">METs</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">141</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="date-statistics-7" class="section level2" number="8.2">
+<h2><span class="header-section-number">8.2</span> Date statistics</h2>
+<table style="width:100%;">
+<caption>Date statistics - minuteMETsNarrow_merged.csv</caption>
+<colgroup>
+<col width="17%" />
+<col width="12%" />
+<col width="23%" />
+<col width="23%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">mean</th>
+<th align="left">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ActivityMinute</td>
+<td align="left">2016-03-12</td>
+<td align="left">2016-04-12 10:59:00</td>
+<td align="left">2016-03-27 06:16:53</td>
+<td align="left">2016-03-27 04:54:00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="numerical-statistics-7" class="section level2" number="8.3">
+<h2><span class="header-section-number">8.3</span> Numerical
+statistics</h2>
+<table>
+<caption>Numerical statistics - minuteMETsNarrow_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">mean</th>
+<th align="right">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">METs</td>
+<td align="right">0</td>
+<td align="right">189</td>
+<td align="right">14.23876</td>
+<td align="right">10</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="skimr-summary-7" class="section level2" number="8.4">
+<h2><span class="header-section-number">8.4</span> Skimr summary</h2>
+<table>
+<caption>Skimr summary - minuteMETsNarrow_merged.csv</caption>
+<colgroup>
+<col width="7%" />
+<col width="10%" />
+<col width="7%" />
+<col width="10%" />
+<col width="9%" />
+<col width="8%" />
+<col width="8%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_type</th>
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">numeric.mean</th>
+<th align="right">numeric.sd</th>
+<th align="right">numeric.p0</th>
+<th align="right">numeric.p25</th>
+<th align="right">numeric.p50</th>
+<th align="right">numeric.p75</th>
+<th align="right">numeric.p100</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">METs</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">14.23876</td>
+<td align="right">11.54079</td>
+<td align="right">0</td>
+<td align="right">10</td>
+<td align="right">10</td>
+<td align="right">11</td>
+<td align="right">189</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="raw-data-overview-7" class="section level2" number="8.5">
+<h2><span class="header-section-number">8.5</span> Raw data
+overview</h2>
+<table>
+<caption>Overview (first 10 lines) -
+minuteMETsNarrow_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">Id</th>
+<th align="left">ActivityMinute</th>
+<th align="left">METs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:00:00</td>
+<td align="left">10</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:01:00</td>
+<td align="left">10</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:02:00</td>
+<td align="left">10</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:03:00</td>
+<td align="left">10</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:04:00</td>
+<td align="left">10</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:05:00</td>
+<td align="left">10</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:06:00</td>
+<td align="left">10</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:07:00</td>
+<td align="left">10</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:08:00</td>
+<td align="left">10</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:09:00</td>
+<td align="left">10</td>
+</tr>
+</tbody>
+</table>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+<div id="minuteSleep_merged" class="section level1" number="9">
+<h1><span class="header-section-number">9</span> File:
+minuteSleep_merged.csv</h1>
+<p><a href="02_Bellabeat_Files_Overview.html#minuteSleep_merged">→ Link
+to overview report</a></p>
+<ul>
+<li><p><strong>File name :</strong> minuteSleep_merged.csv</p></li>
+<li><p><strong>File size :</strong> 8.88 Mo</p></li>
+<li><p><strong>Number of observations :</strong> 198559</p></li>
+<li><p><strong>Number of columns :</strong> 4</p></li>
+<li><p><strong>Duplicates detecteds :</strong> Oui</p></li>
+<li><p><strong>Number of duplicated lines :</strong> 525</p></li>
+</ul>
+<div id="column-profile-8" class="section level2" number="9.1">
+<h2><span class="header-section-number">9.1</span> Column profile</h2>
+<table>
+<caption>Variable profile - minuteSleep_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">column</th>
+<th align="left">type</th>
+<th align="right">n_missing</th>
+<th align="right">pct_missing</th>
+<th align="right">n_distinct</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Id</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">23</td>
+</tr>
+<tr class="even">
+<td align="left">date</td>
+<td align="left">POSIXct</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">54523</td>
+</tr>
+<tr class="odd">
+<td align="left">value</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">logId</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">556</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="date-statistics-8" class="section level2" number="9.2">
+<h2><span class="header-section-number">9.2</span> Date statistics</h2>
+<table>
+<caption>Date statistics - minuteSleep_merged.csv</caption>
+<colgroup>
+<col width="10%" />
+<col width="22%" />
+<col width="22%" />
+<col width="22%" />
+<col width="22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">mean</th>
+<th align="left">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">date</td>
+<td align="left">2016-03-11 21:19:30</td>
+<td align="left">2016-04-12 08:35:00</td>
+<td align="left">2016-03-27 12:39:41</td>
+<td align="left">2016-03-28 03:21:00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="numerical-statistics-8" class="section level2" number="9.3">
+<h2><span class="header-section-number">9.3</span> Numerical
+statistics</h2>
+<table>
+<caption>Numerical statistics - minuteSleep_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">mean</th>
+<th align="right">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">value</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">1.085899</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="skimr-summary-8" class="section level2" number="9.4">
+<h2><span class="header-section-number">9.4</span> Skimr summary</h2>
+<table>
+<caption>Skimr summary - minuteSleep_merged.csv</caption>
+<colgroup>
+<col width="7%" />
+<col width="10%" />
+<col width="7%" />
+<col width="10%" />
+<col width="9%" />
+<col width="8%" />
+<col width="8%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_type</th>
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">numeric.mean</th>
+<th align="right">numeric.sd</th>
+<th align="right">numeric.p0</th>
+<th align="right">numeric.p25</th>
+<th align="right">numeric.p50</th>
+<th align="right">numeric.p75</th>
+<th align="right">numeric.p100</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">value</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1.085899</td>
+<td align="right">0.3144799</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="raw-data-overview-8" class="section level2" number="9.5">
+<h2><span class="header-section-number">9.5</span> Raw data
+overview</h2>
+<table>
+<caption>Overview (first 10 lines) - minuteSleep_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">Id</th>
+<th align="left">date</th>
+<th align="left">value</th>
+<th align="left">logId</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-13 02:39:30</td>
+<td align="left">1</td>
+<td align="left">11114919637</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-13 02:40:30</td>
+<td align="left">1</td>
+<td align="left">11114919637</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-13 02:41:30</td>
+<td align="left">1</td>
+<td align="left">11114919637</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-13 02:42:30</td>
+<td align="left">1</td>
+<td align="left">11114919637</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-13 02:43:30</td>
+<td align="left">1</td>
+<td align="left">11114919637</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-13 02:44:30</td>
+<td align="left">1</td>
+<td align="left">11114919637</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-13 02:45:30</td>
+<td align="left">2</td>
+<td align="left">11114919637</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-13 02:46:30</td>
+<td align="left">2</td>
+<td align="left">11114919637</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-13 02:47:30</td>
+<td align="left">1</td>
+<td align="left">11114919637</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-13 02:48:30</td>
+<td align="left">1</td>
+<td align="left">11114919637</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="overview-duplicated" class="section level2" number="9.6">
+<h2><span class="header-section-number">9.6</span> Overview duplicated
+**</h2>
+<table>
+<caption>Overview (first 10 duplicated lines) -
+minuteSleep_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">Id</th>
+<th align="left">date</th>
+<th align="left">value</th>
+<th align="left">logId</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">4319703577</td>
+<td align="left">2016-04-05 22:50:00</td>
+<td align="left">3</td>
+<td align="left">11344563687</td>
+</tr>
+<tr class="even">
+<td align="left">4319703577</td>
+<td align="left">2016-04-05 22:51:00</td>
+<td align="left">3</td>
+<td align="left">11344563687</td>
+</tr>
+<tr class="odd">
+<td align="left">4319703577</td>
+<td align="left">2016-04-05 22:52:00</td>
+<td align="left">2</td>
+<td align="left">11344563687</td>
+</tr>
+<tr class="even">
+<td align="left">4319703577</td>
+<td align="left">2016-04-05 22:53:00</td>
+<td align="left">2</td>
+<td align="left">11344563687</td>
+</tr>
+<tr class="odd">
+<td align="left">4319703577</td>
+<td align="left">2016-04-05 22:54:00</td>
+<td align="left">2</td>
+<td align="left">11344563687</td>
+</tr>
+<tr class="even">
+<td align="left">4319703577</td>
+<td align="left">2016-04-05 22:55:00</td>
+<td align="left">1</td>
+<td align="left">11344563687</td>
+</tr>
+<tr class="odd">
+<td align="left">4319703577</td>
+<td align="left">2016-04-05 22:56:00</td>
+<td align="left">1</td>
+<td align="left">11344563687</td>
+</tr>
+<tr class="even">
+<td align="left">4319703577</td>
+<td align="left">2016-04-05 22:57:00</td>
+<td align="left">2</td>
+<td align="left">11344563687</td>
+</tr>
+<tr class="odd">
+<td align="left">4319703577</td>
+<td align="left">2016-04-05 22:58:00</td>
+<td align="left">2</td>
+<td align="left">11344563687</td>
+</tr>
+<tr class="even">
+<td align="left">4319703577</td>
+<td align="left">2016-04-05 22:59:00</td>
+<td align="left">1</td>
+<td align="left">11344563687</td>
+</tr>
+</tbody>
+</table>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+<div id="minuteStepsNarrow_merged" class="section level1" number="10">
+<h1><span class="header-section-number">10</span> File:
+minuteStepsNarrow_merged.csv</h1>
+<p><a href="02_Bellabeat_Files_Overview.html#minuteStepsNarrow_merged">→
+Link to overview report</a></p>
+<ul>
+<li><p><strong>File name :</strong>
+minuteStepsNarrow_merged.csv</p></li>
+<li><p><strong>File size :</strong> 48.34 Mo</p></li>
+<li><p><strong>Number of observations :</strong> 1445040</p></li>
+<li><p><strong>Number of columns :</strong> 3</p></li>
+<li><p><strong>Duplicates detecteds :</strong> Non</p></li>
+<li><p><strong>Number of duplicated lines :</strong> 0</p></li>
+</ul>
+<div id="column-profile-9" class="section level2" number="10.1">
+<h2><span class="header-section-number">10.1</span> Column profile</h2>
+<table>
+<caption>Variable profile - minuteStepsNarrow_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">column</th>
+<th align="left">type</th>
+<th align="right">n_missing</th>
+<th align="right">pct_missing</th>
+<th align="right">n_distinct</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Id</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">34</td>
+</tr>
+<tr class="even">
+<td align="left">ActivityMinute</td>
+<td align="left">POSIXct</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">45300</td>
+</tr>
+<tr class="odd">
+<td align="left">Steps</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">190</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="date-statistics-9" class="section level2" number="10.2">
+<h2><span class="header-section-number">10.2</span> Date statistics</h2>
+<table style="width:100%;">
+<caption>Date statistics - minuteStepsNarrow_merged.csv</caption>
+<colgroup>
+<col width="17%" />
+<col width="12%" />
+<col width="23%" />
+<col width="23%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">mean</th>
+<th align="left">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ActivityMinute</td>
+<td align="left">2016-03-12</td>
+<td align="left">2016-04-12 10:59:00</td>
+<td align="left">2016-03-27 06:16:53</td>
+<td align="left">2016-03-27 04:54:00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="numerical-statistics-9" class="section level2" number="10.3">
+<h2><span class="header-section-number">10.3</span> Numerical
+statistics</h2>
+<table>
+<caption>Numerical statistics - minuteStepsNarrow_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">mean</th>
+<th align="right">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Steps</td>
+<td align="right">0</td>
+<td align="right">204</td>
+<td align="right">4.770312</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="skimr-summary-9" class="section level2" number="10.4">
+<h2><span class="header-section-number">10.4</span> Skimr summary</h2>
+<table>
+<caption>Skimr summary - minuteStepsNarrow_merged.csv</caption>
+<colgroup>
+<col width="7%" />
+<col width="10%" />
+<col width="7%" />
+<col width="10%" />
+<col width="9%" />
+<col width="8%" />
+<col width="8%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_type</th>
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">numeric.mean</th>
+<th align="right">numeric.sd</th>
+<th align="right">numeric.p0</th>
+<th align="right">numeric.p25</th>
+<th align="right">numeric.p50</th>
+<th align="right">numeric.p75</th>
+<th align="right">numeric.p100</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">Steps</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4.770312</td>
+<td align="right">17.21853</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">204</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="raw-data-overview-9" class="section level2" number="10.5">
+<h2><span class="header-section-number">10.5</span> Raw data
+overview</h2>
+<table>
+<caption>Overview (first 10 lines) -
+minuteStepsNarrow_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">Id</th>
+<th align="left">ActivityMinute</th>
+<th align="left">Steps</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:00:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:01:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:02:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:03:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:04:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:05:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:06:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:07:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:08:00</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">1503960366</td>
+<td align="left">2016-03-12 00:09:00</td>
+<td align="left">0</td>
+</tr>
+</tbody>
+</table>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+<div id="weightLogInfo_merged" class="section level1" number="11">
+<h1><span class="header-section-number">11</span> File:
+weightLogInfo_merged.csv</h1>
+<p><a href="02_Bellabeat_Files_Overview.html#weightLogInfo_merged">→
+Link to overview report</a></p>
+<ul>
+<li><p><strong>File name :</strong> weightLogInfo_merged.csv</p></li>
+<li><p><strong>File size :</strong> 0.00 Mo</p></li>
+<li><p><strong>Number of observations :</strong> 33</p></li>
+<li><p><strong>Number of columns :</strong> 8</p></li>
+<li><p><strong>Duplicates detecteds :</strong> Non</p></li>
+<li><p><strong>Number of duplicated lines :</strong> 0</p></li>
+</ul>
+<div id="column-profile-10" class="section level2" number="11.1">
+<h2><span class="header-section-number">11.1</span> Column profile</h2>
+<table>
+<caption>Variable profile - weightLogInfo_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">column</th>
+<th align="left">type</th>
+<th align="right">n_missing</th>
+<th align="right">pct_missing</th>
+<th align="right">n_distinct</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Id</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">11</td>
+</tr>
+<tr class="even">
+<td align="left">Date</td>
+<td align="left">POSIXct</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">24</td>
+</tr>
+<tr class="odd">
+<td align="left">WeightKg</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">27</td>
+</tr>
+<tr class="even">
+<td align="left">WeightPounds</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">27</td>
+</tr>
+<tr class="odd">
+<td align="left">Fat</td>
+<td align="left">numeric</td>
+<td align="right">31</td>
+<td align="right">0.9393939</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">BMI</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">27</td>
+</tr>
+<tr class="odd">
+<td align="left">IsManualReport</td>
+<td align="left">logical</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">LogId</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">24</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="date-statistics-10" class="section level2" number="11.2">
+<h2><span class="header-section-number">11.2</span> Date statistics</h2>
+<table>
+<caption>Date statistics - weightLogInfo_merged.csv</caption>
+<colgroup>
+<col width="10%" />
+<col width="22%" />
+<col width="22%" />
+<col width="22%" />
+<col width="22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">mean</th>
+<th align="left">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Date</td>
+<td align="left">2016-03-30 23:59:59</td>
+<td align="left">2016-04-12 23:59:59</td>
+<td align="left">2016-04-06 16:15:32</td>
+<td align="left">2016-04-06 23:59:59</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="numerical-statistics-10" class="section level2" number="11.3">
+<h2><span class="header-section-number">11.3</span> Numerical
+statistics</h2>
+<table>
+<caption>Numerical statistics - weightLogInfo_merged.csv</caption>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">mean</th>
+<th align="right">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">WeightKg</td>
+<td align="right">53.3000</td>
+<td align="right">129.6000</td>
+<td align="right">73.44242</td>
+<td align="right">62.5000</td>
+</tr>
+<tr class="even">
+<td align="left">WeightPounds</td>
+<td align="right">117.5064</td>
+<td align="right">285.7191</td>
+<td align="right">161.91283</td>
+<td align="right">137.7889</td>
+</tr>
+<tr class="odd">
+<td align="left">Fat</td>
+<td align="right">10.0000</td>
+<td align="right">22.0000</td>
+<td align="right">16.00000</td>
+<td align="right">16.0000</td>
+</tr>
+<tr class="even">
+<td align="left">BMI</td>
+<td align="right">21.4500</td>
+<td align="right">46.1700</td>
+<td align="right">25.73091</td>
+<td align="right">24.3900</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="skimr-summary-10" class="section level2" number="11.4">
+<h2><span class="header-section-number">11.4</span> Skimr summary</h2>
+<table>
+<caption>Skimr summary - weightLogInfo_merged.csv</caption>
+<colgroup>
+<col width="7%" />
+<col width="10%" />
+<col width="7%" />
+<col width="10%" />
+<col width="9%" />
+<col width="8%" />
+<col width="8%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_type</th>
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">numeric.mean</th>
+<th align="right">numeric.sd</th>
+<th align="right">numeric.p0</th>
+<th align="right">numeric.p25</th>
+<th align="right">numeric.p50</th>
+<th align="right">numeric.p75</th>
+<th align="right">numeric.p100</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">WeightKg</td>
+<td align="right">0</td>
+<td align="right">1.0000000</td>
+<td align="right">73.44242</td>
+<td align="right">16.531127</td>
+<td align="right">53.3000</td>
+<td align="right">61.7000</td>
+<td align="right">62.5000</td>
+<td align="right">85.8000</td>
+<td align="right">129.6000</td>
+</tr>
+<tr class="even">
+<td align="left">numeric</td>
+<td align="left">WeightPounds</td>
+<td align="right">0</td>
+<td align="right">1.0000000</td>
+<td align="right">161.91283</td>
+<td align="right">36.444896</td>
+<td align="right">117.5064</td>
+<td align="right">136.0252</td>
+<td align="right">137.7889</td>
+<td align="right">189.1566</td>
+<td align="right">285.7191</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">Fat</td>
+<td align="right">31</td>
+<td align="right">0.0606061</td>
+<td align="right">16.00000</td>
+<td align="right">8.485281</td>
+<td align="right">10.0000</td>
+<td align="right">13.0000</td>
+<td align="right">16.0000</td>
+<td align="right">19.0000</td>
+<td align="right">22.0000</td>
+</tr>
+<tr class="even">
+<td align="left">numeric</td>
+<td align="left">BMI</td>
+<td align="right">0</td>
+<td align="right">1.0000000</td>
+<td align="right">25.73091</td>
+<td align="right">4.330387</td>
+<td align="right">21.4500</td>
+<td align="right">24.1000</td>
+<td align="right">24.3900</td>
+<td align="right">25.7600</td>
+<td align="right">46.1700</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="raw-data-overview-10" class="section level2" number="11.5">
+<h2><span class="header-section-number">11.5</span> Raw data
+overview</h2>
+<table>
+<caption>Overview (first 10 lines) - weightLogInfo_merged.csv</caption>
+<colgroup>
+<col width="11%" />
+<col width="21%" />
+<col width="9%" />
+<col width="14%" />
+<col width="4%" />
+<col width="6%" />
+<col width="16%" />
+<col width="15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Id</th>
+<th align="left">Date</th>
+<th align="left">WeightKg</th>
+<th align="left">WeightPounds</th>
+<th align="left">Fat</th>
+<th align="left">BMI</th>
+<th align="left">IsManualReport</th>
+<th align="left">LogId</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1503960366</td>
+<td align="left">2016-04-05 23:59:59</td>
+<td align="left">53.3</td>
+<td align="left">117.5064</td>
+<td align="left">22</td>
+<td align="left">22.97</td>
+<td align="left">TRUE</td>
+<td align="left">1459900799000</td>
+</tr>
+<tr class="even">
+<td align="left">1927972279</td>
+<td align="left">2016-04-10 18:33:26</td>
+<td align="left">129.6</td>
+<td align="left">285.7191</td>
+<td align="left">NA</td>
+<td align="left">46.17</td>
+<td align="left">FALSE</td>
+<td align="left">1460313206000</td>
+</tr>
+<tr class="odd">
+<td align="left">2347167796</td>
+<td align="left">2016-04-03 23:59:59</td>
+<td align="left">63.4</td>
+<td align="left">139.7731</td>
+<td align="left">10</td>
+<td align="left">24.77</td>
+<td align="left">TRUE</td>
+<td align="left">1459727999000</td>
+</tr>
+<tr class="even">
+<td align="left">2873212765</td>
+<td align="left">2016-04-06 23:59:59</td>
+<td align="left">56.7</td>
+<td align="left">125.0021</td>
+<td align="left">NA</td>
+<td align="left">21.45</td>
+<td align="left">TRUE</td>
+<td align="left">1459987199000</td>
+</tr>
+<tr class="odd">
+<td align="left">2873212765</td>
+<td align="left">2016-04-07 23:59:59</td>
+<td align="left">57.2</td>
+<td align="left">126.1044</td>
+<td align="left">NA</td>
+<td align="left">21.65</td>
+<td align="left">TRUE</td>
+<td align="left">1460073599000</td>
+</tr>
+<tr class="even">
+<td align="left">2891001357</td>
+<td align="left">2016-04-05 23:59:59</td>
+<td align="left">88.4</td>
+<td align="left">194.8886</td>
+<td align="left">NA</td>
+<td align="left">25.03</td>
+<td align="left">TRUE</td>
+<td align="left">1459900799000</td>
+</tr>
+<tr class="odd">
+<td align="left">4445114986</td>
+<td align="left">2016-03-30 23:59:59</td>
+<td align="left">92.4</td>
+<td align="left">203.7071</td>
+<td align="left">NA</td>
+<td align="left">35.01</td>
+<td align="left">TRUE</td>
+<td align="left">1459382399000</td>
+</tr>
+<tr class="even">
+<td align="left">4558609924</td>
+<td align="left">2016-04-08 23:59:59</td>
+<td align="left">69.4</td>
+<td align="left">153.0008</td>
+<td align="left">NA</td>
+<td align="left">27.14</td>
+<td align="left">TRUE</td>
+<td align="left">1460159999000</td>
+</tr>
+<tr class="odd">
+<td align="left">4702921684</td>
+<td align="left">2016-04-04 23:59:59</td>
+<td align="left">99.7</td>
+<td align="left">219.8009</td>
+<td align="left">NA</td>
+<td align="left">26.11</td>
+<td align="left">TRUE</td>
+<td align="left">1459814399000</td>
+</tr>
+<tr class="even">
+<td align="left">6962181067</td>
+<td align="left">2016-03-30 23:59:59</td>
+<td align="left">61.5</td>
+<td align="left">135.5843</td>
+<td align="left">NA</td>
+<td align="left">24.03</td>
+<td align="left">TRUE</td>
+<td align="left">1459382399000</td>
+</tr>
+</tbody>
+</table>
+<p><a href="#top">↑ Return to the beginning</a></p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
