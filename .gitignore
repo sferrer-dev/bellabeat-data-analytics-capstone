@@ -386,3 +386,4 @@ data-samples/*.csv
 
 src/EDA.Bellabeat.R/.RDataTmp
 /src/EDA.Bellabeat.R/.RDataTmp1
+*.ipynb

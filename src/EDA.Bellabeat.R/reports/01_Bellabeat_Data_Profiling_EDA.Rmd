@@ -27,10 +27,6 @@ The pipeline performs a comprehensive assessment of the raw data to validate the
 -   temporal ranges and granularity,
 -   key descriptive statistics.
 
-::: tip
-The analysis confirms overall dataset stability while identifying notable anomalies — including the **525 duplicates** found in `minuteSleep_merged.csv` — and provides a clear view of the distribution of core metrics such as activity, sleep, heart rate, and calories.
-:::
-
 ## Technical Keys {.unnumbered}
 
 A central function, **`profile_csv()`**, standardizes all quality checks across datasets: automated type detection, missing-value assessment, cardinality analysis, descriptive statistics, temporal auditing, duplicate identification, and enhanced summaries via **skimr**.
@@ -39,44 +35,7 @@ Batch execution through **`purrr::map()`** ensures **homogeneity, reproducibilit
 
 The function **`auto_parse_datetime()`** automatically handles the detection and conversion of temporal columns, ensuring reliable interpretation of dates and timestamps despite the variety of formats present in the raw data. It provides consistent timestamp handling and delivers the uniformity required for all time-based analyses in the pipeline. By centralizing this logic, the pipeline enforces coherent normalization and eliminates ambiguities associated with textual time formats.
 
-::: important
-All outputs — HTML and PDF — are automatically generated and consolidated in the project’s **`output/`** directory, ensuring clean separation between computation, reporting, and delivery.
-:::
-
 Together, these elements provide a **technical backbone** for subsequent phases of data cleaning, feature engineering, aggregation, and analytical modelling.
-
-------------------------------------------------------------------------
-
-**Using the `render_all.R`**
-
-------------------------------------------------------------------------
-
-To facilitate the automated generation of the HTML of this report, the project includes a dedicated rendering script located at:
-
-```         
-scripts/render_all.R
-```
-
-This script ensures that output is produced in the directory:
-
-```         
-reports/output/
-```
-
-------------------------------------------------------------------------
-
-**How to execute the rendering script from RStudio**
-
-------------------------------------------------------------------------
-
-1.  Open the RStudio console.
-2.  Run the following command:
-
-``` r
-source(here::here("scripts", "render_all.R"))
-```
-
-[↑ Return to the beginning](#top)
 
 ```{r setup, include=FALSE}
 # Global chunk options

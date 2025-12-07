@@ -34,3 +34,79 @@ This **Coursera Capstone Project** focuses on analyzing the **Fitabase dataset (
 - [Daily activity](05_Bellabeat_Analyse_Daily_Activity.html) - [Activité quotidienne](05_Bellabeat_Analyse_Daily_Activity_FR.html)
 - [Daily heart rate](05_Bellabeat_DailyHeartrate_Rythm.html) - [Rythme cardiaque quotidien](05_Bellabeat_DailyHeartrate_Rythm_FR.html)
 - [User activty profiles](05_Bellabeat_User_Activity_profiles.html) - [Profils d'activité des utilisatrice](05_Bellabeat_User_Activity_profiles_FR.html)
+
+# Using the `render_all.R` {.unnumbered}
+
+To streamline the automated build process of this analysis, the project includes a dedicated rendering script located at:
+
+```
+scripts/render_all.R
+```
+
+This script performs three key tasks:
+
+1. **Builds the complete HTML website** associated with all reports inside the `reports/` folder.
+2. **Generates English and French Jupyter Notebooks (`.ipynb`)** based on the corresponding R Markdown files.
+3. **Organizes all outputs into their appropriate directories**.
+
+The HTML site is produced in:
+
+```
+reports/output/
+```
+
+The Jupyter notebooks are generated in:
+
+```
+notebooks/
+```
+
+---
+
+## **Generation of `.ipynb` Notebooks** {.unnumbered}
+
+---
+
+As part of the build workflow, the script automatically converts each R Markdown file matching the naming pattern:
+
+```
+XX_ReportName.Rmd  
+XX_ReportName_FR.Rmd
+```
+
+into structured Jupyter notebooks (`.ipynb`).
+
+### **Process overview** {.unnumbered}
+
+* Quarto is used to render each `.Rmd` file into `.ipynb` format.
+* Notebooks are first created temporarily inside `reports/`.
+* They are then moved into the main output directory:
+
+```
+notebooks/
+```
+
+separated into English and French versions depending on file naming conventions (`_FR.Rmd` vs non-FR).
+
+These notebooks can be opened locally, reviewed in JupyterLab/Jupyter Notebook, or uploaded directly to Kaggle as public notebooks accompanying the HTML analytical reports.
+
+---
+
+## **How to execute the rendering script from RStudio** {.unnumbered}
+
+---
+
+1. Open the RStudio console.
+2. Run the following command:
+
+```r
+source(here::here("scripts", "render_all.R"))
+```
+
+Executing this command triggers the full build process:
+
+* HTML site generation
+* `.ipynb` notebook generation
+* Output organization across both `reports/output/` and `notebooks/`
+
+After completion, the console displays a summary of all generated artifacts.

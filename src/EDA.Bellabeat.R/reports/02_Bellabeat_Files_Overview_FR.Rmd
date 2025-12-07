@@ -11,6 +11,22 @@ output:
     df_print: paged
 ---
 
+
+```{r setup, include=FALSE}
+# Global chunk options
+knitr::opts_chunk$set(
+  echo    = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+```{r libraries}
+# Packages
+library(dplyr)
+library(knitr)
+```
+
 # Introduction {.unnumbered}
 
 Ce rapport présente une vue d’ensemble structurée des **11 fichiers de données Fitabase/Bellabeat** collectés entre le **03/12/2016** et le **04/11/2016**.\
@@ -20,41 +36,71 @@ Il a pour objectif de documenter, pour chaque fichier :
 -   Les **forces et limites** du jeu de données (taille de l’échantillon, complétude, cohérence, biais potentiels) ;
 -   Le **potentiel analytique** pour un projet d’analytique de données (EDA, modélisation, segmentation, analyses temporelles).
 
-```{r files_overview_table, echo = FALSE, message = FALSE, warning = FALSE}
+```{r files_overview_table}
 
-# Packages
-library(dplyr)
-library(knitr)
-library(kableExtra)
-
-files_overview <- tribble(
-  ~File,                             ~`Temporal granularity`, ~`Data type`,                        ~`Key variables`,
-  "dailyActivity_merged.csv",        "Daily",                 "Overall activity",                  "Daily steps, calories, intensity, distance",
-  "heartrate_seconds_merged.csv",    "Second",                "Heart rate",                        "bpm, timestamp",
-  "hourlyCalories_merged.csv",       "Hourly",                "Energy expenditure",                "Calories per hour",
-  "hourlyIntensities_merged.csv",    "Hourly",                "Activity intensity",                "Total, light, moderate, very active intensity",
-  "hourlySteps_merged.csv",          "Hourly",                "Walking activity",                  "Steps per hour",
-  "minuteCaloriesNarrow_merged.csv", "Minute",                "Fine-grained energy expenditure",   "Calories per minute",
-  "minuteIntensitiesNarrow_merged.csv", "Minute",             "Activity intensity",                "Intensity per minute",
-  "minuteMETsNarrow_merged.csv",     "Minute",                "Expenditure / effort (METs)",       "METs",
-  "minuteSleep_merged.csv",          "Minute",                "Sleep (stages)",                    "Sleep level, timestamp",
-  "minuteStepsNarrow_merged.csv",    "Minute",                "Steps per minute",                  "Steps per minute",
-  "weightLogInfo_merged.csv",        "Event / manual entry",  "Weight and BMI",                    "Weight, BMI, is_manual"
+files_overview <- data.frame(
+  File = c(
+    "dailyActivity_merged.csv",
+    "heartrate_seconds_merged.csv",
+    "hourlyCalories_merged.csv",
+    "hourlyIntensities_merged.csv",
+    "hourlySteps_merged.csv",
+    "minuteCaloriesNarrow_merged.csv",
+    "minuteIntensitiesNarrow_merged.csv",
+    "minuteMETsNarrow_merged.csv",
+    "minuteSleep_merged.csv",
+    "minuteStepsNarrow_merged.csv",
+    "weightLogInfo_merged.csv"
+  ),
+  `Temporal granularity` = c(
+    "Daily",
+    "Second",
+    "Hourly",
+    "Hourly",
+    "Hourly",
+    "Minute",
+    "Minute",
+    "Minute",
+    "Minute",
+    "Minute",
+    "Event / manual entry"
+  ),
+  `Data type` = c(
+    "Overall activity",
+    "Heart rate",
+    "Energy expenditure",
+    "Activity intensity",
+    "Walking activity",
+    "Fine-grained energy expenditure",
+    "Activity intensity",
+    "Expenditure / effort (METs)",
+    "Sleep (stages)",
+    "Steps per minute",
+    "Weight and BMI"
+  ),
+  `Key variables` = c(
+    "Daily steps, calories, intensity, distance",
+    "bpm, timestamp",
+    "Calories per hour",
+    "Total, light, moderate, very active intensity",
+    "Steps per hour",
+    "Calories per minute",
+    "Intensity per minute",
+    "METs",
+    "Sleep level, timestamp",
+    "Steps per minute",
+    "Weight, BMI, is_manual"
+  ),
+  check.names = FALSE,
+  stringsAsFactors = FALSE
 )
 
-files_overview %>%
-  kable(
-    format  = "html",
-    caption = "Overview of the 11 Bellabeat data files",
-    align   = c("l", "c", "c", "l")
-  ) %>%
-  kable_styling(
-    full_width        = FALSE,
-    position          = "center",
-    bootstrap_options = c("striped", "hover", "condensed", "responsive")
-  ) %>%
-  column_spec(1, bold = TRUE) %>%
-  column_spec(4, width = "10cm")
+kable(
+  files_overview,
+  caption = "Overview of the 11 Bellabeat data files",
+  align   = c("l", "c", "c", "l")
+)
+
 ```
 
 Ce document sert de **référence technique** pour orienter les travaux d’exploration des données (EDA), de préparation, de visualisation et d’analyse plus avancée sur le dataset Bellabeat.
